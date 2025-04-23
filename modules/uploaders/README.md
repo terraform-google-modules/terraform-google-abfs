@@ -48,7 +48,7 @@ No modules.
 | <a name="input_abfs_license"></a> [abfs\_license](#input\_abfs\_license) | ABFS license (JSON) | `string` | n/a | yes |
 | <a name="input_abfs_manifest_file"></a> [abfs\_manifest\_file](#input\_abfs\_manifest\_file) | Relative path from the manifest project root to the manifest file | `string` | `"default.xml"` | no |
 | <a name="input_abfs_manifest_project_name"></a> [abfs\_manifest\_project\_name](#input\_abfs\_manifest\_project\_name) | Name of the git project on the manifest-server containing manifests | `string` | `"platform/manifest"` | no |
-| <a name="input_abfs_puser_cos_image_ref"></a> [abfs\_puser\_cos\_image\_ref](#input\_abfs\_puser\_cos\_image\_ref) | Reference to the COS boot image to use for the ABFS uploader | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |
+| <a name="input_abfs_uploader_cos_image_ref"></a> [abfs\_puser\_cos\_image\_ref](#input\_abfs\_puser\_cos\_image\_ref) | Reference to the COS boot image to use for the ABFS uploader | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |
 | <a name="input_abfs_server_name"></a> [abfs\_server\_name](#input\_abfs\_server\_name) | The name of the ABFS server | `string` | n/a | yes |
 | <a name="input_goog_cm_deployment_name"></a> [goog\_cm\_deployment\_name](#input\_goog\_cm\_deployment\_name) | The name of the deployment for Marketplace | `string` | `""` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Google Cloud project ID | `string` | n/a | yes |
