@@ -96,7 +96,7 @@ variable "abfs_manifest_file" {
   default     = "default.xml"
 }
 
-variable "abfs_puser_cos_image_ref" {
+variable "abfs_uploader_cos_image_ref" {
   description = "Reference to the COS boot image to use for the ABFS uploader"
   type        = string
   default     = "projects/cos-cloud/global/images/family/cos-109-lts"

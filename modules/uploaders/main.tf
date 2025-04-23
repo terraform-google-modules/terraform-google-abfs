@@ -60,7 +60,7 @@ resource "google_compute_instance" "abfs_gerrit_uploaders" {
 
   boot_disk {
     initialize_params {
-      image = var.abfs_puser_cos_image_ref
+      image = var.abfs_uploader_cos_image_ref
     }
   }
 
