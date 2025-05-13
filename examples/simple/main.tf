@@ -26,14 +26,14 @@ module "abfs-deployment" {
 module "abfs-uploaders" {
   source = "../../modules/uploaders"
 
-  project_id                       = var.project_id
-  zone                             = var.zone
-  service_account_email            = google_service_account.abfs_server.email
-  subnetwork                       = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
-  abfs_docker_image_uri            = var.abfs_docker_image_uri
-  abfs_gerrit_uploader_git_servers = var.abfs_gerrit_uploader_git_servers
-  abfs_license                     = var.abfs_license
-  abfs_server_name                 = module.abfs-deployment.abfs_server_name
+  project_id                           = var.project_id
+  zone                                 = var.zone
+  service_account_email                = google_service_account.abfs_server.email
+  subnetwork                           = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
+  abfs_docker_image_uri                = var.abfs_docker_image_uri
+  abfs_gerrit_uploader_manifest_server = var.abfs_gerrit_uploader_manifest_server
+  abfs_license                         = var.abfs_license
+  abfs_server_name                     = module.abfs-deployment.abfs_server_name
 }
 
 module "monitoring" {

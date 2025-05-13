@@ -68,9 +68,10 @@ variable "abfs_gerrit_uploader_datadisk_type" {
   type        = string
 }
 
-variable "abfs_gerrit_uploader_git_servers" {
-  description = "List of git servers to upload to the ABFS server (e.g. [\"android.googlesource.com\"])"
-  type        = list(string)
+variable "abfs_gerrit_uploader_manifest_server" {
+  default     = "android.googlesource.com"
+  description = "The manifest server to assume"
+  type        = string
 }
 
 variable "abfs_gerrit_uploader_git_branch" {

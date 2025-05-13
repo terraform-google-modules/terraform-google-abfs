@@ -108,11 +108,11 @@ spec:
         description: The PD regional disk type to use for the ABFS gerrit uploader datadisk(s)
         varType: string
         defaultValue: pd-ssd
-      - name: abfs_gerrit_uploader_git_servers
-        description: List of git servers to upload to the ABFS server (e.g. ["android.googlesource.com"])
-        varType: list(string)
+      - name: abfs_gerrit_uploader_manifest_server
+        description: The manifest server to assume
+        varType: string
         required: true
-        defaultValue: ["android.googlesource.com"]
+        defaultValue: "android.googlesource.com"
       - name: abfs_gerrit_uploader_git_branch
         description: Git branch to upload to the ABFS server (e.g.main)
         varType: string

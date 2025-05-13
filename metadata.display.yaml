@@ -32,12 +32,12 @@ spec:
           name: goog_cm_deployment_name
           title: Deployment name
           subtext: If set, this value will be used as a prefix for all VM and disk names
-        abfs_gerrit_uploader_git_servers:
-          name: abfs_gerrit_uploader_git_servers
+        abfs_gerrit_uploader_manifest_server:
+          name: abfs_gerrit_uploader_manifest_server
           title: ABFS Gerrit Uploader Git Servers
           section: gerrit_config
           subtext: |
-            Format: ["android.googlesource.com","gerrit.example.com"]
+            Format: "android.googlesource.com"
         abfs_gerrit_uploader_git_branch:
           name: abfs_gerrit_uploader_git_branch
           title: ABFS Gerrit Uploader Git Branch

@@ -143,7 +143,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                 abfs_datadisk_mountpoint = var.abfs_datadisk_mountpoint
                 # FIXME: Find a better way to parameterize the abfs command
                 abfs_command = <<-EOT
-                               --manifest-server ${join(",", var.abfs_gerrit_uploader_git_servers)} \
+                               --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
                                --remote-servers ${var.abfs_server_name}:50051 \
                                --manifest-project-name ${var.abfs_manifest_project_name} \
                                gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
