@@ -1,0 +1,114 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-abfs-uploaders
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: ABFS Uploaders Terraform module
+    source:
+      repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
+      dir: /modules/uploaders
+    description: {}
+  content:
+    examples:
+      - name: simple
+        location: examples/simple
+  interfaces:
+    variables:
+      - name: project_id
+        description: Google Cloud project ID
+        varType: string
+        required: true
+      - name: zone
+        description: Zone for ABFS servers
+        varType: string
+        required: true
+      - name: subnetwork
+        description: Subnetwork for the servers
+        varType: string
+        required: true
+      - name: service_account_email
+        description: Email of service account to attach to the servers
+        varType: string
+        required: true
+      - name: abfs_gerrit_uploader_count
+        description: The number of gerrit uploader instances to create
+        varType: number
+        defaultValue: 3
+      - name: abfs_gerrit_uploader_machine_type
+        description: Machine type for ABFS gerrit uploaders
+        varType: string
+        defaultValue: n2d-standard-48
+      - name: abfs_gerrit_uploader_name_prefix
+        description: Name prefix for the ABFS gerrit uploader VM(s)
+        varType: string
+        defaultValue: abfs-gerrit-uploader
+      - name: abfs_gerrit_uploader_datadisk_name_prefix
+        description: A name prefix for the ABFS gerrit uploader datadisk(s) that will be attached to VM(s). Note, this does not affect the mounting of the disk - the device name is always set to "abfs-server-storage"
+        varType: string
+        defaultValue: abfs-gerrit-uploader-datadisk
+      - name: abfs_gerrit_uploader_datadisk_size_gb
+        description: Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s)
+        varType: number
+        defaultValue: 4096
+      - name: abfs_gerrit_uploader_datadisk_type
+        description: The PD regional disk type to use for the ABFS gerrit uploader datadisk(s)
+        varType: string
+        defaultValue: pd-ssd
+      - name: abfs_gerrit_uploader_manifest_server
+        description: The manifest server to assume
+        varType: string
+        defaultValue: android.googlesource.com
+      - name: abfs_gerrit_uploader_git_branch
+        description: Git branch to upload to the ABFS server (e.g. main)
+        varType: string
+        defaultValue: main
+      - name: abfs_license
+        description: ABFS license (JSON)
+        varType: string
+        required: true
+      - name: abfs_manifest_project_name
+        description: Name of the git project on the manifest-server containing manifests
+        varType: string
+        defaultValue: platform/manifest
+      - name: abfs_manifest_file
+        description: Relative path from the manifest project root to the manifest file
+        varType: string
+        defaultValue: default.xml
+      - name: abfs_uploader_cos_image_ref
+        description: Reference to the COS boot image to use for the ABFS uploader
+        varType: string
+        defaultValue: projects/cos-cloud/global/images/family/cos-109-lts
+      - name: abfs_docker_image_uri
+        description: Docker image URI for the ABFS uploader
+        varType: string
+        required: true
+      - name: abfs_datadisk_mountpoint
+        description: Location for mounting the ABFS datadisk on the host VM
+        varType: string
+        defaultValue: /mnt/disks/abfs-data
+      - name: abfs_server_name
+        description: The name of the ABFS server
+        varType: string
+        required: true
+      - name: goog_cm_deployment_name
+        description: The name of the deployment for Marketplace
+        varType: string
+        defaultValue: ""
