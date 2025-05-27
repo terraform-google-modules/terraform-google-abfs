@@ -13,115 +13,115 @@
 # limitations under the License.
 
 variable "project_id" {
-  description = "Google Cloud project ID"
   type        = string
+  description = "Google Cloud project ID"
 }
 
 variable "zone" {
-  description = "Zone for ABFS servers"
   type        = string
+  description = "Zone for ABFS servers"
 }
 
 variable "subnetwork" {
-  description = "Subnetwork for the servers"
   type        = string
+  description = "Subnetwork for the servers"
 }
 
 variable "service_account_email" {
-  description = "Email of service account to attach to the servers"
   type        = string
+  description = "Email of service account to attach to the servers"
 }
 
 variable "abfs_gerrit_uploader_count" {
-  default     = 3
-  description = "The number of gerrit uploader instances to create"
   type        = number
+  description = "The number of gerrit uploader instances to create"
+  default     = 3
 }
 
 variable "abfs_gerrit_uploader_machine_type" {
-  default     = "n2d-standard-48"
-  description = "Machine type for ABFS gerrit uploaders"
   type        = string
+  description = "Machine type for ABFS gerrit uploaders"
+  default     = "n2d-standard-48"
 }
 
 variable "abfs_gerrit_uploader_name_prefix" {
-  default     = "abfs-gerrit-uploader"
-  description = "Name prefix for the ABFS gerrit uploader VM(s)"
   type        = string
+  description = "Name prefix for the ABFS gerrit uploader VM(s)"
+  default     = "abfs-gerrit-uploader"
 }
 
 variable "abfs_gerrit_uploader_datadisk_name_prefix" {
-  default     = "abfs-gerrit-uploader-datadisk"
-  description = "A name prefix for the ABFS gerrit uploader datadisk(s) that will be attached to VM(s). Note, this does not affect the mounting of the disk - the device name is always set to \"abfs-server-storage\""
   type        = string
+  description = "A name prefix for the ABFS gerrit uploader datadisk(s) that will be attached to VM(s). Note, this does not affect the mounting of the disk - the device name is always set to \"abfs-server-storage\""
+  default     = "abfs-gerrit-uploader-datadisk"
 }
 
 variable "abfs_gerrit_uploader_datadisk_size_gb" {
-  default     = 4096
-  description = "Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s)"
   type        = number
+  description = "Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s)"
+  default     = 4096
 }
 
 variable "abfs_gerrit_uploader_datadisk_type" {
-  default     = "pd-ssd"
-  description = "The PD regional disk type to use for the ABFS gerrit uploader datadisk(s)"
   type        = string
+  description = "The PD regional disk type to use for the ABFS gerrit uploader datadisk(s)"
+  default     = "pd-ssd"
 }
 
 variable "abfs_gerrit_uploader_manifest_server" {
-  default     = "android.googlesource.com"
-  description = "The manifest server to assume"
   type        = string
+  description = "The manifest server to assume"
+  default     = "android.googlesource.com"
 }
 
 variable "abfs_gerrit_uploader_git_branch" {
-  default     = "main"
-  description = "Git branch to upload to the ABFS server (e.g. main)"
-  type        = string
+  type        = set(string)
+  description = "Branches from where to find projects (e.g. [\"main\",\"v-keystone-qcom-release\"]) (default [\"main\"])"
+  default     = ["main"]
 }
 
 variable "abfs_license" {
-  description = "ABFS license (JSON)"
   type        = string
+  description = "ABFS license (JSON)"
 }
 
 variable "abfs_manifest_project_name" {
-  description = "Name of the git project on the manifest-server containing manifests"
   type        = string
+  description = "Name of the git project on the manifest-server containing manifests"
   default     = "platform/manifest"
 }
 
 variable "abfs_manifest_file" {
-  description = "Relative path from the manifest project root to the manifest file"
   type        = string
+  description = "Relative path from the manifest project root to the manifest file"
   default     = "default.xml"
 }
 
 variable "abfs_uploader_cos_image_ref" {
-  description = "Reference to the COS boot image to use for the ABFS uploader"
   type        = string
+  description = "Reference to the COS boot image to use for the ABFS uploader"
   default     = "projects/cos-cloud/global/images/family/cos-109-lts"
 }
 
 variable "abfs_docker_image_uri" {
-  description = "Docker image URI for the ABFS uploader"
   type        = string
+  description = "Docker image URI for the ABFS uploader"
 }
 
 variable "abfs_datadisk_mountpoint" {
-  description = "Location for mounting the ABFS datadisk on the host VM"
   type        = string
+  description = "Location for mounting the ABFS datadisk on the host VM"
   default     = "/mnt/disks/abfs-data"
 }
 
 variable "abfs_server_name" {
-  description = "The name of the ABFS server"
   type        = string
+  description = "The name of the ABFS server"
 }
 
 // Marketplace requires this variable name to be declared
 variable "goog_cm_deployment_name" {
-  description = "The name of the deployment for Marketplace"
   type        = string
+  description = "The name of the deployment for Marketplace"
   default     = ""
 }

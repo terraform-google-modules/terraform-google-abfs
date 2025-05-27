@@ -32,6 +32,9 @@ module "abfs-uploaders" {
   subnetwork                           = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
   abfs_docker_image_uri                = var.abfs_docker_image_uri
   abfs_gerrit_uploader_manifest_server = var.abfs_gerrit_uploader_manifest_server
+  abfs_gerrit_uploader_git_branch      = var.abfs_gerrit_uploader_git_branch
+  abfs_manifest_project_name           = var.abfs_manifest_project_name
+  abfs_manifest_file                   = var.abfs_manifest_file
   abfs_license                         = var.abfs_license
   abfs_server_name                     = module.abfs-deployment.abfs_server_name
 }

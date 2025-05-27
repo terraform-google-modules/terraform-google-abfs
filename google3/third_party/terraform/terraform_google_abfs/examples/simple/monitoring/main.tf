@@ -13,13 +13,13 @@
 # limitations under the License.
 
 variable "project_id" {
-  description = "Google Cloud project ID"
   type        = string
+  description = "Google Cloud project ID"
 }
 
 variable "notification_email" {
-  description = "Email address to send alert notifications to"
   type        = string
+  description = "Email address to send alert notifications to"
 }
 
 resource "google_monitoring_notification_channel" "email" {

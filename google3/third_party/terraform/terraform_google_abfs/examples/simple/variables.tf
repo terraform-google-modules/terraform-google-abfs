@@ -13,37 +13,55 @@
 # limitations under the License.
 
 variable "project_id" {
-  description = "Google Cloud project ID"
   type        = string
+  description = "Google Cloud project ID"
 }
 
 variable "region" {
-  description = "Region for ABFS servers"
   type        = string
+  description = "Region for ABFS servers"
 }
 
 variable "zone" {
-  description = "Zone for ABFS servers"
   type        = string
+  description = "Zone for ABFS servers"
 }
 
 variable "abfs_docker_image_uri" {
-  description = "Docker image URI for main ABFS server"
   type        = string
+  description = "Docker image URI for main ABFS server"
+}
+
+variable "abfs_gerrit_uploader_git_branch" {
+  type        = set(string)
+  description = "Branches from where to find projects (e.g. [\"main\",\"v-keystone-qcom-release\"]) (default [\"main\"])"
+  default     = ["main"]
+}
+
+variable "abfs_manifest_project_name" {
+  type        = string
+  description = "Name of the git project on the manifest-server containing manifests"
+  default     = "platform/manifest"
+}
+
+variable "abfs_manifest_file" {
+  type        = string
+  description = "Relative path from the manifest project root to the manifest file"
+  default     = "default.xml"
 }
 
 variable "abfs_gerrit_uploader_manifest_server" {
-  default     = "android.googlesource.com"
-  description = "The manifest server to assume"
   type        = string
+  description = "The manifest server to assume"
+  default     = "android.googlesource.com"
 }
 
 variable "abfs_license" {
-  description = "ABFS license (JSON)"
   type        = string
+  description = "ABFS license (JSON)"
 }
 
 variable "alert_notification_email" {
-  description = "Email address to send alert notifications to"
   type        = string
+  description = "Email address to send alert notifications to"
 }

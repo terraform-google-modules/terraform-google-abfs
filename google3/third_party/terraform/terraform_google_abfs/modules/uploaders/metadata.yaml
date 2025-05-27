@@ -77,9 +77,10 @@ spec:
         varType: string
         defaultValue: android.googlesource.com
       - name: abfs_gerrit_uploader_git_branch
-        description: Git branch to upload to the ABFS server (e.g. main)
-        varType: string
-        defaultValue: main
+        description: Branches from where to find projects (e.g. ["main","v-keystone-qcom-release"]) (default ["main"])
+        varType: set(string)
+        defaultValue:
+          - main
       - name: abfs_license
         description: ABFS license (JSON)
         varType: string

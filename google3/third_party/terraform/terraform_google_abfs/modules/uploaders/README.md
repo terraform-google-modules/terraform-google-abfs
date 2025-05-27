@@ -17,7 +17,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 | abfs\_gerrit\_uploader\_datadisk\_name\_prefix | A name prefix for the ABFS gerrit uploader datadisk(s) that will be attached to VM(s). Note, this does not affect the mounting of the disk - the device name is always set to "abfs-server-storage" | `string` | `"abfs-gerrit-uploader-datadisk"` | no |
 | abfs\_gerrit\_uploader\_datadisk\_size\_gb | Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s) | `number` | `4096` | no |
 | abfs\_gerrit\_uploader\_datadisk\_type | The PD regional disk type to use for the ABFS gerrit uploader datadisk(s) | `string` | `"pd-ssd"` | no |
-| abfs\_gerrit\_uploader\_git\_branch | Git branch to upload to the ABFS server (e.g. main) | `string` | `"main"` | no |
+| abfs\_gerrit\_uploader\_git\_branch | Branches from where to find projects (e.g. ["main","v-keystone-qcom-release"]) (default ["main"]) | `set(string)` | <pre>[<br>  "main"<br>]</pre> | no |
 | abfs\_gerrit\_uploader\_machine\_type | Machine type for ABFS gerrit uploaders | `string` | `"n2d-standard-48"` | no |
 | abfs\_gerrit\_uploader\_manifest\_server | The manifest server to assume | `string` | `"android.googlesource.com"` | no |
 | abfs\_gerrit\_uploader\_name\_prefix | Name prefix for the ABFS gerrit uploader VM(s) | `string` | `"abfs-gerrit-uploader"` | no |

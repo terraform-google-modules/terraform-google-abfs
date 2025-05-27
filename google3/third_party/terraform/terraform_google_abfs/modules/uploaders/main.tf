@@ -147,7 +147,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                                --remote-servers ${var.abfs_server_name}:50051 \
                                --manifest-project-name ${var.abfs_manifest_project_name} \
                                gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
-                               --branch ${var.abfs_gerrit_uploader_git_branch} \
+                               --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
                                --project-storage-path /abfs-storage \
                                --manifest-file ${var.abfs_manifest_file}
                                EOT
