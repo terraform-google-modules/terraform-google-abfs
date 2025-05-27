@@ -29,7 +29,7 @@ tool, which pulls a cloud-init config file from the metatdata server.
 The cloud-init config is generated in the server's [main.tf](./modules/server/main.tf) and the uploaders [main.tf](./modules/uploaders/main.tf) and is assembled from this [systemd configuration](./cloud-init) and [associated bash scripts](./cloud-init/scripts).
 
 Systemd is highly configurable and parallelized to allow for optimal and rapid VM
-startup. The vizualization below shows the order and dependencies of the relevant
+startup. The visualization below shows the order and dependencies of the relevant
 systemd units.
 
 ![systemd graph](./systemd-graph.svg)
