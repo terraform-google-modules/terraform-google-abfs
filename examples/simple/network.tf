@@ -19,6 +19,7 @@ module "abfs-vpc" {
   project_id   = data.google_project.project.project_id
   network_name = "abfs-network"
   routing_mode = "GLOBAL"
+
   firewall_rules = [
     {
       description             = "Allow egress to Google APIs via Private Google Access"
@@ -76,6 +77,7 @@ module "abfs-vpc" {
       ]
     }
   ]
+
   subnets = [
     {
       subnet_name           = "abfs-subnet"

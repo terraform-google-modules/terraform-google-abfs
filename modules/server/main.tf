@@ -13,7 +13,7 @@
 # limitations under the License.
 
 locals {
-  cloud_init_path           = "${path.module}/../../cloud-init"
+  cloud_init_path           = "${path.module}/../../files/cloud-init"
   goog_cm_deployment_name   = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
   abfs_datadisk_device_name = "abfs-server-storage"
   static_script_files = [for filename in fileset("${local.cloud_init_path}/scripts/", "*.sh") :
@@ -137,7 +137,12 @@ data "cloudinit_config" "abfs_server" {
               {
                 abfs_docker_image_uri    = var.abfs_docker_image_uri
                 abfs_datadisk_mountpoint = var.abfs_datadisk_mountpoint
-                abfs_command             = var.abfs_server_command
+                abfs_command             = <<-EOT
+                  --project ${google_spanner_instance.abfs.project} \
+                  --bucket ${google_storage_bucket.abfs.name} \
+                  --instance ${google_spanner_instance.abfs.name} \
+                  --db ${google_spanner_database.abfs.name}
+                EOT
             }))
           }
         ],

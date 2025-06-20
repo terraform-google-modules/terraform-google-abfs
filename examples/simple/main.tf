@@ -12,21 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "abfs-deployment" {
-  source = "../../modules/server"
-
-  project_id            = var.project_id
-  zone                  = var.zone
-  service_account_email = data.google_service_account.abfs.email
-  subnetwork            = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
-  abfs_docker_image_uri = var.abfs_docker_image_uri
-  abfs_license          = var.abfs_license
+moved {
+  from = module.abfs-deployment
+  to   = module.abfs_server
 }
 
-module "abfs-uploaders" {
+moved {
+  from = module.abfs-uploaders
+  to   = module.abfs_uploaders
+}
+
+module "abfs_server" {
+  source = "../../modules/server"
+
+  project_id                   = data.google_project.project.project_id
+  zone                         = var.zone
+  service_account_email        = data.google_service_account.abfs.email
+  subnetwork                   = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
+  abfs_docker_image_uri        = var.abfs_docker_image_uri
+  abfs_license                 = var.abfs_license
+  abfs_bucket_location         = var.abfs_bucket_location
+  abfs_spanner_instance_config = var.abfs_spanner_instance_config
+}
+
+module "abfs_uploaders" {
   source = "../../modules/uploaders"
 
-  project_id                           = var.project_id
+  project_id                           = data.google_project.project.project_id
   zone                                 = var.zone
   service_account_email                = data.google_service_account.abfs.email
   subnetwork                           = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
@@ -36,7 +48,7 @@ module "abfs-uploaders" {
   abfs_manifest_project_name           = var.abfs_manifest_project_name
   abfs_manifest_file                   = var.abfs_manifest_file
   abfs_license                         = var.abfs_license
-  abfs_server_name                     = module.abfs-deployment.abfs_server_name
+  abfs_server_name                     = module.abfs_server.abfs_server_name
 }
 
 module "monitoring" {

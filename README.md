@@ -26,7 +26,7 @@ This module is divided into two distinct submodules which creates the following:
 Systemd config and scripts are created on the VM by the built-in cloud-init
 tool, which pulls a cloud-init config file from the metatdata server.
 
-The cloud-init config is generated in the server's [main.tf](./modules/server/main.tf) and the uploaders [main.tf](./modules/uploaders/main.tf) and is assembled from this [systemd configuration](./cloud-init) and [associated bash scripts](./cloud-init/scripts).
+The cloud-init config is generated in the server's [main.tf](./modules/server/main.tf) and the uploaders [main.tf](./modules/uploaders/main.tf) and is assembled from this [systemd configuration](./files/cloud-init) and [associated bash scripts](./files/cloud-init/scripts).
 
 Systemd is highly configurable and parallelized to allow for optimal and rapid VM
 startup. The visualization below shows the order and dependencies of the relevant

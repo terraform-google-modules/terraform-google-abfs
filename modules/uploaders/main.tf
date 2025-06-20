@@ -13,7 +13,7 @@
 # limitations under the License.
 
 locals {
-  cloud_init_path           = "${path.module}/../../cloud-init"
+  cloud_init_path           = "${path.module}/../../files/cloud-init"
   goog_cm_deployment_name   = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
   abfs_datadisk_device_name = "abfs-server-storage"
   static_script_files = [for filename in fileset("${local.cloud_init_path}/scripts/", "*.sh") :

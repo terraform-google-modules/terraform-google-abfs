@@ -29,7 +29,7 @@ variable "zone" {
 
 variable "abfs_docker_image_uri" {
   type        = string
-  description = "Docker image URI for main ABFS server"
+  description = "Docker image URI for ABFS"
 }
 
 variable "abfs_gerrit_uploader_git_branch" {
@@ -69,4 +69,14 @@ variable "alert_notification_email" {
 variable "abfs_service_account_id" {
   type        = string
   description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com)"
+}
+
+variable "abfs_bucket_location" {
+  type        = string
+  description = "The location of the ABFS bucket (https://cloud.google.com/storage/docs/locations)."
+}
+
+variable "abfs_spanner_instance_config" {
+  type        = string
+  description = "The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance (https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/spanner_instance.html#config-1)."
 }

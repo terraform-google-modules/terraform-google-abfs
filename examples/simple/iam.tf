@@ -23,12 +23,15 @@ module "project-iam-bindings" {
 
   projects = [data.google_project.project.project_id]
   mode     = "authoritative"
+
   bindings = {
     "roles/artifactregistry.reader"             = [data.google_service_account.abfs.member],
     "roles/logging.logWriter"                   = [data.google_service_account.abfs.member],
     "roles/monitoring.metricWriter"             = [data.google_service_account.abfs.member],
     "roles/monitoring.viewer"                   = [data.google_service_account.abfs.member],
+    "roles/spanner.databaseUser"                = [data.google_service_account.abfs.member],
     "roles/stackdriver.resourceMetadata.writer" = [data.google_service_account.abfs.member],
+    "roles/storage.objectAdmin"                 = [data.google_service_account.abfs.member],
   }
 
   depends_on = [

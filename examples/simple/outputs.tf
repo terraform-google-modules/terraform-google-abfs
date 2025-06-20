@@ -20,3 +20,8 @@ output "license_information" {
     service_account_unique_id = data.google_service_account.abfs.unique_id
   }
 }
+
+output "spanner_database_schema_creation" {
+  description = "The CLI command for creating the Spanner database schema"
+  value       = "gcloud --project ${data.google_project.project.project_id} spanner databases ddl update --instance ${module.abfs_server.abfs_spanner_instance.name} ${module.abfs_server.abfs_spanner_database.name} --ddl-file ${path.module}/../../files/schemas/0.0.31-schema.sql"
+}

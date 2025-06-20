@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 source "$(dirname "$0")/abfs_base.sh"
 # TODO: If running as a non-root user add to docker group
 #usermod -a -G docker abfs
@@ -21,7 +23,7 @@ source "$(dirname "$0")/abfs_base.sh"
 if [[ "$(df /mnt/stateful_partition --output=pcent | egrep -o '[0-9]+')" -ge 90 ]]; then
   docker system prune -a -f || echo "docker system prune failed, continuing with GCR warmup"
 fi
-AR_HOSTS=("us-docker.pkg.dev","europe-docker.pkg.dev","europe-north1-docker.pkg.dev")
+AR_HOSTS=("us-docker.pkg.dev","europe-docker.pkg.dev","europe-north1-docker.pkg.dev","europe-west3-docker.pkg.dev")
 docker-credential-gcr configure-docker --registries "${AR_HOSTS[*]}"
 # TODO: Support pulling multiple images
 # TODO: Check VM region in metadata and pull from nearest repo

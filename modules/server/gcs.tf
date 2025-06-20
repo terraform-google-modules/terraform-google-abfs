@@ -12,17 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "abfs_server_name" {
-  description = "The name of the ABFS server instance"
-  value       = google_compute_instance.abfs_server.name
+resource "random_bytes" "abfs_bucket_prefix" {
+  length = 2
 }
 
-output "abfs_spanner_instance" {
-  description = "The ABFS Spanner instance object"
-  value       = google_spanner_instance.abfs
-}
-
-output "abfs_spanner_database" {
-  description = "The ABFS Spanner database object"
-  value       = google_spanner_database.abfs
+resource "google_storage_bucket" "abfs" {
+  project                  = var.project_id
+  name                     = "${var.abfs_bucket_name}-${random_bytes.abfs_bucket_prefix.hex}"
+  location                 = var.abfs_bucket_location
+  public_access_prevention = "enforced"
 }

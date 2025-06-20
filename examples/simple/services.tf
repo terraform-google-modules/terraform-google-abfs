@@ -32,7 +32,8 @@ module "project-services" {
   activate_apis = [
     "compute.googleapis.com",
     "dns.googleapis.com",
-    "monitoring.googleapis.com"
+    "monitoring.googleapis.com",
+    "spanner.googleapis.com",
   ]
 
   depends_on = [
