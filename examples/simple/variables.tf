@@ -65,3 +65,8 @@ variable "alert_notification_email" {
   type        = string
   description = "Email address to send alert notifications to"
 }
+
+variable "abfs_service_account_id" {
+  type        = string
+  description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com)"
+}

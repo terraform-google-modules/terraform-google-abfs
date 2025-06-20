@@ -19,7 +19,6 @@ module "abfs-vpc" {
   project_id   = data.google_project.project.project_id
   network_name = "abfs-network"
   routing_mode = "GLOBAL"
-
   firewall_rules = [
     {
       description             = "Allow egress to Google APIs via Private Google Access"
@@ -27,7 +26,7 @@ module "abfs-vpc" {
       name                    = "allow-egress-google-apis"
       priority                = 1000
       ranges                  = ["199.36.153.8/30", "34.126.0.0/18"]
-      target_service_accounts = [google_service_account.abfs_server.email]
+      target_service_accounts = [data.google_service_account.abfs.email]
 
       allow = [
         {
@@ -59,8 +58,8 @@ module "abfs-vpc" {
       priority    = 1000
 
       ranges                  = ["0.0.0.0/0"]
-      source_service_accounts = [google_service_account.abfs_server.email]
-      target_service_accounts = [google_service_account.abfs_server.email]
+      source_service_accounts = [data.google_service_account.abfs.email]
+      target_service_accounts = [data.google_service_account.abfs.email]
       allow = [
         {
           protocol = "icmp"
@@ -77,7 +76,6 @@ module "abfs-vpc" {
       ]
     }
   ]
-
   subnets = [
     {
       subnet_name           = "abfs-subnet"
@@ -100,8 +98,9 @@ resource "google_compute_router" "nat_router" {
 }
 
 module "cloud-nat" {
-  source     = "terraform-google-modules/cloud-nat/google"
-  version    = "~> 5.3"
+  source  = "terraform-google-modules/cloud-nat/google"
+  version = "~> 5.3"
+
   project_id = var.project_id
   region     = var.region
   router     = google_compute_router.nat_router.name

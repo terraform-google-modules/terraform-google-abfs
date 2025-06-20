@@ -16,7 +16,7 @@ output "license_information" {
   value = {
     project_id                = data.google_project.project.project_id,
     project_number            = data.google_project.project.number,
-    service_account_email     = google_service_account.abfs_server.email
-    service_account_unique_id = google_service_account.abfs_server.unique_id
+    service_account_email     = data.google_service_account.abfs.email
+    service_account_unique_id = data.google_service_account.abfs.unique_id
   }
 }

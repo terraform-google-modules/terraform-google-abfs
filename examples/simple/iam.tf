@@ -12,24 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_service_account" "abfs_server" {
-  project      = data.google_project.project.project_id
-  account_id   = "abfs-server"
-  display_name = "SA for ABFS server VMs"
+data "google_service_account" "abfs" {
+  project    = data.google_project.project.project_id
+  account_id = var.abfs_service_account_id
 }
 
 module "project-iam-bindings" {
-  source   = "terraform-google-modules/iam/google//modules/projects_iam"
-  version  = "8.1.0"
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "8.1.0"
+
   projects = [data.google_project.project.project_id]
   mode     = "authoritative"
-
   bindings = {
-    "roles/logging.logWriter"                   = ["serviceAccount:${google_service_account.abfs_server.email}"],
-    "roles/monitoring.metricWriter"             = ["serviceAccount:${google_service_account.abfs_server.email}"],
-    "roles/monitoring.viewer"                   = ["serviceAccount:${google_service_account.abfs_server.email}"],
-    "roles/stackdriver.resourceMetadata.writer" = ["serviceAccount:${google_service_account.abfs_server.email}"],
-    "roles/artifactregistry.reader"             = ["serviceAccount:${google_service_account.abfs_server.email}"]
+    "roles/artifactregistry.reader"             = [data.google_service_account.abfs.member],
+    "roles/logging.logWriter"                   = [data.google_service_account.abfs.member],
+    "roles/monitoring.metricWriter"             = [data.google_service_account.abfs.member],
+    "roles/monitoring.viewer"                   = [data.google_service_account.abfs.member],
+    "roles/stackdriver.resourceMetadata.writer" = [data.google_service_account.abfs.member],
   }
 
   depends_on = [

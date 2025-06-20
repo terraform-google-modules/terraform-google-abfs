@@ -17,7 +17,7 @@ module "abfs-deployment" {
 
   project_id            = var.project_id
   zone                  = var.zone
-  service_account_email = google_service_account.abfs_server.email
+  service_account_email = data.google_service_account.abfs.email
   subnetwork            = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
   abfs_docker_image_uri = var.abfs_docker_image_uri
   abfs_license          = var.abfs_license
@@ -28,7 +28,7 @@ module "abfs-uploaders" {
 
   project_id                           = var.project_id
   zone                                 = var.zone
-  service_account_email                = google_service_account.abfs_server.email
+  service_account_email                = data.google_service_account.abfs.email
   subnetwork                           = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
   abfs_docker_image_uri                = var.abfs_docker_image_uri
   abfs_gerrit_uploader_manifest_server = var.abfs_gerrit_uploader_manifest_server
@@ -40,7 +40,8 @@ module "abfs-uploaders" {
 }
 
 module "monitoring" {
-  source             = "./monitoring"
+  source = "./monitoring"
+
   project_id         = data.google_project.project.project_id
   notification_email = var.alert_notification_email
 }
