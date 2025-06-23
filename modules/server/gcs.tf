@@ -17,8 +17,9 @@ resource "random_bytes" "abfs_bucket_prefix" {
 }
 
 resource "google_storage_bucket" "abfs" {
-  project                  = var.project_id
-  name                     = "${var.abfs_bucket_name}-${random_bytes.abfs_bucket_prefix.hex}"
-  location                 = var.abfs_bucket_location
-  public_access_prevention = "enforced"
+  project                     = var.project_id
+  name                        = "${var.abfs_bucket_name}-${random_bytes.abfs_bucket_prefix.hex}"
+  location                    = var.abfs_bucket_location
+  public_access_prevention    = "enforced"
+  uniform_bucket_level_access = true
 }
