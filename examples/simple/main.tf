@@ -23,7 +23,7 @@ moved {
 }
 
 module "abfs_server" {
-  source = "../../modules/server"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.5.0"
 
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone
@@ -36,7 +36,7 @@ module "abfs_server" {
 }
 
 module "abfs_uploaders" {
-  source = "../../modules/uploaders"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.5.0"
 
   project_id                           = data.google_project.project.project_id
   zone                                 = var.zone
