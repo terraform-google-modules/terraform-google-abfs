@@ -11,12 +11,10 @@ For example usage, please check the following [example](../../examples/simple/ma
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| abfs\_bootdisk\_size\_gb | Size in GB for the ABFS bootdisk that will be attached to the VM | `number` | `100` | no |
+| abfs\_bootdisk\_type | The PD regional disk type to use for the ABFS bootdisk | `string` | `"pd-ssd"` | no |
 | abfs\_bucket\_location | The location of the ABFS bucket (https://cloud.google.com/storage/docs/locations). | `string` | n/a | yes |
 | abfs\_bucket\_name | The name of the ABFS bucket. | `string` | `"abfs"` | no |
-| abfs\_datadisk\_mountpoint | Location for mounting the ABFS datadisk on the host VM | `string` | `"/mnt/disks/abfs-data"` | no |
-| abfs\_datadisk\_name | A name for the ABFS datadisk that will be attached to the VM. Note, this does not affect the mounting of the disk - the device name is always set to "abfs-server-storage" | `string` | `"abfs-datadisk"` | no |
-| abfs\_datadisk\_size\_gb | Size in GB for the ABFS datadisk that will be attached to the VM | `number` | `10000` | no |
-| abfs\_datadisk\_type | The PD regional disk type to use for the ABFS datadisk | `string` | `"pd-ssd"` | no |
 | abfs\_docker\_image\_uri | Docker image URI for the ABFS server | `string` | n/a | yes |
 | abfs\_license | ABFS license (JSON) | `string` | n/a | yes |
 | abfs\_server\_cos\_image\_ref | Reference to the COS boot image to use for the ABFS server | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |

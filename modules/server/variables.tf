@@ -66,27 +66,15 @@ variable "abfs_docker_image_uri" {
   description = "Docker image URI for the ABFS server"
 }
 
-variable "abfs_datadisk_mountpoint" {
-  type        = string
-  description = "Location for mounting the ABFS datadisk on the host VM"
-  default     = "/mnt/disks/abfs-data"
-}
-
-variable "abfs_datadisk_name" {
-  type        = string
-  description = "A name for the ABFS datadisk that will be attached to the VM. Note, this does not affect the mounting of the disk - the device name is always set to \"abfs-server-storage\""
-  default     = "abfs-datadisk"
-}
-
-variable "abfs_datadisk_size_gb" {
+variable "abfs_bootdisk_size_gb" {
   type        = number
-  description = "Size in GB for the ABFS datadisk that will be attached to the VM"
-  default     = 10000
+  description = "Size in GB for the ABFS bootdisk that will be attached to the VM"
+  default     = 100
 }
 
-variable "abfs_datadisk_type" {
+variable "abfs_bootdisk_type" {
   type        = string
-  description = "The PD regional disk type to use for the ABFS datadisk"
+  description = "The PD regional disk type to use for the ABFS bootdisk"
   default     = "pd-ssd"
 }
 

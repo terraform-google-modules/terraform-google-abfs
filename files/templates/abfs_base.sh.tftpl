@@ -13,6 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-declare -r DATADISK_MOUNTPOINT="${abfs_datadisk_mountpoint}"
-declare -r ABFS_DOCKER_IMAGE_URI="${abfs_docker_image_uri}"
-declare -r ABFS_CMD="${abfs_command}"
+%{ for env_key, env_value in envs ~}
+declare -r ${env_key}="${env_value}"
+%{ endfor ~}

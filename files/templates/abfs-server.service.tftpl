@@ -14,8 +14,10 @@
 
 [Unit]
 Description=Start an ABFS server
+%{ if type == "uploader" ~}
 Wants=abfs-datadisk-ready.target
 After=abfs-datadisk-ready.target
+%{ endif ~}
 Wants=abfs-docker-warmup.service
 After=abfs-docker-warmup.service
 

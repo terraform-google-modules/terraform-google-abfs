@@ -13,41 +13,60 @@
 # limitations under the License.
 
 locals {
-  cloud_init_path           = "${path.module}/../../files/cloud-init"
-  goog_cm_deployment_name   = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
-  abfs_datadisk_device_name = "abfs-server-storage"
-  static_script_files = [for filename in fileset("${local.cloud_init_path}/scripts/", "*.sh") :
-    {
-      path        = "/var/lib/abfs/bin/${filename}"
-      permissions = "0755"
-      owner       = "root"
-      encoding    = "gzip+base64"
-      content     = base64gzip(file("${local.cloud_init_path}/scripts/${filename}"))
-  }]
-  systemd_files = [for filename in fileset(local.cloud_init_path, "abfs*") :
-    {
-      path        = "/etc/systemd/system/${filename}"
-      permissions = "0644"
-      owner       = "root"
-      encoding    = "gzip+base64"
-      content     = base64gzip(file("${local.cloud_init_path}/${filename}"))
-  }]
+  common_files_root       = "${path.module}/../../files"
+  goog_cm_deployment_name = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
+  abfs_server_name        = "${local.goog_cm_deployment_name}${var.abfs_server_name}"
+
+  static_script_files = flatten([
+    for folder in ["${local.common_files_root}/scripts", "${path.module}/files/scripts"] : [
+      for filename in fileset(folder, "*.sh") :
+      {
+        path        = "/var/lib/abfs/bin/${filename}"
+        permissions = "0755"
+        owner       = "root"
+        encoding    = "gzip+base64"
+        content     = base64gzip(file("${folder}/${filename}"))
+      }
+    ]
+  ])
+
+  systemd_files = flatten([
+    for folder in ["${local.common_files_root}/systemd", "${path.module}/files/systemd"] : [
+      for filename in fileset(folder, "*") :
+      {
+        path        = "/etc/systemd/system/${filename}"
+        permissions = "0644"
+        owner       = "root"
+        encoding    = "gzip+base64"
+        content     = base64gzip(file("${folder}/${filename}"))
+      }
+    ]
+  ])
+
   runcmd = [
     "systemctl daemon-reload",
-    "systemctl enable abfs-datadisk.path",
     "systemctl restart abfs-docker-warmup.service",
     "systemctl is-active -q abfs-server.service || systemctl start --no-block abfs-server.service",
     "systemctl is-active -q fluent-bit.service || systemctl start --no-block fluent-bit.service",
     "systemctl is-active -q node-problem-detector.service || systemctl start --no-block node-problem-detector.service"
   ]
+
   bootcmd = [
     "echo 'cloud-init bootcmd'"
   ]
 }
 
+resource "google_compute_disk" "abfs_server_bootdisk" {
+  name  = "${local.abfs_server_name}-bootdisk"
+  zone  = var.zone
+  image = var.abfs_server_cos_image_ref
+  size  = var.abfs_bootdisk_size_gb
+  type  = var.abfs_bootdisk_type
+}
+
 resource "google_compute_instance" "abfs_server" {
   project      = var.project_id
-  name         = "${local.goog_cm_deployment_name}${var.abfs_server_name}"
+  name         = local.abfs_server_name
   machine_type = var.abfs_server_machine_type
   zone         = var.zone
 
@@ -58,9 +77,7 @@ resource "google_compute_instance" "abfs_server" {
   }
 
   boot_disk {
-    initialize_params {
-      image = var.abfs_server_cos_image_ref
-    }
+    source = google_compute_disk.abfs_server_bootdisk.name
   }
 
   network_interface {
@@ -76,29 +93,6 @@ resource "google_compute_instance" "abfs_server" {
     abfs-license = base64encode(var.abfs_license)
     user-data    = data.cloudinit_config.abfs_server.rendered
   }
-
-  lifecycle {
-    ignore_changes = [attached_disk]
-  }
-}
-
-resource "google_compute_disk" "abfs_datadisk" {
-  project = var.project_id
-  name    = "${local.goog_cm_deployment_name}${var.abfs_datadisk_name}"
-  size    = var.abfs_datadisk_size_gb
-  zone    = var.zone
-  type    = var.abfs_datadisk_type
-
-  lifecycle {
-    # prevent_destroy = true
-  }
-}
-
-resource "google_compute_attached_disk" "abfs_datadisk_attachment" {
-  project     = var.project_id
-  disk        = google_compute_disk.abfs_datadisk.id
-  instance    = google_compute_instance.abfs_server.id
-  device_name = local.abfs_datadisk_device_name
 }
 
 data "cloudinit_config" "abfs_server" {
@@ -118,9 +112,11 @@ data "cloudinit_config" "abfs_server" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.cloud_init_path}/scripts/abfs_container.env.tftpl",
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_container.env.tftpl",
               {
-                needs_git = "false"
+                envs = {
+                  "NEEDS_GIT" = false
+                }
             }))
           }
         ],
@@ -133,16 +129,29 @@ data "cloudinit_config" "abfs_server" {
             permissions = "0755"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.cloud_init_path}/scripts/abfs_base.sh.tftpl",
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_base.sh.tftpl",
               {
-                abfs_docker_image_uri    = var.abfs_docker_image_uri
-                abfs_datadisk_mountpoint = var.abfs_datadisk_mountpoint
-                abfs_command             = <<-EOT
-                  --project ${google_spanner_instance.abfs.project} \
-                  --bucket ${google_storage_bucket.abfs.name} \
-                  --instance ${google_spanner_instance.abfs.name} \
-                  --db ${google_spanner_database.abfs.name}
-                EOT
+                envs = {
+                  "ABFS_CMD"              = <<-EOT
+                    --project ${google_spanner_instance.abfs.project} \
+                    --bucket ${google_storage_bucket.abfs.name} \
+                    --instance ${google_spanner_instance.abfs.name} \
+                    --db ${google_spanner_database.abfs.name}
+                  EOT
+                  "ABFS_DOCKER_IMAGE_URI" = var.abfs_docker_image_uri,
+                }
+            }))
+          }
+        ],
+        [
+          {
+            path        = "/etc/systemd/system/abfs-server.service"
+            permissions = "0644"
+            owner       = "root"
+            encoding    = "gzip+base64"
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs-server.service.tftpl",
+              {
+                type = "server"
             }))
           }
         ],

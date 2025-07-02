@@ -13,9 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "$(dirname "$0")/abfs_base.sh"
-echo "running abfs_datadisk.sh"
-echo "DATADISK_MOUNTPOINT: $DATADISK_MOUNTPOINT"
 function setup_disk() {
   device_by_id="$1"
   disk_mountpoint="$2"
@@ -32,6 +29,11 @@ function setup_disk() {
     mount -o discard,errors=panic "$device_by_id" "$disk_mountpoint"
   fi
 }
+
+source "$(dirname "$0")/abfs_base.sh"
+echo "running abfs_datadisk.sh"
+echo "DATADISK_MOUNTPOINT: $DATADISK_MOUNTPOINT"
+
 set -x
 setup_disk /dev/disk/by-id/google-abfs-server-storage "${DATADISK_MOUNTPOINT}"
 set +x

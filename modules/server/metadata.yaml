@@ -68,20 +68,12 @@ spec:
         description: Docker image URI for the ABFS server
         varType: string
         required: true
-      - name: abfs_datadisk_mountpoint
-        description: Location for mounting the ABFS datadisk on the host VM
-        varType: string
-        defaultValue: /mnt/disks/abfs-data
-      - name: abfs_datadisk_name
-        description: A name for the ABFS datadisk that will be attached to the VM. Note, this does not affect the mounting of the disk - the device name is always set to "abfs-server-storage"
-        varType: string
-        defaultValue: abfs-datadisk
-      - name: abfs_datadisk_size_gb
-        description: Size in GB for the ABFS datadisk that will be attached to the VM
+      - name: abfs_bootdisk_size_gb
+        description: Size in GB for the ABFS bootdisk that will be attached to the VM
         varType: number
-        defaultValue: 10000
-      - name: abfs_datadisk_type
-        description: The PD regional disk type to use for the ABFS datadisk
+        defaultValue: 100
+      - name: abfs_bootdisk_type
+        description: The PD regional disk type to use for the ABFS bootdisk
         varType: string
         defaultValue: pd-ssd
       - name: abfs_bucket_name

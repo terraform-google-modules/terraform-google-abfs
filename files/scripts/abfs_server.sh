@@ -15,16 +15,17 @@
 
 source "$(dirname "$0")/abfs_base.sh"
 
-# TODO: think about which additional Docker run args might be needed...
-# --memory, --memory-swap, --ulimit, --oom-score-adj
 DOCKER_RUN_ARGS=(--privileged \
     --cap-add=all \
     --pid=host \
     --env-file /var/run/abfs/abfs_container.env \
-    --publish 50051:50051 \
-    --volume ${DATADISK_MOUNTPOINT}:/abfs-storage
+    --publish 50051:50051
 )
-# TODO: pass abfs args to the VM dynmaically
+
+if [[ -n "${DATADISK_MOUNTPOINT}" ]]; then
+  DOCKER_RUN_ARGS+=(--volume ${DATADISK_MOUNTPOINT}:/abfs-storage)
+fi
+
 docker run --name=abfs-server --log-driver=journald \
   "${DOCKER_RUN_ARGS[@]}" "${ABFS_DOCKER_IMAGE_URI}" \
   ${ABFS_CMD} 

@@ -13,25 +13,36 @@
 # limitations under the License.
 
 locals {
-  cloud_init_path           = "${path.module}/../../files/cloud-init"
+  common_files_root         = "${path.module}/../../files"
   goog_cm_deployment_name   = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
   abfs_datadisk_device_name = "abfs-server-storage"
-  static_script_files = [for filename in fileset("${local.cloud_init_path}/scripts/", "*.sh") :
-    {
-      path        = "/var/lib/abfs/bin/${filename}"
-      permissions = "0755"
-      owner       = "root"
-      encoding    = "gzip+base64"
-      content     = base64gzip(file("${local.cloud_init_path}/scripts/${filename}"))
-  }]
-  systemd_files = [for filename in fileset(local.cloud_init_path, "abfs*") :
-    {
-      path        = "/etc/systemd/system/${filename}"
-      permissions = "0644"
-      owner       = "root"
-      encoding    = "gzip+base64"
-      content     = base64gzip(file("${local.cloud_init_path}/${filename}"))
-  }]
+
+  static_script_files = flatten([
+    for folder in ["${local.common_files_root}/scripts", "${path.module}/files/scripts"] : [
+      for filename in fileset(folder, "*.sh") :
+      {
+        path        = "/var/lib/abfs/bin/${filename}"
+        permissions = "0755"
+        owner       = "root"
+        encoding    = "gzip+base64"
+        content     = base64gzip(file("${folder}/${filename}"))
+      }
+    ]
+  ])
+
+  systemd_files = flatten([
+    for folder in ["${local.common_files_root}/systemd", "${path.module}/files/systemd"] : [
+      for filename in fileset(folder, "*") :
+      {
+        path        = "/etc/systemd/system/${filename}"
+        permissions = "0644"
+        owner       = "root"
+        encoding    = "gzip+base64"
+        content     = base64gzip(file("${folder}/${filename}"))
+      }
+    ]
+  ])
+
   runcmd = [
     "systemctl daemon-reload",
     "systemctl enable abfs-datadisk.path",
@@ -40,6 +51,7 @@ locals {
     "systemctl is-active -q fluent-bit.service || systemctl start --no-block fluent-bit.service",
     "systemctl is-active -q node-problem-detector.service || systemctl start --no-block node-problem-detector.service"
   ]
+
   bootcmd = [
     "echo 'cloud-init bootcmd'"
   ]
@@ -122,9 +134,11 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.cloud_init_path}/scripts/abfs_container.env.tftpl",
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_container.env.tftpl",
               {
-                needs_git = "true" # gerrit uploaders need git access
+                envs = {
+                  "NEEDS_GIT" = true # gerrit uploaders need git access
+                }
             }))
           }
         ],
@@ -137,20 +151,33 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             permissions = "0755"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.cloud_init_path}/scripts/abfs_base.sh.tftpl",
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_base.sh.tftpl",
               {
-                abfs_docker_image_uri    = var.abfs_docker_image_uri
-                abfs_datadisk_mountpoint = var.abfs_datadisk_mountpoint
-                # FIXME: Find a better way to parameterize the abfs command
-                abfs_command = <<-EOT
-                               --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
-                               --remote-servers ${var.abfs_server_name}:50051 \
-                               --manifest-project-name ${var.abfs_manifest_project_name} \
-                               gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
-                               --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
-                               --project-storage-path /abfs-storage \
-                               --manifest-file ${var.abfs_manifest_file}
-                               EOT
+                envs = {
+                  "ABFS_CMD"              = <<-EOT
+                    --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
+                    --remote-servers ${var.abfs_server_name}:50051 \
+                    --manifest-project-name ${var.abfs_manifest_project_name} \
+                    gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
+                    --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
+                    --project-storage-path /abfs-storage \
+                    --manifest-file ${var.abfs_manifest_file}
+                  EOT
+                  "ABFS_DOCKER_IMAGE_URI" = var.abfs_docker_image_uri,
+                  "DATADISK_MOUNTPOINT"   = var.abfs_datadisk_mountpoint,
+                }
+            }))
+          }
+        ],
+        [
+          {
+            path        = "/etc/systemd/system/abfs-server.service"
+            permissions = "0644"
+            owner       = "root"
+            encoding    = "gzip+base64"
+            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs-server.service.tftpl",
+              {
+                type = "uploader"
             }))
           }
         ],
