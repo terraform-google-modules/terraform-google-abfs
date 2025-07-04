@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_monitoring_notification_channel" "email" {
-  display_name = "ABFS Email Notification Channel"
-  type         = "email"
-  labels = {
-    email_address = var.notification_email
-  }
-  force_delete = false
-  enabled      = true
+variable "project_id" {
+  type        = string
+  description = "Google Cloud project ID"
+}
+
+variable "notification_email" {
+  type        = string
+  description = "Email address to send alert notifications to"
 }

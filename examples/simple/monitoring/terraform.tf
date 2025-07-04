@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_monitoring_notification_channel" "email" {
-  display_name = "ABFS Email Notification Channel"
-  type         = "email"
-  labels = {
-    email_address = var.notification_email
+terraform {
+  required_version = ">= 1.9.6"
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 6.11.0"
+    }
   }
-  force_delete = false
-  enabled      = true
 }
