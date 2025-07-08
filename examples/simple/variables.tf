@@ -50,6 +50,24 @@ variable "abfs_manifest_file" {
   default     = "default.xml"
 }
 
+variable "abfs_gerrit_uploader_count" {
+  type        = number
+  description = "The number of gerrit uploader instances to create"
+  default     = 3
+}
+
+variable "abfs_gerrit_uploader_machine_type" {
+  type        = string
+  description = "Machine type for ABFS gerrit uploaders"
+  default     = "n2d-standard-48"
+}
+
+variable "abfs_gerrit_uploader_datadisk_size_gb" {
+  type        = number
+  description = "Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s)"
+  default     = 4096
+}
+
 variable "abfs_gerrit_uploader_manifest_server" {
   type        = string
   description = "The manifest server to assume"
@@ -69,6 +87,12 @@ variable "alert_notification_email" {
 variable "abfs_service_account_id" {
   type        = string
   description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com)"
+}
+
+variable "abfs_server_machine_type" {
+  type        = string
+  description = "Machine type for ABFS servers"
+  default     = "n2-highmem-128"
 }
 
 variable "abfs_bucket_location" {

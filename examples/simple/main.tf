@@ -32,23 +32,27 @@ module "abfs_server" {
   abfs_docker_image_uri        = var.abfs_docker_image_uri
   abfs_license                 = var.abfs_license
   abfs_bucket_location         = var.abfs_bucket_location
+  abfs_server_machine_type     = var.abfs_server_machine_type
   abfs_spanner_instance_config = var.abfs_spanner_instance_config
 }
 
 module "abfs_uploaders" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.6.0"
 
-  project_id                           = data.google_project.project.project_id
-  zone                                 = var.zone
-  service_account_email                = data.google_service_account.abfs.email
-  subnetwork                           = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
-  abfs_docker_image_uri                = var.abfs_docker_image_uri
-  abfs_gerrit_uploader_manifest_server = var.abfs_gerrit_uploader_manifest_server
-  abfs_gerrit_uploader_git_branch      = var.abfs_gerrit_uploader_git_branch
-  abfs_manifest_project_name           = var.abfs_manifest_project_name
-  abfs_manifest_file                   = var.abfs_manifest_file
-  abfs_license                         = var.abfs_license
-  abfs_server_name                     = module.abfs_server.abfs_server_name
+  project_id                            = data.google_project.project.project_id
+  zone                                  = var.zone
+  service_account_email                 = data.google_service_account.abfs.email
+  subnetwork                            = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
+  abfs_docker_image_uri                 = var.abfs_docker_image_uri
+  abfs_gerrit_uploader_count            = var.abfs_gerrit_uploader_count
+  abfs_gerrit_uploader_machine_type     = var.abfs_gerrit_uploader_machine_type
+  abfs_gerrit_uploader_datadisk_size_gb = var.abfs_gerrit_uploader_datadisk_size_gb
+  abfs_gerrit_uploader_manifest_server  = var.abfs_gerrit_uploader_manifest_server
+  abfs_gerrit_uploader_git_branch       = var.abfs_gerrit_uploader_git_branch
+  abfs_manifest_project_name            = var.abfs_manifest_project_name
+  abfs_manifest_file                    = var.abfs_manifest_file
+  abfs_license                          = var.abfs_license
+  abfs_server_name                      = module.abfs_server.abfs_server_name
 }
 
 module "monitoring" {
