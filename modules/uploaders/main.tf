@@ -137,7 +137,8 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_container.env.tftpl",
               {
                 envs = {
-                  "NEEDS_GIT" = true # gerrit uploaders need git access
+                  "NEEDS_GIT"       = true # gerrit uploaders need git access
+                  "GIT_LFS_ENABLED" = var.abfs_enable_git_lfs
                 }
             }))
           }
@@ -158,6 +159,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                     --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
                     --remote-servers ${var.abfs_server_name}:50051 \
                     --manifest-project-name ${var.abfs_manifest_project_name} \
+                    --lfs=${var.abfs_enable_git_lfs} \
                     gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
                     --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
                     --project-storage-path /abfs-storage \

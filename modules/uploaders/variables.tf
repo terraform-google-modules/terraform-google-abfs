@@ -80,6 +80,12 @@ variable "abfs_gerrit_uploader_git_branch" {
   default     = ["main"]
 }
 
+variable "abfs_enable_git_lfs" {
+  type        = bool
+  description = "Enable Git LFS support"
+  default     = false
+}
+
 variable "abfs_license" {
   type        = string
   description = "ABFS license (JSON)"
