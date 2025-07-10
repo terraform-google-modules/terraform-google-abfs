@@ -136,7 +136,7 @@ data "cloudinit_config" "abfs_server" {
                 envs = {
                   "ABFS_CMD"              = <<-EOT
                     --project ${google_spanner_instance.abfs.project} \
-                    --bucket ${google_storage_bucket.abfs.name} \
+                    --bucket ${data.google_storage_bucket.abfs.name} \
                     --instance ${google_spanner_instance.abfs.name} \
                     --db ${google_spanner_database.abfs.name}
                   EOT

@@ -14,6 +14,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 | abfs\_datadisk\_mountpoint | Location for mounting the ABFS datadisk on the host VM | `string` | `"/mnt/disks/abfs-data"` | no |
 | abfs\_docker\_image\_uri | Docker image URI for the ABFS uploader | `string` | n/a | yes |
 | abfs\_enable\_git\_lfs | Enable Git LFS support | `bool` | `false` | no |
+| abfs\_gerrit\_uploader\_allow\_stopping\_for\_update | Allow to stop uploaders to update properties | `bool` | `true` | no |
 | abfs\_gerrit\_uploader\_count | The number of gerrit uploader instances to create | `number` | `3` | no |
 | abfs\_gerrit\_uploader\_datadisk\_name\_prefix | A name prefix for the ABFS gerrit uploader datadisk(s) that will be attached to VM(s). Note, this does not affect the mounting of the disk - the device name is always set to "abfs-server-storage" | `string` | `"abfs-gerrit-uploader-datadisk"` | no |
 | abfs\_gerrit\_uploader\_datadisk\_size\_gb | Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s) | `number` | `4096` | no |

@@ -48,6 +48,10 @@ spec:
         description: Email of service account to attach to the servers
         varType: string
         required: true
+      - name: abfs_gerrit_uploader_allow_stopping_for_update
+        description: Allow to stop uploaders to update properties
+        varType: bool
+        defaultValue: true
       - name: abfs_gerrit_uploader_count
         description: The number of gerrit uploader instances to create
         varType: number

@@ -12,13 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+moved {
+  from = google_storage_bucket.abfs
+  to   = google_storage_bucket.abfs[0]
+}
+
+moved {
+  from = random_bytes.abfs_bucket_prefix
+  to   = random_bytes.abfs_bucket_prefix[0]
+}
+
+data "google_storage_bucket" "abfs" {
+  project = var.project_id
+  name    = var.existing_bucket_name == "" ? google_storage_bucket.abfs[0].name : var.existing_bucket_name
+}
+
 resource "random_bytes" "abfs_bucket_prefix" {
+  count  = var.existing_bucket_name == "" ? 1 : 0
   length = 2
 }
 
 resource "google_storage_bucket" "abfs" {
+  count                       = var.existing_bucket_name == "" ? 1 : 0
   project                     = var.project_id
-  name                        = "${var.abfs_bucket_name}-${random_bytes.abfs_bucket_prefix.hex}"
+  name                        = "${var.abfs_bucket_name}-${random_bytes.abfs_bucket_prefix[0].hex}"
   location                    = var.abfs_bucket_location
   public_access_prevention    = "enforced"
   uniform_bucket_level_access = true

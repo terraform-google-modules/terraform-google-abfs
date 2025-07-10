@@ -48,6 +48,10 @@ spec:
         description: Email of service account to attach to the servers
         varType: string
         required: true
+      - name: abfs_server_allow_stopping_for_update
+        description: Allow to stop the server to update properties
+        varType: bool
+        defaultValue: true
       - name: abfs_server_machine_type
         description: Machine type for ABFS servers
         varType: string
@@ -76,6 +80,10 @@ spec:
         description: The PD regional disk type to use for the ABFS bootdisk
         varType: string
         defaultValue: pd-ssd
+      - name: existing_bucket_name
+        description: The name of the existing ABFS bucket to use. If not specified, a new bucket will be created.
+        varType: string
+        defaultValue: ""
       - name: abfs_bucket_name
         description: The name of the ABFS bucket.
         varType: string

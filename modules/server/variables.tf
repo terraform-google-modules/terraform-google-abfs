@@ -85,6 +85,12 @@ variable "abfs_bootdisk_type" {
 }
 
 // Google Cloud Storage
+variable "existing_bucket_name" {
+  type        = string
+  description = "The name of the existing ABFS bucket to use. If not specified, a new bucket will be created."
+  default     = ""
+}
+
 variable "abfs_bucket_name" {
   type        = string
   description = "The name of the ABFS bucket."
