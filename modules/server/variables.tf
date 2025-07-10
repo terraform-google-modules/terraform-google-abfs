@@ -32,6 +32,12 @@ variable "service_account_email" {
   description = "Email of service account to attach to the servers"
 }
 
+variable "abfs_server_allow_stopping_for_update" {
+  type        = bool
+  description = "Allow to stop the server to update properties"
+  default     = true
+}
+
 variable "abfs_server_machine_type" {
   type        = string
   description = "Machine type for ABFS servers"

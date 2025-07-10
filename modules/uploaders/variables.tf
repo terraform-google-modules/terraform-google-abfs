@@ -32,6 +32,12 @@ variable "service_account_email" {
   description = "Email of service account to attach to the servers"
 }
 
+variable "abfs_gerrit_uploader_allow_stopping_for_update" {
+  type        = bool
+  description = "Allow to stop uploaders to update properties"
+  default     = true
+}
+
 variable "abfs_gerrit_uploader_count" {
   type        = number
   description = "The number of gerrit uploader instances to create"

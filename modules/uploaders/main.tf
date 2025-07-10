@@ -64,6 +64,8 @@ resource "google_compute_instance" "abfs_gerrit_uploaders" {
   machine_type = var.abfs_gerrit_uploader_machine_type
   zone         = var.zone
 
+  allow_stopping_for_update = var.abfs_gerrit_uploader_allow_stopping_for_update
+
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
     email  = var.service_account_email
