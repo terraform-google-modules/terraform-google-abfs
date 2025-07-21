@@ -23,5 +23,15 @@ output "license_information" {
 
 output "spanner_database_schema_creation" {
   description = "The CLI command for creating the Spanner database schema"
-  value       = "SCHEMA_FILE=0.0.31-schema.sql; curl -O https://raw.githubusercontent.com/terraform-google-modules/terraform-google-abfs/refs/heads/main/files/schemas/$SCHEMA_FILE; gcloud --project ${data.google_project.project.project_id} spanner databases ddl update --instance ${module.abfs_server.abfs_spanner_instance.name} ${module.abfs_server.abfs_spanner_database.name} --ddl-file $SCHEMA_FILE; rm $SCHEMA_FILE"
+  value = var.abfs_spanner_database_create_tables ? (
+    "# The abfs_spanner_database_create_tables variable was set to true; no further action required."
+    ) : (
+    join(" ", [
+      "gcloud --project ${data.google_project.project.project_id}",
+      "spanner databases ddl update",
+      "--instance ${module.abfs_server.abfs_spanner_instance.name}",
+      "${module.abfs_server.abfs_spanner_database.name}",
+      "--ddl-file ${module.abfs_server.abfs_spanner_database_schema_file}",
+    ])
+  )
 }

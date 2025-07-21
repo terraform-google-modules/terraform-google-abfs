@@ -32,8 +32,17 @@ resource "google_spanner_instance" "abfs" {
   }
 }
 
+data "local_file" "abfs_spanner_database_schema" {
+  filename = "${path.module}/../../files/schemas/${var.abfs_spanner_database_schema_version}-schema.sql"
+}
+
 resource "google_spanner_database" "abfs" {
   instance            = google_spanner_instance.abfs.name
   name                = var.abfs_spanner_database_name
+  ddl                 = var.abfs_spanner_database_create_tables ? split(";;", data.local_file.abfs_spanner_database_schema.content) : []
   deletion_protection = true
+  lifecycle {
+    # Ignore changes after database creation to avoid accidental data loss.
+    ignore_changes = [ddl]
+  }
 }

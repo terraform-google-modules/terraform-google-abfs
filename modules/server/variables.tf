@@ -126,6 +126,18 @@ variable "abfs_spanner_database_name" {
   default     = "abfs"
 }
 
+variable "abfs_spanner_database_create_tables" {
+  type        = bool
+  description = "Creates the tables in the database using the online DDL schema with the given schema version."
+  default     = false
+}
+
+variable "abfs_spanner_database_schema_version" {
+  type        = string
+  description = "The version of the DDL schema to use for the ABFS database."
+  default     = "0.0.31"
+}
+
 // Marketplace requires this variable name to be declared
 variable "goog_cm_deployment_name" {
   type        = string

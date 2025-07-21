@@ -23,21 +23,22 @@ moved {
 }
 
 module "abfs_server" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.7.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.7.1"
 
-  project_id                   = data.google_project.project.project_id
-  zone                         = var.zone
-  service_account_email        = data.google_service_account.abfs.email
-  subnetwork                   = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
-  abfs_docker_image_uri        = var.abfs_docker_image_uri
-  abfs_license                 = var.abfs_license
-  abfs_bucket_location         = var.abfs_bucket_location
-  abfs_server_machine_type     = var.abfs_server_machine_type
-  abfs_spanner_instance_config = var.abfs_spanner_instance_config
+  project_id                          = data.google_project.project.project_id
+  zone                                = var.zone
+  service_account_email               = data.google_service_account.abfs.email
+  subnetwork                          = module.abfs-vpc.subnets["${var.region}/abfs-subnet"].name
+  abfs_docker_image_uri               = var.abfs_docker_image_uri
+  abfs_license                        = var.abfs_license
+  abfs_bucket_location                = var.abfs_bucket_location
+  abfs_server_machine_type            = var.abfs_server_machine_type
+  abfs_spanner_instance_config        = var.abfs_spanner_instance_config
+  abfs_spanner_database_create_tables = var.abfs_spanner_database_create_tables
 }
 
 module "abfs_uploaders" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.7.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.7.1"
 
   project_id                            = data.google_project.project.project_id
   zone                                  = var.zone

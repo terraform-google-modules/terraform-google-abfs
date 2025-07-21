@@ -105,6 +105,12 @@ variable "abfs_spanner_instance_config" {
   description = "The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance (https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/spanner_instance.html#config-1)."
 }
 
+variable "abfs_spanner_database_create_tables" {
+  type        = bool
+  description = "Creates the tables in the database."
+  default     = false
+}
+
 variable "abfs_enable_git_lfs" {
   type        = bool
   description = "Enable Git LFS support"

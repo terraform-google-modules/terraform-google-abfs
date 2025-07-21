@@ -26,3 +26,13 @@ output "abfs_spanner_database" {
   description = "The ABFS Spanner database object"
   value       = google_spanner_database.abfs
 }
+
+output "abfs_spanner_database_schema_version" {
+  description = "The schema version used for the ABFS Spanner database"
+  value       = var.abfs_spanner_database_schema_version
+}
+
+output "abfs_spanner_database_schema_file" {
+  description = "The ABFS Spanner database schema file"
+  value       = data.local_file.abfs_spanner_database_schema.filename
+}
