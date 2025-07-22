@@ -116,3 +116,9 @@ variable "abfs_enable_git_lfs" {
   description = "Enable Git LFS support"
   default     = false
 }
+
+variable "create_dns_zones" {
+  type        = bool
+  description = "Whether to create the DNS zones for private access to Artifact Registry"
+  default     = true
+}
