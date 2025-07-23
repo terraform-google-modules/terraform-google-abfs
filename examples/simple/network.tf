@@ -27,7 +27,7 @@ module "abfs-vpc" {
       name                    = "allow-egress-google-apis"
       priority                = 1000
       ranges                  = ["199.36.153.8/30", "34.126.0.0/18"]
-      target_service_accounts = [data.google_service_account.abfs.email]
+      target_service_accounts = [local.abfs_service_account_email]
 
       allow = [
         {
@@ -59,8 +59,8 @@ module "abfs-vpc" {
       priority    = 1000
 
       ranges                  = ["0.0.0.0/0"]
-      source_service_accounts = [data.google_service_account.abfs.email]
-      target_service_accounts = [data.google_service_account.abfs.email]
+      source_service_accounts = [local.abfs_service_account_email]
+      target_service_accounts = [local.abfs_service_account_email]
       allow = [
         {
           protocol = "icmp"

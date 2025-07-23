@@ -59,6 +59,7 @@ locals {
 
 resource "google_compute_instance" "abfs_gerrit_uploaders" {
   count        = var.abfs_gerrit_uploader_count
+
   project      = var.project_id
   name         = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_name_prefix}-${count.index}"
   machine_type = var.abfs_gerrit_uploader_machine_type
@@ -67,7 +68,7 @@ resource "google_compute_instance" "abfs_gerrit_uploaders" {
   allow_stopping_for_update = var.abfs_gerrit_uploader_allow_stopping_for_update
 
   service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    # Google recommends custom service accounts with a cloud-platform scope and permissions granted via IAM roles.
     email  = var.service_account_email
     scopes = ["cloud-platform"]
   }
@@ -98,8 +99,9 @@ resource "google_compute_instance" "abfs_gerrit_uploaders" {
 }
 
 resource "google_compute_disk" "abfs_gerrit_uploader_datadisks" {
-  project = var.project_id
   count   = var.abfs_gerrit_uploader_count
+
+  project = var.project_id
   name    = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_datadisk_name_prefix}-${count.index}"
   size    = var.abfs_gerrit_uploader_datadisk_size_gb
   zone    = var.zone
@@ -111,8 +113,9 @@ resource "google_compute_disk" "abfs_gerrit_uploader_datadisks" {
 }
 
 resource "google_compute_attached_disk" "abfs_gerrit_uploader_datadisk_attachments" {
-  project     = var.project_id
   count       = var.abfs_gerrit_uploader_count
+
+  project     = var.project_id
   disk        = google_compute_disk.abfs_gerrit_uploader_datadisks[count.index].id
   instance    = google_compute_instance.abfs_gerrit_uploaders[count.index].id
   device_name = local.abfs_datadisk_device_name
@@ -120,6 +123,7 @@ resource "google_compute_attached_disk" "abfs_gerrit_uploader_datadisk_attachmen
 
 data "cloudinit_config" "abfs_gerrit_uploader_configs" {
   count         = var.abfs_gerrit_uploader_count
+
   gzip          = false
   base64_encode = false
 

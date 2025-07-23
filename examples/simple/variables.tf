@@ -86,7 +86,14 @@ variable "alert_notification_email" {
 
 variable "abfs_service_account_id" {
   type        = string
-  description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com)"
+  description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com); if not specified, a new service account will be created using the abfs_service_account_name."
+  default     = ""
+}
+
+variable "abfs_service_account_name" {
+  type        = string
+  description = "The name of the service account to create in case abfs_service_account_id is not specified."
+  default     = "abfs"
 }
 
 variable "abfs_server_machine_type" {

@@ -73,7 +73,7 @@ resource "google_compute_instance" "abfs_server" {
   allow_stopping_for_update = var.abfs_server_allow_stopping_for_update
 
   service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    # Google recommends custom service accounts with a cloud-platform scope and permissions granted via IAM roles.
     email  = var.service_account_email
     scopes = ["cloud-platform"]
   }

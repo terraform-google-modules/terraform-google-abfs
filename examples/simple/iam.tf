@@ -12,9 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  create_service_account         = var.abfs_service_account_id == ""
+  abfs_service_account_email     = local.create_service_account ? google_service_account.abfs[0].email : data.google_service_account.abfs[0].email
+  abfs_service_account_unique_id = local.create_service_account ? google_service_account.abfs[0].unique_id : data.google_service_account.abfs[0].unique_id
+}
+
 data "google_service_account" "abfs" {
+  count      = local.create_service_account ? 0 : 1
+
   project    = data.google_project.project.project_id
   account_id = var.abfs_service_account_id
+}
+
+resource "google_service_account" "abfs" {
+  count        = local.create_service_account ? 1 : 0
+
+  project      = data.google_project.project.project_id
+  account_id   = var.abfs_service_account_name
+  display_name = "Service Account for ABFS"
+
+  lifecycle {
+    # Prevent the service account that may have been granted an ABFS license from being deleted.
+    prevent_destroy = true
+  }
 }
 
 module "project-iam-bindings" {
@@ -25,16 +46,18 @@ module "project-iam-bindings" {
   mode     = "authoritative"
 
   bindings = {
-    "roles/artifactregistry.reader"             = [data.google_service_account.abfs.member],
-    "roles/logging.logWriter"                   = [data.google_service_account.abfs.member],
-    "roles/monitoring.metricWriter"             = [data.google_service_account.abfs.member],
-    "roles/monitoring.viewer"                   = [data.google_service_account.abfs.member],
-    "roles/spanner.databaseUser"                = [data.google_service_account.abfs.member],
-    "roles/stackdriver.resourceMetadata.writer" = [data.google_service_account.abfs.member],
-    "roles/storage.objectAdmin"                 = [data.google_service_account.abfs.member],
+    "roles/artifactregistry.reader"             = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/logging.logWriter"                   = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/monitoring.metricWriter"             = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/monitoring.viewer"                   = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/spanner.databaseUser"                = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/stackdriver.resourceMetadata.writer" = ["serviceAccount:${local.abfs_service_account_email}"],
+    "roles/storage.objectAdmin"                 = ["serviceAccount:${local.abfs_service_account_email}"],
   }
 
   depends_on = [
-    module.project-services
+    module.project-services,
+    data.google_service_account.abfs,
+    google_service_account.abfs
   ]
 }
