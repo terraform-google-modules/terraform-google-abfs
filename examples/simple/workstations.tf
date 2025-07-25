@@ -12,24 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = ">= 1.9.6"
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 6.11.0"
-    }
-  }
-  # grant Storage Object Admin role to the Google Identity invoking Terraform
-  # backend "gcs" {
-  #   bucket = "YOUR_BUCKET"
-  #   # folder in the bucket (will be created) to store the .tfstate
-  #   prefix = "terraform/abfs"
-  # }
-}
+module "workstations" {
+  count = var.create_cloud_workstation_resources ? 1 : 0
 
-provider "google" {
-  project = var.project_id
-  region  = var.region
-  zone    = var.zone
+  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_workstations?ref=v2.1.0"
+
+  project_id   = data.google_project.project.project_id
+  cws_scopes   = var.cws_scopes
+  cws_clusters = var.cws_clusters
+  cws_configs  = var.cws_configs
 }

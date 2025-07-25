@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -58,7 +58,7 @@ locals {
 }
 
 resource "google_compute_instance" "abfs_gerrit_uploaders" {
-  count        = var.abfs_gerrit_uploader_count
+  count = var.abfs_gerrit_uploader_count
 
   project      = var.project_id
   name         = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_name_prefix}-${count.index}"
@@ -99,7 +99,7 @@ resource "google_compute_instance" "abfs_gerrit_uploaders" {
 }
 
 resource "google_compute_disk" "abfs_gerrit_uploader_datadisks" {
-  count   = var.abfs_gerrit_uploader_count
+  count = var.abfs_gerrit_uploader_count
 
   project = var.project_id
   name    = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_datadisk_name_prefix}-${count.index}"
@@ -113,7 +113,7 @@ resource "google_compute_disk" "abfs_gerrit_uploader_datadisks" {
 }
 
 resource "google_compute_attached_disk" "abfs_gerrit_uploader_datadisk_attachments" {
-  count       = var.abfs_gerrit_uploader_count
+  count = var.abfs_gerrit_uploader_count
 
   project     = var.project_id
   disk        = google_compute_disk.abfs_gerrit_uploader_datadisks[count.index].id
@@ -122,7 +122,7 @@ resource "google_compute_attached_disk" "abfs_gerrit_uploader_datadisk_attachmen
 }
 
 data "cloudinit_config" "abfs_gerrit_uploader_configs" {
-  count         = var.abfs_gerrit_uploader_count
+  count = var.abfs_gerrit_uploader_count
 
   gzip          = false
   base64_encode = false

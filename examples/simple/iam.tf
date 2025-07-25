@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,14 +19,14 @@ locals {
 }
 
 data "google_service_account" "abfs" {
-  count      = local.create_service_account ? 0 : 1
+  count = local.create_service_account ? 0 : 1
 
   project    = data.google_project.project.project_id
   account_id = var.abfs_service_account_id
 }
 
 resource "google_service_account" "abfs" {
-  count        = local.create_service_account ? 1 : 0
+  count = local.create_service_account ? 1 : 0
 
   project      = data.google_project.project.project_id
   account_id   = var.abfs_service_account_name

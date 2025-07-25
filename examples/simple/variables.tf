@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -128,4 +128,58 @@ variable "create_dns_zones" {
   type        = bool
   description = "Whether to create the DNS zones for private access to Artifact Registry"
   default     = true
+}
+
+variable "create_cloud_workstation_resources" {
+  type        = bool
+  description = "Whether to create Cloud Workstation resources"
+  default     = false
+}
+
+variable "cws_scopes" {
+  type        = list(string)
+  description = "The scope of the Cloud Workstations Service Account"
+  default     = ["https://www.googleapis.com/auth/cloud-platform"]
+}
+
+variable "cws_clusters" {
+  type = map(object({
+    network    = string
+    region     = string
+    subnetwork = string
+  }))
+  description = "A map of Cloud Workstation clusters to create. The key of the map is used as the unique ID for the cluster."
+  default     = {}
+  validation {
+    condition     = !var.create_cloud_workstation_resources || length(var.cws_clusters) > 0
+    error_message = "cws_clusters is required when create_cloud_workstation_resources is enabled."
+  }
+}
+
+variable "cws_configs" {
+  type = map(object({
+    cws_cluster                    = string
+    idle_timeout                   = number
+    machine_type                   = string
+    boot_disk_size_gb              = number
+    disable_public_ip_addresses    = bool
+    pool_size                      = number
+    enable_nested_virtualization   = bool
+    persistent_disk_size_gb        = number
+    persistent_disk_fs_type        = string
+    persistent_disk_type           = string
+    persistent_disk_reclaim_policy = string
+    creators                       = optional(list(string))
+    image                          = optional(string)
+    instances = list(object({
+      name  = string
+      users = list(string)
+    }))
+  }))
+  description = "A map of Cloud Workstation configurations."
+  default     = {}
+  validation {
+    condition     = !var.create_cloud_workstation_resources || length(var.cws_configs) > 0
+    error_message = "cws_configs is required when create_cloud_workstation_resources is enabled."
+  }
 }
