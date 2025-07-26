@@ -1,0 +1,77 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+project_id = "YOUR_PROJECT_ID"
+region     = "europe-west1"
+zone       = "europe-west1-c"
+
+# If you don't need private access to Artifact Registry, set this to false.
+#create_dns_zones = false
+
+# if unset will create a new service account
+# if set, will use the specified service account
+#abfs_service_account_id = "YOUR_EXISTING_SERVICE_ACCOUNT_ID"
+
+# run terraform apply first
+# submit the output through the allow-listing form
+# then insert the license here and run terraform apply again
+#abfs_license            = "INSERT_YOUR_LICENSE_HERE"
+
+abfs_docker_image_uri = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:latest"
+
+abfs_server_machine_type = "n2d-standard-48"
+
+# If you want to enable Git LFS support, set this to true.
+abfs_enable_git_lfs = true
+
+abfs_gerrit_uploader_count           = 3
+abfs_gerrit_uploader_manifest_server = "android.googlesource.com"
+#abfs_gerrit_uploader_git_branch     = ["branch1", "branch2"]
+
+abfs_bucket_location                = "europe-west1"
+abfs_spanner_instance_config        = "regional-europe-west1"
+abfs_spanner_database_create_tables = true
+
+#alert_notification_email = "your_email@example.com"
+
+create_cloud_workstation_resources = true
+cws_clusters = {
+  "cws-abfs-cluster" = {
+    network    = "default"
+    region     = "europe-west1"
+    subnetwork = "default"
+  }
+}
+cws_configs = {
+  "cws-abfs-config" = {
+    cws_cluster                    = "cws-abfs-cluster"
+    idle_timeout                   = 3600
+    machine_type                   = "e2-standard-8"
+    boot_disk_size_gb              = 64
+    disable_public_ip_addresses    = true
+    pool_size                      = 0
+    enable_nested_virtualization   = false
+    persistent_disk_size_gb        = 2000
+    persistent_disk_fs_type        = "ext4"
+    persistent_disk_type           = "pd-ssd"
+    persistent_disk_reclaim_policy = "RETAIN"
+    creators                       = ["your_email@example.com"]
+    instances                      = [
+      {
+        name  = "cws-abfs-instance"
+        users = ["your_email@example.com"]
+      }
+    ]
+  }
+}

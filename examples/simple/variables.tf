@@ -74,9 +74,13 @@ variable "abfs_gerrit_uploader_manifest_server" {
   default     = "android.googlesource.com"
 }
 
+# If you don't have an ABFS license yet, leave this empty and run terraform apply.
+# Submit the output via the Early Access Program (EAP) form.
+# When you received a license, insert it in your terraform.tfvars file and run terraform apply again.
 variable "abfs_license" {
   type        = string
   description = "ABFS license (JSON)"
+  default     = ""
 }
 
 variable "alert_notification_email" {
@@ -86,14 +90,14 @@ variable "alert_notification_email" {
 
 variable "abfs_service_account_id" {
   type        = string
-  description = "ABFS service account ID (e.g. abfs@<project-id>.iam.gserviceaccount.com); if not specified, a new service account will be created using the abfs_service_account_name."
+  description = "ABFS service account ID (e.g. sa-abfs@<project-id>.iam.gserviceaccount.com); if not specified, a new service account will be created using the abfs_service_account_name."
   default     = ""
 }
 
 variable "abfs_service_account_name" {
   type        = string
   description = "The name of the service account to create in case abfs_service_account_id is not specified."
-  default     = "abfs"
+  default     = "sa-abfs"
 }
 
 variable "abfs_server_machine_type" {
@@ -171,10 +175,10 @@ variable "cws_configs" {
     persistent_disk_reclaim_policy = string
     creators                       = optional(list(string))
     image                          = optional(string)
-    instances = list(object({
+    instances                      = optional(list(object({
       name  = string
       users = list(string)
-    }))
+    })))
   }))
   description = "A map of Cloud Workstation configurations."
   default     = {}
