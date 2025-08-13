@@ -36,10 +36,21 @@ data "local_file" "abfs_spanner_database_schema" {
   filename = "${path.module}/../../files/schemas/${var.abfs_spanner_database_schema_version}-schema.sql"
 }
 
+locals {
+  # 1. Remove comment lines from the DDL content.
+  cleaned_ddl = replace(data.local_file.abfs_spanner_database_schema.content, "(?m)^--.*\\R?", "")
+
+  # 2. Split the content into individual statements using the semicolon as a delimiter.
+  statements = split(";", local.cleaned_ddl)
+
+  # 3. Trim whitespace from each statement and filter out any empty statements.
+  spanner_ddl_statements = var.abfs_spanner_database_create_tables ? [for s in local.statements : trimspace(s) if length(trimspace(s)) > 0] : []
+}
+
 resource "google_spanner_database" "abfs" {
   instance            = google_spanner_instance.abfs.name
   name                = var.abfs_spanner_database_name
-  ddl                 = var.abfs_spanner_database_create_tables ? split(";;", data.local_file.abfs_spanner_database_schema.content) : []
+  ddl                 = local.spanner_ddl_statements
   deletion_protection = true
   lifecycle {
     # Ignore changes after database creation to avoid accidental data loss.
