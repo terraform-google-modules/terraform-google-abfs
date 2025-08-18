@@ -33,7 +33,7 @@ abfs_docker_image_uri = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alp
 abfs_server_machine_type = "n2d-standard-48"
 
 # If you want to enable Git LFS support, set this to true.
-abfs_enable_git_lfs = true
+#abfs_enable_git_lfs = true
 
 abfs_gerrit_uploader_count           = 3
 abfs_gerrit_uploader_manifest_server = "android.googlesource.com"
