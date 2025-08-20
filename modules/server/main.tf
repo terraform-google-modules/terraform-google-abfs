@@ -57,11 +57,12 @@ locals {
 }
 
 resource "google_compute_disk" "abfs_server_bootdisk" {
-  name  = "${local.abfs_server_name}-bootdisk"
-  zone  = var.zone
-  image = var.abfs_server_cos_image_ref
-  size  = var.abfs_bootdisk_size_gb
-  type  = var.abfs_bootdisk_type
+  project = var.project_id
+  name    = "${local.abfs_server_name}-bootdisk"
+  zone    = var.zone
+  image   = var.abfs_server_cos_image_ref
+  size    = var.abfs_bootdisk_size_gb
+  type    = var.abfs_bootdisk_type
 }
 
 resource "google_compute_instance" "abfs_server" {
