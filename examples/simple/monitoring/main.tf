@@ -13,6 +13,7 @@
 # limitations under the License.
 
 resource "google_monitoring_notification_channel" "email" {
+  project      = var.project_id
   display_name = "ABFS Email Notification Channel"
   type         = "email"
   labels = {
