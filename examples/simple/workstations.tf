@@ -15,7 +15,7 @@
 module "workstations" {
   count = var.create_cloud_workstation_resources ? 1 : 0
 
-  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_workstations?ref=v2.1.0"
+  source = "../../../../cloud_cicd_foundation/infra/modules/cicd_workstations"
 
   project_id   = data.google_project.project.project_id
   cws_scopes   = var.cws_scopes
