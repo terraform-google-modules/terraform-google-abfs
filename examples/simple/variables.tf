@@ -155,7 +155,7 @@ variable "cws_clusters" {
   description = "A map of Cloud Workstation clusters to create. The key of the map is used as the unique ID for the cluster."
   default     = {}
   validation {
-    condition     = !var.create_cloud_workstation_resources || length(var.cws_clusters) > 0
+    condition     = ! var.create_cloud_workstation_resources || length(var.cws_clusters) > 0
     error_message = "cws_clusters is required when create_cloud_workstation_resources is enabled."
   }
 }
@@ -175,7 +175,7 @@ variable "cws_configs" {
     persistent_disk_reclaim_policy = string
     creators                       = optional(list(string))
     image                          = optional(string)
-    instances                      = optional(list(object({
+    instances = optional(list(object({
       name  = string
       users = list(string)
     })))
@@ -183,7 +183,16 @@ variable "cws_configs" {
   description = "A map of Cloud Workstation configurations."
   default     = {}
   validation {
-    condition     = !var.create_cloud_workstation_resources || length(var.cws_configs) > 0
+    condition     = ! var.create_cloud_workstation_resources || length(var.cws_configs) > 0
     error_message = "cws_configs is required when create_cloud_workstation_resources is enabled."
   }
+}
+
+variable "cws_custom_images" {
+  type = map(object({
+    scheduler_region = optional(string)
+    ci_schedule      = optional(string)
+  }))
+  description = "Map of custom images and their Cloud Build trigger details to be used for Cloud Workstations. The key of the map equals the container image name."
+  default     = {}
 }
