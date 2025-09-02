@@ -12,19 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "cicd_pipelines" {
-  count = var.create_cloud_workstation_resources ? 1 : 0
-
-  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_pipelines?ref=v2.1.0"
-
-  project_id = data.google_project.project.project_id
-  apps = {
-    for k in keys(var.cws_custom_images) : k => {
-      runtime = "workstations"
-    }
-  }
-}
-
 module "workstations" {
   count = var.create_cloud_workstation_resources ? 1 : 0
 
@@ -34,27 +21,24 @@ module "workstations" {
   cws_scopes   = var.cws_scopes
   cws_clusters = var.cws_clusters
   cws_configs  = var.cws_configs
-  custom_images = {
-    for k, v in module.cicd_pipelines[0].cloud_build_trigger_trigger_id :
-    k => merge(
-      {
-        ci_trigger = v
-      },
-      try({ scheduler_region = var.cws_custom_images[k]["scheduler_region"] }, {}),
-      try({ ci_schedule = var.cws_custom_images[k]["ci_schedule"] }, {})
-    )
-  }
-  cloud_build_service_account_id = module.cicd_pipelines[0].cloud_build_service_account_id
 }
 
-resource "google_artifact_registry_repository_iam_binding" "reader" {
-  count = var.create_cloud_workstation_resources ? 1 : 0
+module "cicd_pipelines" {
+  count = var.create_cloud_workstation_resources && length(var.cws_custom_images) > 0 ? 1 : 0
 
-  project    = module.cicd_pipelines[0].artifact_registry_repository.project
-  location   = module.cicd_pipelines[0].artifact_registry_repository.location
-  repository = module.cicd_pipelines[0].artifact_registry_repository.id
-  role       = "roles/artifactregistry.reader"
-  members = [
+  source = "../../../../cloud_cicd_foundation/infra/modules/cicd_pipelines"
+
+  project_id = data.google_project.project.project_id
+  apps = {
+    for k, v in var.cws_custom_images : k => {
+      runtime = "workstations"
+      workstation_config = {
+        scheduler_region = v.scheduler_region
+        ci_schedule      = v.ci_schedule
+      }
+    }
+  }
+  artifact_registry_readers = [
     "serviceAccount:${module.workstations[0].cws_service_account_email}"
   ]
 }
