@@ -12,12 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "abfs-vpc" {
+moved {
+  from = module.abfs-vpc
+  to   = module.abfs_vpc
+}
+
+module "abfs_vpc" {
   source  = "terraform-google-modules/network/google"
   version = "9.2.0"
 
   project_id   = data.google_project.project.project_id
-  network_name = "abfs-network"
+  network_name = var.abfs_network_name
   routing_mode = "GLOBAL"
 
   firewall_rules = [
@@ -80,9 +85,9 @@ module "abfs-vpc" {
 
   subnets = [
     {
-      subnet_name           = "abfs-subnet"
-      subnet_ip             = "10.2.0.0/16"
-      subnet_private_access = "true"
+      subnet_name           = var.abfs_subnet_name
+      subnet_ip             = var.abfs_subnet_ip
+      subnet_private_access = var.abfs_subnet_private_access
       subnet_region         = var.region
     }
   ]
@@ -95,7 +100,7 @@ module "abfs-vpc" {
 resource "google_compute_router" "nat_router" {
   project = var.project_id
   name    = "natgw-router"
-  network = module.abfs-vpc.network_self_link
+  network = module.abfs_vpc.network_self_link
   region  = var.region
 }
 

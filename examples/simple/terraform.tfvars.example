@@ -45,6 +45,16 @@ abfs_spanner_database_create_tables = true
 
 #alert_notification_email = "your_email@example.com"
 
+# Whether to create the example GCE instance for testing ABFS.
+#create_client_instance_resource = true
+
+# Example override for the client instance configuration.
+# Note: You only need to include keys you want to override from the defaults in variables.tf.
+# abfs_client_config = {
+#   name                  = "my-abfs-client"
+#   machine_type          = "e2-standard-16"
+# }
+
 create_cloud_workstation_resources = true
 cws_clusters = {
   "cws-abfs-cluster" = {
@@ -66,12 +76,25 @@ cws_configs = {
     persistent_disk_fs_type        = "ext4"
     persistent_disk_type           = "pd-ssd"
     persistent_disk_reclaim_policy = "RETAIN"
-    creators                       = ["your_email@example.com"]
+    creators                       = [
+      # "your_email@example.com",
+    ]
     instances                      = [
       {
         name  = "cws-abfs-instance"
         users = ["your_email@example.com"]
       }
     ]
+  }
+}
+
+# Example for custom images for Cloud Workstations.
+# The key of the map is the name of the image to be built.
+cws_custom_images = {
+  "asfp" = {
+    # Optional: The region for the Cloud Scheduler job, defaults to the region of the Cloud Build trigger.
+    scheduler_region = "europe-west1"
+    # Optional: The schedule for the image rebuild, defaults to daily at 3 AM.
+    ci_schedule      = "0 3 * * *"
   }
 }

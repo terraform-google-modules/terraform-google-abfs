@@ -19,12 +19,36 @@ variable "project_id" {
 
 variable "region" {
   type        = string
-  description = "Region for ABFS servers"
+  description = "Region for ABFS resources"
 }
 
 variable "zone" {
   type        = string
-  description = "Zone for ABFS servers"
+  description = "Zone for ABFS resources"
+}
+
+variable "abfs_network_name" {
+  type        = string
+  description = "Name of the ABFS network"
+  default     = "abfs-network"
+}
+
+variable "abfs_subnet_name" {
+  type        = string
+  description = "Name of the ABFS subnetwork"
+  default     = "abfs-subnet"
+}
+
+variable "abfs_subnet_ip" {
+  type        = string
+  description = "IP range for the ABFS subnetwork"
+  default     = "10.2.0.0/16"
+}
+
+variable "abfs_subnet_private_access" {
+  type        = bool
+  description = "Enable private Google access for the ABFS subnetwork"
+  default     = true
 }
 
 variable "abfs_docker_image_uri" {
@@ -72,6 +96,59 @@ variable "abfs_gerrit_uploader_manifest_server" {
   type        = string
   description = "The manifest server to assume"
   default     = "android.googlesource.com"
+}
+
+variable "abfs_client_config" {
+  type = object({
+    name                  = string
+    machine_type          = string
+    image_project         = string
+    image_name            = string
+    size                  = number
+    type                  = string
+    scopes                = list(string)
+    goog_ops_agent_policy = string
+    preemptible           = bool
+    automatic_restart     = bool
+    enable_oslogin        = bool
+    can_ip_forward        = bool
+    deletion_protection   = bool
+    enable_display        = bool
+    shielded_instance_config = object({
+      enable_integrity_monitoring = bool
+      enable_secure_boot          = bool
+      enable_vtpm                 = bool
+    })
+  })
+  description = "Configuration for the ABFS client compute instance."
+  default = {
+    name          = "abfs-client"
+    machine_type  = "n1-standard-8"
+    image_project = "ubuntu-os-cloud"
+    image_name    = "ubuntu-minimal-2404-noble-amd64-v20250818"
+    size          = 2000
+    type          = "pd-ssd"
+    scopes = [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring.write",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/trace.append"
+    ]
+    goog_ops_agent_policy = "v2-x86-template-1-4-0"
+    preemptible           = true
+    automatic_restart     = false
+    enable_oslogin        = true
+    can_ip_forward        = false
+    deletion_protection   = false
+    enable_display        = false
+    shielded_instance_config = {
+      enable_integrity_monitoring = true
+      enable_secure_boot          = false
+      enable_vtpm                 = true
+    }
+  }
 }
 
 # If you don't have an ABFS license yet, leave this empty and run terraform apply.
@@ -132,6 +209,12 @@ variable "create_dns_zones" {
   type        = bool
   description = "Whether to create the DNS zones for private access to Artifact Registry"
   default     = true
+}
+
+variable "create_client_instance_resource" {
+  type        = bool
+  description = "Whether to create a Google Cloud Engine compute instance for an ABFS client"
+  default     = false
 }
 
 variable "create_cloud_workstation_resources" {

@@ -46,7 +46,7 @@ module "cloud-dns-private-google-apis" {
   type        = "private"
 
   private_visibility_config_networks = [
-    module.abfs-vpc.network_id
+    module.abfs_vpc.network_id
   ]
 
   recordsets = [
@@ -79,7 +79,7 @@ module "cloud-dns-private-artifact-registry" {
   type        = "private"
 
   private_visibility_config_networks = [
-    module.abfs-vpc.network_id
+    module.abfs_vpc.network_id
   ]
 
   recordsets = [
@@ -112,7 +112,7 @@ module "source-repositories-private-artifact-registry" {
   type        = "private"
 
   private_visibility_config_networks = [
-    module.abfs-vpc.network_id
+    module.abfs_vpc.network_id
   ]
 
   recordsets = [
