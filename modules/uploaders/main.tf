@@ -30,6 +30,17 @@ locals {
     ]
   ])
 
+  pre_start_hooks = var.pre_start_hooks == null ? [] : [
+    for filename in fileset(var.pre_start_hooks, "*") :
+    {
+      path        = "/var/lib/abfs/pre-start-hooks.d/${filename}"
+      permissions = "0755"
+      owner       = "root"
+      encoding    = "gzip+base64"
+      content     = base64gzip(file("${var.pre_start_hooks}/${filename}"))
+    }
+  ]
+
   systemd_files = flatten([
     for folder in ["${local.common_files_root}/systemd", "${path.module}/files/systemd"] : [
       for filename in fileset(folder, "*") :
@@ -161,7 +172,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_base.sh.tftpl",
               {
                 envs = {
-                  "ABFS_CMD"              = <<-EOT
+                  "ABFS_CMD"                   = <<-EOT
                     --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
                     --remote-servers ${var.abfs_server_name}:50051 \
                     --manifest-project-name ${var.abfs_manifest_project_name} \
@@ -171,8 +182,9 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                     --project-storage-path /abfs-storage \
                     --manifest-file ${var.abfs_manifest_file}
                   EOT
-                  "ABFS_DOCKER_IMAGE_URI" = var.abfs_docker_image_uri,
-                  "DATADISK_MOUNTPOINT"   = var.abfs_datadisk_mountpoint,
+                  "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,
+                  "DATADISK_MOUNTPOINT"        = var.abfs_datadisk_mountpoint,
+                  "PRE_START_HOOKS_MOUNTPOINT" = length(local.pre_start_hooks) > 0 ? "/var/lib/abfs/pre-start-hooks.d/" : null,
                 }
             }))
           }
@@ -192,7 +204,8 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
         # static script files used during startup
         local.static_script_files,
         # config for systemd services, targets, paths, etc
-        local.systemd_files
+        local.systemd_files,
+        local.pre_start_hooks,
       )
       runcmd  = local.runcmd,
       bootcmd = local.bootcmd

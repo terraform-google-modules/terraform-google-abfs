@@ -108,6 +108,14 @@ spec:
         description: A unique identifier for the ABFS database, which cannot be changed after the instance is created.
         varType: string
         defaultValue: abfs
+      - name: abfs_spanner_database_create_tables
+        description: Creates the tables in the database using the online DDL schema with the given schema version.
+        varType: bool
+        defaultValue: false
+      - name: abfs_spanner_database_schema_version
+        description: The version of the DDL schema to use for the ABFS database.
+        varType: string
+        defaultValue: 0.0.31
       - name: goog_cm_deployment_name
         description: The name of the deployment for Marketplace
         varType: string
@@ -117,5 +125,9 @@ spec:
         description: The name of the ABFS server instance
       - name: abfs_spanner_database
         description: The ABFS Spanner database object
+      - name: abfs_spanner_database_schema_file
+        description: The ABFS Spanner database schema file
+      - name: abfs_spanner_database_schema_version
+        description: The schema version used for the ABFS Spanner database
       - name: abfs_spanner_instance
         description: The ABFS Spanner instance object

@@ -117,6 +117,9 @@ spec:
         description: The name of the ABFS server
         varType: string
         required: true
+      - name: pre_start_hooks
+        description: The absolute path to the local directory containing pre-start hook scripts. These scripts will be copied to the host VM and mounted to the docker container at /etc/abfs/pre-start.d.
+        varType: string
       - name: goog_cm_deployment_name
         description: The name of the deployment for Marketplace
         varType: string

@@ -29,6 +29,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 | abfs\_server\_name | The name of the ABFS server | `string` | n/a | yes |
 | abfs\_uploader\_cos\_image\_ref | Reference to the COS boot image to use for the ABFS uploader | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |
 | goog\_cm\_deployment\_name | The name of the deployment for Marketplace | `string` | `""` | no |
+| pre\_start\_hooks | The absolute path to the local directory containing pre-start hook scripts. These scripts will be copied to the host VM and mounted to the docker container at /etc/abfs/pre-start.d. | `string` | `null` | no |
 | project\_id | Google Cloud project ID | `string` | n/a | yes |
 | service\_account\_email | Email of service account to attach to the servers | `string` | n/a | yes |
 | subnetwork | Subnetwork for the servers | `string` | n/a | yes |

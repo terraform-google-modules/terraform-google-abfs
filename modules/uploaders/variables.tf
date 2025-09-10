@@ -131,6 +131,12 @@ variable "abfs_server_name" {
   description = "The name of the ABFS server"
 }
 
+variable "pre_start_hooks" {
+  type        = string
+  description = "The absolute path to the local directory containing pre-start hook scripts. These scripts will be copied to the host VM and mounted to the docker container at /etc/abfs/pre-start.d."
+  default     = null
+}
+
 // Marketplace requires this variable name to be declared
 variable "goog_cm_deployment_name" {
   type        = string

@@ -26,6 +26,10 @@ if [[ -n "${DATADISK_MOUNTPOINT}" ]]; then
   DOCKER_RUN_ARGS+=(--volume ${DATADISK_MOUNTPOINT}:/abfs-storage)
 fi
 
+if [[ -n "${PRE_START_HOOKS_MOUNTPOINT}" ]]; then
+  DOCKER_RUN_ARGS+=(--volume ${PRE_START_HOOKS_MOUNTPOINT}:/etc/abfs/pre-start.d:ro)
+fi
+
 docker run --name=abfs-server --log-driver=journald \
   "${DOCKER_RUN_ARGS[@]}" "${ABFS_DOCKER_IMAGE_URI}" \
   ${ABFS_CMD} 

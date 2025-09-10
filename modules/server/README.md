@@ -21,7 +21,9 @@ For example usage, please check the following [example](../../examples/simple/ma
 | abfs\_server\_cos\_image\_ref | Reference to the COS boot image to use for the ABFS server | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |
 | abfs\_server\_machine\_type | Machine type for ABFS servers | `string` | `"n2-highmem-128"` | no |
 | abfs\_server\_name | Name for the ABFS server | `string` | `"abfs-server"` | no |
+| abfs\_spanner\_database\_create\_tables | Creates the tables in the database using the online DDL schema with the given schema version. | `bool` | `false` | no |
 | abfs\_spanner\_database\_name | A unique identifier for the ABFS database, which cannot be changed after the instance is created. | `string` | `"abfs"` | no |
+| abfs\_spanner\_database\_schema\_version | The version of the DDL schema to use for the ABFS database. | `string` | `"0.0.31"` | no |
 | abfs\_spanner\_instance\_config | The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance. | `string` | n/a | yes |
 | abfs\_spanner\_instance\_display\_name | The descriptive name for the ABFS instance as it appears in UIs. | `string` | `"ABFS"` | no |
 | abfs\_spanner\_instance\_name | A unique identifier for the ABFS instance, which cannot be changed after the instance is created. | `string` | `"abfs"` | no |
@@ -38,6 +40,8 @@ For example usage, please check the following [example](../../examples/simple/ma
 |------|-------------|
 | abfs\_server\_name | The name of the ABFS server instance |
 | abfs\_spanner\_database | The ABFS Spanner database object |
+| abfs\_spanner\_database\_schema\_file | The ABFS Spanner database schema file |
+| abfs\_spanner\_database\_schema\_version | The schema version used for the ABFS Spanner database |
 | abfs\_spanner\_instance | The ABFS Spanner instance object |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
