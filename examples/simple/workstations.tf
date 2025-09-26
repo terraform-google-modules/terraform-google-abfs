@@ -12,33 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "workstations" {
+module "cicd_foundation" {
   count = var.create_cloud_workstation_resources ? 1 : 0
 
-  source = "../../../../cloud_cicd_foundation/infra/modules/cicd_workstations"
+  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_foundation?ref=v3.0.0"
 
-  project_id   = data.google_project.project.project_id
-  cws_scopes   = var.cws_scopes
-  cws_clusters = var.cws_clusters
-  cws_configs  = var.cws_configs
-}
-
-module "cicd_pipelines" {
-  count = var.create_cloud_workstation_resources && length(var.cws_custom_images) > 0 ? 1 : 0
-
-  source = "../../../../cloud_cicd_foundation/infra/modules/cicd_pipelines"
-
-  project_id = data.google_project.project.project_id
-  apps = {
-    for k, v in var.cws_custom_images : k => {
-      runtime = "workstations"
-      workstation_config = {
-        scheduler_region = v.scheduler_region
-        ci_schedule      = v.ci_schedule
-      }
-    }
-  }
-  artifact_registry_readers = [
-    "serviceAccount:${module.workstations[0].cws_service_account_email}"
-  ]
+  project_id  = data.google_project.project.project_id
+  enable_apis = var.enable_apis
+  # go/keep-sorted start
+  artifact_registry_region     = var.artifact_registry_region
+  cloud_build_region           = var.cloud_build_region
+  cws_clusters                 = var.cws_clusters
+  cws_configs                  = var.cws_configs
+  cws_custom_images            = var.cws_custom_images
+  git_branch_trigger           = var.git_branch_trigger
+  secret_manager_region        = var.secret_manager_region
+  secure_source_manager_region = var.secure_source_manager_region
+  # go/keep-sorted end
 }

@@ -26,12 +26,24 @@ output "spanner_database_schema_creation" {
   value = var.abfs_spanner_database_create_tables ? (
     "# The abfs_spanner_database_create_tables variable was set to true; no further action required."
     ) : (
-    join(" ", [
-      "gcloud --project ${data.google_project.project.project_id}",
-      "spanner databases ddl update",
-      "--instance ${module.abfs_server.abfs_spanner_instance.name}",
-      "${module.abfs_server.abfs_spanner_database.name}",
-      "--ddl-file ${module.abfs_server.abfs_spanner_database_schema_file}",
-    ])
+    <<-EOT
+      # Execute the following command to create the Spanner database schema:
+      gcloud --project ${data.google_project.project.project_id} \
+        spanner databases ddl update \
+        --instance ${module.abfs_server.abfs_spanner_instance.name} \
+        ${module.abfs_server.abfs_spanner_database.name} \
+        --ddl-file ${module.abfs_server.abfs_spanner_database_schema_file}
+    EOT
   )
+}
+
+output "webhook_setup_instructions" {
+  description = "Instructions to set up the webhook trigger."
+  value       = var.create_cloud_workstation_resources ? module.cicd_foundation[0].webhook_setup_instructions : null
+  sensitive   = true
+}
+
+output "webhook_setup_instructions_display" {
+  description = "Instructions to set up the webhook trigger."
+  value       = var.create_cloud_workstation_resources ? module.cicd_foundation[0].webhook_setup_instructions_display : null
 }

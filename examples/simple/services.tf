@@ -17,6 +17,7 @@ module "project-services-cloud-resource-manager" {
   version = "18.0.0"
 
   project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
   disable_services_on_destroy = false
   activate_apis = [
     "cloudresourcemanager.googleapis.com"
@@ -28,6 +29,7 @@ module "project-services" {
   version = "18.0.0"
 
   project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
   disable_services_on_destroy = false
   activate_apis = [
     "compute.googleapis.com",

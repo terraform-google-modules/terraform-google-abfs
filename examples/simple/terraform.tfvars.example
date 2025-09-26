@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "YOUR_PROJECT_ID"
-region     = "europe-west1"
-zone       = "europe-west1-c"
+project_id                   = "YOUR_PROJECT_ID"
+region                       = "europe-west1"
+zone                         = "europe-west1-c"
+artifact_registry_region     = "europe-west1"
+cloud_build_region           = "europe-west1"
+secret_manager_region        = "europe-west1"
+secure_source_manager_region = "europe-west4"
+
+# If you don't need or want to enable APIs, set this to false.
+#enable_apis = false
 
 # If you don't need private access to Artifact Registry, set this to false.
 #create_dns_zones = false
@@ -57,16 +64,16 @@ abfs_spanner_database_create_tables = true
 
 create_cloud_workstation_resources = true
 cws_clusters = {
-  "cws-abfs-cluster" = {
+  "cws" = {
     network    = "default"
     region     = "europe-west1"
     subnetwork = "default"
   }
 }
 cws_configs = {
-  "cws-abfs-config" = {
-    cws_cluster                    = "cws-abfs-cluster"
-    idle_timeout                   = 3600
+  "cws-abfs" = {
+    cws_cluster                    = "cws"
+    idle_timeout_seconds           = 3600
     machine_type                   = "e2-standard-8"
     boot_disk_size_gb              = 64
     disable_public_ip_addresses    = true
@@ -76,13 +83,19 @@ cws_configs = {
     persistent_disk_fs_type        = "ext4"
     persistent_disk_type           = "pd-ssd"
     persistent_disk_reclaim_policy = "RETAIN"
+    custom_image_names             = [
+      "android-studio",
+      "android-studio-for-platform",
+      "code-oss",
+      "repo-builder"
+    ]
     creators                       = [
       # "your_email@example.com",
     ]
     instances                      = [
       {
-        name  = "cws-abfs-instance"
-        users = ["your_email@example.com"]
+        name  = "cws-abfs"
+        # users = ["your_email@example.com"]
       }
     ]
   }
@@ -91,10 +104,41 @@ cws_configs = {
 # Example for custom images for Cloud Workstations.
 # The key of the map is the name of the image to be built.
 cws_custom_images = {
-  "asfp" = {
-    # Optional: The region for the Cloud Scheduler job, defaults to the region of the Cloud Build trigger.
-    scheduler_region = "europe-west1"
-    # Optional: The schedule for the image rebuild, defaults to daily at 3 AM.
-    ci_schedule      = "0 3 * * *"
+  "android-studio" : {
+    build = {
+      # Optional: The relative path to the Dockerfile within the repository.
+      dockerfile_path = "examples/images/android/android-studio"
+      # Optional: The timeout for the build in seconds, defaults to 7200.
+      timeout_seconds = 7200
+      # Optional: The machine type to use for the build, defaults to "UNSPECIFIED".
+      machine_type    = "E2_HIGHCPU_32"
+    }
+    #workstation_config = {
+    #  # Optional: The region for the Cloud Scheduler job, defaults to the region of the Cloud Build trigger.
+    #  scheduler_region = "europe-west1"
+    #  # Optional: The schedule for the image rebuild, defaults to daily at 3 AM.
+    #  ci_schedule      = "0 3 * * *"
+    #}
+  },
+  "android-studio-for-platform" = {
+    build = {
+      dockerfile_path = "examples/images/android-open-source-project/android-studio-for-platform"
+      timeout_seconds = 7200
+      machine_type = "E2_HIGHCPU_32"
+    }
   }
+  "code-oss" : {
+    build = {
+      dockerfile_path = "examples/images/android-open-source-project/code-oss"
+      timeout_seconds = 7200
+      machine_type    = "E2_HIGHCPU_32"
+    }
+  },
+  "repo-builder" : {
+    build = {
+      dockerfile_path = "examples/images/android-open-source-project/repo-builder"
+      timeout_seconds = 7200
+      machine_type    = "E2_HIGHCPU_32"
+    }
+  },
 }
