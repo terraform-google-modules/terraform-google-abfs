@@ -184,7 +184,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                   EOT
                   "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,
                   "DATADISK_MOUNTPOINT"        = var.abfs_datadisk_mountpoint,
-                  "PRE_START_HOOKS_MOUNTPOINT" = length(local.pre_start_hooks) > 0 ? "/var/lib/abfs/pre-start-hooks.d/" : null,
+                  "PRE_START_HOOKS_MOUNTPOINT" = length(local.pre_start_hooks) > 0 ? "/var/lib/abfs/pre-start-hooks.d/" : "",
                 }
             }))
           }
