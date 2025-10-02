@@ -64,29 +64,3 @@ resource "google_compute_instance" "abfs_client" {
     enable_vtpm                 = var.abfs_client_config.shielded_instance_config.enable_vtpm
   }
 }
-
-module "ops_agent_policy" {
-  count = var.create_client_instance_resource ? 1 : 0
-
-  source = "github.com/terraform-google-modules/terraform-google-cloud-operations/modules/ops-agent-policy?ref=v0.6.0"
-
-  project = google_compute_instance.abfs_client[0].project
-  zone    = google_compute_instance.abfs_client[0].zone
-  assignment_id = format(
-    "goog-ops-agent-%s-%s",
-    var.abfs_client_config.goog_ops_agent_policy,
-    google_compute_instance.abfs_client[0].zone
-  )
-  agents_rule = {
-    package_state = "installed"
-    version       = "latest"
-  }
-  instance_filter = {
-    all = false
-    inclusion_labels = [{
-      labels = {
-        goog-ops-agent-policy = var.abfs_client_config.goog_ops_agent_policy
-      }
-    }]
-  }
-}

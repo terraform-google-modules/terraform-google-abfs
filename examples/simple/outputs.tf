@@ -36,14 +36,3 @@ output "spanner_database_schema_creation" {
     EOT
   )
 }
-
-output "webhook_setup_instructions" {
-  description = "Instructions to set up the webhook trigger."
-  value       = var.create_cloud_workstation_resources ? module.cicd_foundation[0].webhook_setup_instructions : null
-  sensitive   = true
-}
-
-output "webhook_setup_instructions_display" {
-  description = "Instructions to set up the webhook trigger."
-  value       = var.create_cloud_workstation_resources ? module.cicd_foundation[0].webhook_setup_instructions_display : null
-}

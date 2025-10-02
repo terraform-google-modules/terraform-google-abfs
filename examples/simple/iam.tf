@@ -13,9 +13,20 @@
 # limitations under the License.
 
 locals {
-  create_service_account         = var.abfs_service_account_id == ""
+  # go/keep-sorted start
+  abfs_iam_roles = [
+    "roles/artifactregistry.reader",
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter",
+    "roles/monitoring.viewer",
+    "roles/spanner.databaseUser",
+    "roles/stackdriver.resourceMetadata.writer",
+    "roles/storage.objectAdmin",
+  ]
   abfs_service_account_email     = local.create_service_account ? google_service_account.abfs[0].email : data.google_service_account.abfs[0].email
   abfs_service_account_unique_id = local.create_service_account ? google_service_account.abfs[0].unique_id : data.google_service_account.abfs[0].unique_id
+  create_service_account         = var.abfs_service_account_id == ""
+  # go/keep-sorted end
 }
 
 data "google_service_account" "abfs" {
@@ -38,22 +49,12 @@ resource "google_service_account" "abfs" {
   }
 }
 
-module "project-iam-bindings" {
-  source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "8.1.0"
+resource "google_project_iam_member" "abfs_iam" {
+  for_each = toset(local.abfs_iam_roles)
 
-  projects = [data.google_project.project.project_id]
-  mode     = "authoritative"
-
-  bindings = {
-    "roles/artifactregistry.reader"             = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/logging.logWriter"                   = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/monitoring.metricWriter"             = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/monitoring.viewer"                   = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/spanner.databaseUser"                = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/stackdriver.resourceMetadata.writer" = ["serviceAccount:${local.abfs_service_account_email}"],
-    "roles/storage.objectAdmin"                 = ["serviceAccount:${local.abfs_service_account_email}"],
-  }
+  project = data.google_project.project.project_id
+  role    = each.value
+  member  = "serviceAccount:${local.abfs_service_account_email}"
 
   depends_on = [
     module.project-services,

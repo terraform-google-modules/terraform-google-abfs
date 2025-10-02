@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 6.11.0"
+      version = ">= 7.5.0"
     }
   }
   # grant Storage Object Admin role to the Google Identity invoking Terraform

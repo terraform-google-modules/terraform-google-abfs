@@ -19,7 +19,7 @@ moved {
 
 module "abfs_vpc" {
   source  = "terraform-google-modules/network/google"
-  version = "9.2.0"
+  version = "~>12.0.0"
 
   project_id   = data.google_project.project.project_id
   network_name = var.abfs_network_name
@@ -106,7 +106,7 @@ resource "google_compute_router" "nat_router" {
 
 module "cloud-nat" {
   source  = "terraform-google-modules/cloud-nat/google"
-  version = "~> 5.3"
+  version = "~> 5.4.0"
 
   project_id = var.project_id
   region     = var.region
