@@ -30,6 +30,8 @@ locals {
     ]
   ])
 
+  templates_files_root = "${path.module}/files/templates"
+
   pre_start_hooks = var.pre_start_hooks == null ? [] : [
     for filename in fileset(var.pre_start_hooks, "*") :
     {
@@ -151,7 +153,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_container.env.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs_container.env.tftpl",
               {
                 envs = {
                   "NEEDS_GIT"       = true # gerrit uploaders need git access
@@ -169,7 +171,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             permissions = "0755"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_base.sh.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs_base.sh.tftpl",
               {
                 envs = {
                   "ABFS_CMD"                   = <<-EOT
@@ -195,7 +197,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs-server.service.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs-server.service.tftpl",
               {
                 type = "uploader"
             }))

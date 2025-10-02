@@ -43,6 +43,8 @@ locals {
     ]
   ])
 
+  templates_files_root = "${path.module}/files/templates"
+
   runcmd = [
     "systemctl daemon-reload",
     "systemctl restart abfs-docker-warmup.service",
@@ -115,7 +117,7 @@ data "cloudinit_config" "abfs_server" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_container.env.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs_container.env.tftpl",
               {
                 envs = {
                   "NEEDS_GIT" = false
@@ -132,7 +134,7 @@ data "cloudinit_config" "abfs_server" {
             permissions = "0755"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs_base.sh.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs_base.sh.tftpl",
               {
                 envs = {
                   "ABFS_CMD"              = <<-EOT
@@ -152,7 +154,7 @@ data "cloudinit_config" "abfs_server" {
             permissions = "0644"
             owner       = "root"
             encoding    = "gzip+base64"
-            content = base64gzip(templatefile("${local.common_files_root}/templates/abfs-server.service.tftpl",
+            content = base64gzip(templatefile("${local.templates_files_root}/abfs-server.service.tftpl",
               {
                 type = "server"
             }))
