@@ -121,6 +121,8 @@ spec:
         varType: string
         defaultValue: ""
     outputs:
+      - name: abfs_bucket_name
+        description: The ABFS GCS bucket name
       - name: abfs_server_name
         description: The name of the ABFS server instance
       - name: abfs_spanner_database

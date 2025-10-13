@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+output "abfs_bucket_name" {
+  description = "The ABFS GCS bucket name"
+  value       = data.google_storage_bucket.abfs.name
+}
+
 output "abfs_server_name" {
   description = "The name of the ABFS server instance"
   value       = google_compute_instance.abfs_server.name

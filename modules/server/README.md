@@ -38,6 +38,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 
 | Name | Description |
 |------|-------------|
+| <a name="output_abfs_bucket_name"></a> [abfs\_bucket\_name](#output\_abfs\_bucket\_name) | The ABFS GCS bucket name |
 | <a name="output_abfs_server_name"></a> [abfs\_server\_name](#output\_abfs\_server\_name) | The name of the ABFS server instance |
 | <a name="output_abfs_spanner_database"></a> [abfs\_spanner\_database](#output\_abfs\_spanner\_database) | The ABFS Spanner database object |
 | <a name="output_abfs_spanner_database_schema_file"></a> [abfs\_spanner\_database\_schema\_file](#output\_abfs\_spanner\_database\_schema\_file) | The ABFS Spanner database schema file |
