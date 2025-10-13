@@ -240,18 +240,6 @@ variable "abfs_server_machine_type" {
   default     = "n2-highmem-128"
 }
 
-variable "abfs_service_account_id" {
-  type        = string
-  description = "ABFS service account ID (e.g. sa-abfs@<project-id>.iam.gserviceaccount.com); if not specified, a new service account will be created using the abfs_service_account_name."
-  default     = ""
-}
-
-variable "abfs_service_account_name" {
-  type        = string
-  description = "The name of the service account to create in case abfs_service_account_id is not specified."
-  default     = "sa-abfs"
-}
-
 variable "abfs_spanner_database_create_tables" {
   type        = bool
   description = "Creates the tables in the database."
@@ -267,6 +255,49 @@ variable "create_client_instance_resource" {
   type        = bool
   description = "Whether to create a Google Cloud Engine compute instance for an ABFS client"
   default     = false
+}
+# go/keep-sorted end
+
+# Service Accounts
+
+# go/keep-sorted start block=yes newline_separated=yes
+variable "client_service_account_id" {
+  type        = string
+  description = "Service account ID (e.g. abfs-client@<project-id>.iam.gserviceaccount.com) used for the ABFS client. If not specified, a new service account will be created using the value of client_service_account_name."
+  default     = ""
+  nullable    = false
+}
+
+variable "client_service_account_name" {
+  type        = string
+  description = "The name of the service account to create in case client_service_account_id is not specified."
+  default     = "abfs-client"
+}
+
+variable "server_service_account_id" {
+  type        = string
+  description = "Service account ID (e.g. abfs-server@<project-id>.iam.gserviceaccount.com) used for the ABFS server. If not specified, a new service account will be created using the value of server_service_account_name."
+  default     = ""
+  nullable    = false
+}
+
+variable "server_service_account_name" {
+  type        = string
+  description = "The name of the service account to create in case server_service_account_id is not specified."
+  default     = "abfs-server"
+}
+
+variable "uploader_service_account_id" {
+  type        = string
+  description = "Service account ID (e.g. abfs-uploader@<project-id>.iam.gserviceaccount.com) used for the ABFS uploader. If not specified, a new service account will be created using the value of uploader_service_account_name."
+  default     = ""
+  nullable    = false
+}
+
+variable "uploader_service_account_name" {
+  type        = string
+  description = "The name of the service account to create in case uploader_service_account_name is not specified."
+  default     = "abfs-uploader"
 }
 # go/keep-sorted end
 

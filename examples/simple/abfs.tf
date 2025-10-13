@@ -27,7 +27,7 @@ module "abfs_server" {
 
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
-  service_account_email               = local.abfs_service_account_email
+  service_account_email               = local.server_service_account.email
   subnetwork                          = module.abfs_vpc.subnets["${var.region}/abfs-subnet"].name
   abfs_docker_image_uri               = var.abfs_docker_image_uri
   abfs_license                        = var.abfs_license
@@ -42,7 +42,7 @@ module "abfs_uploaders" {
 
   project_id                            = data.google_project.project.project_id
   zone                                  = var.zone
-  service_account_email                 = local.abfs_service_account_email
+  service_account_email                 = local.uploader_service_account.email
   subnetwork                            = module.abfs_vpc.subnets["${var.region}/abfs-subnet"].name
   abfs_docker_image_uri                 = var.abfs_docker_image_uri
   abfs_gerrit_uploader_count            = var.abfs_gerrit_uploader_count

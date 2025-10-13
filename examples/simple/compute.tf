@@ -55,7 +55,7 @@ resource "google_compute_instance" "abfs_client" {
     provisioning_model  = var.abfs_client_config.preemptible ? "SPOT" : "STANDARD"
   }
   service_account {
-    email  = local.abfs_service_account_email
+    email  = local.client_service_account.email
     scopes = var.abfs_client_config.scopes
   }
   shielded_instance_config {

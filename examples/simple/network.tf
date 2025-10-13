@@ -27,20 +27,6 @@ module "abfs_vpc" {
 
   firewall_rules = [
     {
-      description             = "Allow egress to Google APIs via Private Google Access"
-      direction               = "EGRESS"
-      name                    = "allow-egress-google-apis"
-      priority                = 1000
-      ranges                  = ["199.36.153.8/30", "34.126.0.0/18"]
-      target_service_accounts = [local.abfs_service_account_email]
-
-      allow = [
-        {
-          protocol = "tcp"
-        }
-      ]
-    },
-    {
       name        = "allow-ssh-tunnel-iap"
       description = "Allow ssh tunnel-through-iap to ABFS server VMs"
       direction   = "INGRESS"
@@ -58,29 +44,21 @@ module "abfs_vpc" {
       ]
     },
     {
-      name        = "allow-internal-ingress"
-      description = "Allow all ingress between VMs using the ABFS service account"
+      name        = "abfs-server-allow-ingress"
+      description = "Allow ingress from the ABFS uploaders and clients to the ABFS server"
       direction   = "INGRESS"
       priority    = 1000
 
-      ranges                  = ["0.0.0.0/0"]
-      source_service_accounts = [local.abfs_service_account_email]
-      target_service_accounts = [local.abfs_service_account_email]
+      source_service_accounts = compact([local.uploader_service_account.email, var.create_client_instance_resource ? local.client_service_account.email : null])
+      target_service_accounts = [local.server_service_account.email]
+
       allow = [
         {
-          protocol = "icmp"
-          ports    = []
-        },
-        {
           protocol = "tcp"
-          ports    = ["0-65535"]
-        },
-        {
-          protocol = "udp"
-          ports    = ["0-65535"]
+          ports    = ["50051"]
         },
       ]
-    }
+    },
   ]
 
   subnets = [

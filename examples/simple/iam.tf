@@ -13,35 +13,36 @@
 # limitations under the License.
 
 locals {
-  # go/keep-sorted start
-  abfs_iam_roles = [
-    "roles/artifactregistry.reader",
-    "roles/logging.logWriter",
-    "roles/monitoring.metricWriter",
-    "roles/monitoring.viewer",
-    "roles/spanner.databaseUser",
-    "roles/stackdriver.resourceMetadata.writer",
-    "roles/storage.objectAdmin",
-  ]
-  abfs_service_account_email     = local.create_service_account ? google_service_account.abfs[0].email : data.google_service_account.abfs[0].email
-  abfs_service_account_unique_id = local.create_service_account ? google_service_account.abfs[0].unique_id : data.google_service_account.abfs[0].unique_id
-  create_service_account         = var.abfs_service_account_id == ""
-  # go/keep-sorted end
+  create_server_service_account = var.server_service_account_id == ""
+  server_service_account        = local.create_server_service_account ? google_service_account.server[0] : data.google_service_account.server[0]
+
+  create_uploader_service_account = var.uploader_service_account_id == ""
+  uploader_service_account        = local.create_uploader_service_account ? google_service_account.uploader[0] : data.google_service_account.uploader[0]
+
+  create_client_service_account = var.client_service_account_id == ""
+  client_service_account        = var.create_client_instance_resource ? (local.create_client_service_account ? google_service_account.client[0] : data.google_service_account.client[0]) : null
 }
 
-data "google_service_account" "abfs" {
-  count = local.create_service_account ? 0 : 1
+# Service Account - Server
+
+moved {
+  from = google_service_account.abfs[0]
+  to   = google_service_account.server[0]
+}
+
+data "google_service_account" "server" {
+  count = local.create_server_service_account ? 0 : 1
 
   project    = data.google_project.project.project_id
-  account_id = var.abfs_service_account_id
+  account_id = var.server_service_account_id
 }
 
-resource "google_service_account" "abfs" {
-  count = local.create_service_account ? 1 : 0
+resource "google_service_account" "server" {
+  count = local.create_server_service_account ? 1 : 0
 
   project      = data.google_project.project.project_id
-  account_id   = var.abfs_service_account_name
-  display_name = "Service Account for ABFS"
+  account_id   = var.server_service_account_name
+  display_name = "Service Account for ABFS Server"
 
   lifecycle {
     # Prevent the service account that may have been granted an ABFS license from being deleted.
@@ -49,16 +50,70 @@ resource "google_service_account" "abfs" {
   }
 }
 
-resource "google_project_iam_member" "abfs_iam" {
-  for_each = toset(local.abfs_iam_roles)
+# Service Account - Uploader
 
-  project = data.google_project.project.project_id
-  role    = each.value
-  member  = "serviceAccount:${local.abfs_service_account_email}"
+data "google_service_account" "uploader" {
+  count = local.create_uploader_service_account ? 0 : 1
+
+  project    = data.google_project.project.project_id
+  account_id = var.uploader_service_account_id
+}
+
+resource "google_service_account" "uploader" {
+  count = local.create_uploader_service_account ? 1 : 0
+
+  project      = data.google_project.project.project_id
+  account_id   = var.uploader_service_account_name
+  display_name = "Service Account for ABFS Uploader"
+
+  lifecycle {
+    # Prevent the service account that may have been granted an ABFS license from being deleted.
+    prevent_destroy = true
+  }
+}
+
+# Service Account - Client
+
+data "google_service_account" "client" {
+  count = var.create_client_instance_resource && ! local.create_client_service_account ? 1 : 0
+
+  project    = data.google_project.project.project_id
+  account_id = var.client_service_account_id
+}
+
+resource "google_service_account" "client" {
+  count = var.create_client_instance_resource && local.create_client_service_account ? 1 : 0
+
+  project      = data.google_project.project.project_id
+  account_id   = var.client_service_account_name
+  display_name = "Service Account for ABFS Client"
+
+  lifecycle {
+    # Prevent the service account that may have been granted an ABFS license from being deleted.
+    prevent_destroy = true
+  }
+}
+
+module "project-iam-bindings" {
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "8.1.0"
+
+  projects = [data.google_project.project.project_id]
+  mode     = "authoritative"
+
+  bindings = {
+    "roles/logging.logWriter"                   = [local.server_service_account.member, local.uploader_service_account.member],
+    "roles/monitoring.metricWriter"             = [local.server_service_account.member, local.uploader_service_account.member],
+    "roles/monitoring.viewer"                   = [local.server_service_account.member, local.uploader_service_account.member],
+    "roles/spanner.databaseUser"                = [local.server_service_account.member],
+    "roles/stackdriver.resourceMetadata.writer" = [local.server_service_account.member, local.uploader_service_account.member],
+    "roles/storage.objectAdmin"                 = [local.server_service_account.member],
+  }
 
   depends_on = [
     module.project-services,
-    data.google_service_account.abfs,
-    google_service_account.abfs
+    local.server_service_account,
+    local.uploader_service_account,
+    local.client_service_account,
   ]
 }
