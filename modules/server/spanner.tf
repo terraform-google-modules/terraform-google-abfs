@@ -48,6 +48,7 @@ locals {
 }
 
 resource "google_spanner_database" "abfs" {
+  project             = var.project_id
   instance            = google_spanner_instance.abfs.name
   name                = var.abfs_spanner_database_name
   ddl                 = local.spanner_ddl_statements
