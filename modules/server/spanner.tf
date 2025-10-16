@@ -12,6 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  # 1. Clean the raw DDL content by removing comment lines and empty lines.
+  file_lines        = split("\n", data.local_file.abfs_spanner_database_schema.content)
+  lines_no_comments = [for line in local.file_lines : line if ! startswith(trimspace(line), "--")]
+  ddl_lines         = [for line in local.lines_no_comments : line if length(trimspace(line)) > 0]
+  cleaned_ddl       = join("\n", local.ddl_lines)
+
+  # 2. Split the content into individual statements using the semicolon as a delimiter.
+  statements = split(";", local.cleaned_ddl)
+
+  # 3. Trim whitespace from each statement and filter out any empty statements.
+  spanner_ddl_statements = var.abfs_spanner_database_create_tables ? [
+    for s in local.statements : trimspace(s)
+    if length(trimspace(s)) > 0
+  ] : []
+}
+
 resource "google_spanner_instance" "abfs" {
   project                      = var.project_id
   name                         = var.abfs_spanner_instance_name
@@ -34,17 +51,6 @@ resource "google_spanner_instance" "abfs" {
 
 data "local_file" "abfs_spanner_database_schema" {
   filename = "${path.module}/../../files/schemas/${var.abfs_spanner_database_schema_version}-schema.sql"
-}
-
-locals {
-  # 1. Remove comment lines from the DDL content.
-  cleaned_ddl = replace(data.local_file.abfs_spanner_database_schema.content, "(?m)^--.*\\R?", "")
-
-  # 2. Split the content into individual statements using the semicolon as a delimiter.
-  statements = split(";", local.cleaned_ddl)
-
-  # 3. Trim whitespace from each statement and filter out any empty statements.
-  spanner_ddl_statements = var.abfs_spanner_database_create_tables ? [for s in local.statements : trimspace(s) if length(trimspace(s)) > 0] : []
 }
 
 resource "google_spanner_database" "abfs" {
