@@ -84,6 +84,12 @@ variable "abfs_bootdisk_type" {
   default     = "pd-ssd"
 }
 
+variable "abfs_extra_params" {
+  type        = list(string)
+  description = "A list of extra parameters to append to the abfs command"
+  default     = []
+}
+
 // Google Cloud Storage
 variable "existing_bucket_name" {
   type        = string

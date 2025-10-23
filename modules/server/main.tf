@@ -141,7 +141,8 @@ data "cloudinit_config" "abfs_server" {
                     --project ${google_spanner_instance.abfs.project} \
                     --bucket ${data.google_storage_bucket.abfs.name} \
                     --instance ${google_spanner_instance.abfs.name} \
-                    --db ${google_spanner_database.abfs.name}
+                    --db ${google_spanner_database.abfs.name} \
+                    ${join(" ", var.abfs_extra_params)}
                   EOT
                   "ABFS_DOCKER_IMAGE_URI" = var.abfs_docker_image_uri,
                 }

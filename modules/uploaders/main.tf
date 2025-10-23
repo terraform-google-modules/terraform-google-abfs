@@ -179,10 +179,12 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                     --remote-servers ${var.abfs_server_name}:50051 \
                     --manifest-project-name ${var.abfs_manifest_project_name} \
                     --lfs=${var.abfs_enable_git_lfs} \
+                    ${join(" ", var.abfs_extra_params)} \
                     gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
                     --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
                     --project-storage-path /abfs-storage \
-                    --manifest-file ${var.abfs_manifest_file}
+                    --manifest-file ${var.abfs_manifest_file} \
+                    ${join(" ", var.abfs_gerrit_uploader_extra_params)}
                   EOT
                   "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,
                   "DATADISK_MOUNTPOINT"        = var.abfs_datadisk_mountpoint,

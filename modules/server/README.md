@@ -16,6 +16,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 | <a name="input_abfs_bucket_location"></a> [abfs\_bucket\_location](#input\_abfs\_bucket\_location) | The location of the ABFS bucket (https://cloud.google.com/storage/docs/locations). | `string` | n/a | yes |
 | <a name="input_abfs_bucket_name"></a> [abfs\_bucket\_name](#input\_abfs\_bucket\_name) | The name of the ABFS bucket. | `string` | `"abfs"` | no |
 | <a name="input_abfs_docker_image_uri"></a> [abfs\_docker\_image\_uri](#input\_abfs\_docker\_image\_uri) | Docker image URI for the ABFS server | `string` | n/a | yes |
+| <a name="input_abfs_extra_params"></a> [abfs\_extra\_params](#input\_abfs\_extra\_params) | A list of extra parameters to append to the abfs command | `list(string)` | `[]` | no |
 | <a name="input_abfs_license"></a> [abfs\_license](#input\_abfs\_license) | ABFS license (JSON) | `string` | n/a | yes |
 | <a name="input_abfs_server_allow_stopping_for_update"></a> [abfs\_server\_allow\_stopping\_for\_update](#input\_abfs\_server\_allow\_stopping\_for\_update) | Allow to stop the server to update properties | `bool` | `true` | no |
 | <a name="input_abfs_server_cos_image_ref"></a> [abfs\_server\_cos\_image\_ref](#input\_abfs\_server\_cos\_image\_ref) | Reference to the COS boot image to use for the ABFS server | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |

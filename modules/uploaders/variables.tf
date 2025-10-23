@@ -86,6 +86,18 @@ variable "abfs_gerrit_uploader_git_branch" {
   default     = ["main"]
 }
 
+variable "abfs_extra_params" {
+  type        = list(string)
+  description = "A list of extra parameters to append to the abfs command"
+  default     = []
+}
+
+variable "abfs_gerrit_uploader_extra_params" {
+  type        = list(string)
+  description = "A list of extra parameters to append to the gerrit upload-daemon sub-command"
+  default     = []
+}
+
 variable "abfs_enable_git_lfs" {
   type        = bool
   description = "Enable Git LFS support"

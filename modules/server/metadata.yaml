@@ -72,6 +72,10 @@ spec:
         description: Docker image URI for the ABFS server
         varType: string
         required: true
+      - name: abfs_extra_params
+        description: A list of extra parameters to append to the abfs command
+        varType: list(string)
+        defaultValue: []
       - name: abfs_bootdisk_size_gb
         description: Size in GB for the ABFS bootdisk that will be attached to the VM
         varType: number
