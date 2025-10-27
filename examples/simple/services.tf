@@ -32,10 +32,13 @@ module "project-services" {
   enable_apis                 = var.enable_apis
   disable_services_on_destroy = false
   activate_apis = [
+    // go/keep-sorted start
     "compute.googleapis.com",
     "dns.googleapis.com",
+    "iam.googleapis.com",
     "monitoring.googleapis.com",
     "spanner.googleapis.com",
+    // go/keep-sorted end
   ]
 
   depends_on = [
