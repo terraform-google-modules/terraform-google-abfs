@@ -20,13 +20,16 @@ module "cicd_foundation" {
   project_id  = data.google_project.project.project_id
   enable_apis = var.enable_apis
   # go/keep-sorted start
-  artifact_registry_region     = var.artifact_registry_region
-  cloud_build_region           = var.cloud_build_region
-  cws_clusters                 = var.cws_clusters
-  cws_configs                  = var.cws_configs
-  cws_custom_images            = var.cws_custom_images
-  git_branch_trigger           = var.git_branch_trigger
-  secret_manager_region        = var.secret_manager_region
-  secure_source_manager_region = var.secure_source_manager_region
+  artifact_registry_region                    = var.artifact_registry_region
+  cloud_build_region                          = var.cloud_build_region
+  cws_clusters                                = var.cws_clusters
+  cws_configs                                 = var.cws_configs
+  cws_custom_images                           = var.cws_custom_images
+  git_branch_trigger                          = var.git_branch_trigger
+  secret_manager_region                       = var.secret_manager_region
+  secure_source_manager_instance_name         = var.secure_source_manager_instance_name
+  secure_source_manager_region                = var.secure_source_manager_region
+  secure_source_manager_repo_git_url_to_clone = var.secure_source_manager_repo_git_url_to_clone
+  secure_source_manager_repo_name             = var.secure_source_manager_repo_name
   # go/keep-sorted end
 }

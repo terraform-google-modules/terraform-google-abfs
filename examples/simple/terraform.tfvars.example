@@ -63,11 +63,14 @@ abfs_spanner_database_create_tables = true
 # }
 
 create_cloud_workstation_resources = true
+
+secure_source_manager_repo_git_url_to_clone = "https://github.com/GoogleCloudPlatform/horizon-sdv.git"
+
 cws_clusters = {
   "cws" = {
-    network    = "default"
+    network    = "abfs-network"
     region     = "europe-west1"
-    subnetwork = "default"
+    subnetwork = "abfs-subnet"
   }
 }
 cws_configs = {
@@ -78,7 +81,7 @@ cws_configs = {
     boot_disk_size_gb              = 64
     disable_public_ip_addresses    = true
     pool_size                      = 0
-    enable_nested_virtualization   = false
+    enable_nested_virtualization   = true
     persistent_disk_size_gb        = 1000
     persistent_disk_fs_type        = "ext4"
     persistent_disk_type           = "pd-ssd"
@@ -87,7 +90,6 @@ cws_configs = {
       "android-studio",
       "android-studio-for-platform",
       "code-oss",
-      "repo-builder"
     ]
     creators                       = [
       # "your_email@example.com",
@@ -107,7 +109,7 @@ cws_custom_images = {
   "android-studio" : {
     build = {
       # Optional: The relative path to the Dockerfile within the repository.
-      dockerfile_path = "examples/images/android/android-studio"
+      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
       # Optional: The timeout for the build in seconds, defaults to 7200.
       timeout_seconds = 7200
       # Optional: The machine type to use for the build, defaults to "UNSPECIFIED".
@@ -122,21 +124,14 @@ cws_custom_images = {
   },
   "android-studio-for-platform" = {
     build = {
-      dockerfile_path = "examples/images/android-open-source-project/android-studio-for-platform"
+      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
       timeout_seconds = 7200
       machine_type = "E2_HIGHCPU_32"
     }
   }
   "code-oss" : {
     build = {
-      dockerfile_path = "examples/images/android-open-source-project/code-oss"
-      timeout_seconds = 7200
-      machine_type    = "E2_HIGHCPU_32"
-    }
-  },
-  "repo-builder" : {
-    build = {
-      dockerfile_path = "examples/images/android-open-source-project/repo-builder"
+      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
       timeout_seconds = 7200
       machine_type    = "E2_HIGHCPU_32"
     }

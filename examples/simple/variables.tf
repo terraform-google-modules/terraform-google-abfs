@@ -378,28 +378,21 @@ variable "cws_custom_images" {
     // go/keep-sorted start block=yes
     "android-studio" : {
       build = {
-        dockerfile_path = "examples/images/android/android-studio"
+        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
     },
     "android-studio-for-platform" : {
       build = {
-        dockerfile_path = "examples/images/android-open-source-project/android-studio-for-platform"
+        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
     },
     "code-oss" : {
       build = {
-        dockerfile_path = "examples/images/android-open-source-project/code-oss"
-        timeout_seconds = 7200
-        machine_type    = "E2_HIGHCPU_32"
-      }
-    },
-    "repo-builder" : {
-      build = {
-        dockerfile_path = "examples/images/android-open-source-project/repo-builder"
+        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
@@ -423,5 +416,17 @@ variable "secure_source_manager_instance_name" {
   type        = string
   description = "The name of the Secure Source Manager instance to create, if secure_source_manager_instance_id is null."
   default     = "cicd-foundation"
+}
+
+variable "secure_source_manager_repo_git_url_to_clone" {
+  type        = string
+  description = "The URL of a Git repository to clone into the new Secure Source Manager repository. If null, cloning is skipped."
+  default     = "https://github.com/GoogleCloudPlatform/horizon-sdv.git"
+}
+
+variable "secure_source_manager_repo_name" {
+  type        = string
+  description = "The name of the Secure Source Manager repository."
+  default     = "horizon-sdv"
 }
 # go/keep-sorted end
