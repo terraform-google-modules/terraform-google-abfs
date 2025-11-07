@@ -17,6 +17,7 @@ region                       = "europe-west1"
 zone                         = "europe-west1-c"
 artifact_registry_region     = "europe-west1"
 cloud_build_region           = "europe-west1"
+cws_region                   = "europe-west1"
 secret_manager_region        = "europe-west1"
 secure_source_manager_region = "europe-west4"
 
@@ -38,6 +39,9 @@ secure_source_manager_region = "europe-west4"
 abfs_docker_image_uri = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:latest"
 
 abfs_server_machine_type = "n2d-standard-48"
+
+cws_subnet_name = "cws-subnet"
+cws_subnet_ip   = "10.3.0.0/16"
 
 # If you want to enable Git LFS support, set this to true.
 #abfs_enable_git_lfs = true
@@ -70,7 +74,7 @@ cws_clusters = {
   "cws" = {
     network    = "abfs-network"
     region     = "europe-west1"
-    subnetwork = "abfs-subnet"
+    subnetwork = "cws-subnet"
   }
 }
 cws_configs = {

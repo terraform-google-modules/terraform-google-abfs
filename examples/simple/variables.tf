@@ -40,9 +40,15 @@ variable "cloud_build_region" {
   default     = "europe-west4"
 }
 
+variable "cws_region" {
+  type        = string
+  description = "The region for Cloud Workstation resources."
+  default     = "europe-west4"
+}
+
 variable "region" {
   type        = string
-  description = "Region for ABFS resources"
+  description = "The region for ABFS resources"
   default     = "europe-west4"
 }
 
@@ -88,6 +94,24 @@ variable "abfs_subnet_name" {
 variable "abfs_subnet_private_access" {
   type        = bool
   description = "Enable private Google access for the ABFS subnetwork"
+  default     = true
+}
+
+variable "cws_subnet_ip" {
+  type        = string
+  description = "IP range for the CWS subnetwork"
+  default     = "10.3.0.0/16"
+}
+
+variable "cws_subnet_name" {
+  type        = string
+  description = "Name of the CWS subnetwork"
+  default     = "cws-subnet"
+}
+
+variable "cws_subnet_private_access" {
+  type        = bool
+  description = "Enable private Google access for the CWS subnetwork"
   default     = true
 }
 # go/keep-sorted end

@@ -67,6 +67,12 @@ module "abfs_vpc" {
       subnet_ip             = var.abfs_subnet_ip
       subnet_private_access = var.abfs_subnet_private_access
       subnet_region         = var.region
+    },
+    {
+      subnet_name           = var.cws_subnet_name
+      subnet_ip             = var.cws_subnet_ip
+      subnet_private_access = var.cws_subnet_private_access
+      subnet_region         = var.cws_region
     }
   ]
 
