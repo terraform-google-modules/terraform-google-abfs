@@ -41,9 +41,6 @@ resource "google_compute_instance" "abfs_client" {
     enable-oslogin  = "true"
   } : {}
   network_interface {
-    access_config {
-      network_tier = "PREMIUM"
-    }
     queue_count = 0
     stack_type  = "IPV4_ONLY"
     subnetwork  = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].self_link

@@ -143,20 +143,13 @@ variable "abfs_client_config" {
   })
   description = "Configuration for the ABFS client compute instance."
   default = {
-    name          = "abfs-client"
-    machine_type  = "n1-standard-8"
-    image_project = "ubuntu-os-cloud"
-    image_name    = "ubuntu-minimal-2404-noble-amd64-v20250818"
-    size          = 2000
-    type          = "pd-ssd"
-    scopes = [
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring.write",
-      "https://www.googleapis.com/auth/service.management.readonly",
-      "https://www.googleapis.com/auth/servicecontrol",
-      "https://www.googleapis.com/auth/trace.append"
-    ]
+    name                  = "abfs-client"
+    machine_type          = "n1-standard-8"
+    image_project         = "ubuntu-os-cloud"
+    image_name            = "ubuntu-minimal-2404-noble-amd64-v20250818"
+    size                  = 2000
+    type                  = "pd-ssd"
+    scopes                = ["cloud-platform"]
     goog_ops_agent_policy = "v2-x86-template-1-4-0"
     preemptible           = true
     automatic_restart     = false
