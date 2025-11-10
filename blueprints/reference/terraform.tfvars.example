@@ -36,7 +36,7 @@ secure_source_manager_region = "europe-west4"
 # then insert the license here and run terraform apply again
 #abfs_license            = "INSERT_YOUR_LICENSE_HERE"
 
-abfs_docker_image_uri = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:latest"
+abfs_docker_image_uri = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.0"
 
 abfs_server_machine_type = "n2d-standard-48"
 
