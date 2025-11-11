@@ -12,6 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  base_metadata = {
+    startup-script = file("${path.module}/files/abfs-client-startup-script.sh")
+  }
+
+  oslogin_metadata = var.abfs_client_config.enable_oslogin ? {
+    enable-osconfig = "TRUE"
+    enable-oslogin  = "TRUE"
+  } : {}
+
+  metadata = merge(local.base_metadata, local.oslogin_metadata)
+}
+
 resource "google_compute_instance" "abfs_client" {
   count = var.create_client_instance_resource ? 1 : 0
 
@@ -36,10 +49,7 @@ resource "google_compute_instance" "abfs_client" {
     }
     mode = "READ_WRITE"
   }
-  metadata = var.abfs_client_config.enable_oslogin ? {
-    enable-osconfig = "TRUE"
-    enable-oslogin  = "true"
-  } : {}
+  metadata = local.metadata
   network_interface {
     queue_count = 0
     stack_type  = "IPV4_ONLY"
