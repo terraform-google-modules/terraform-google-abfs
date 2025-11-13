@@ -113,7 +113,7 @@ cws_custom_images = {
   "android-studio" : {
     build = {
       # Optional: The relative path to the Dockerfile within the repository.
-      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
       # Optional: The timeout for the build in seconds, defaults to 7200.
       timeout_seconds = 7200
       # Optional: The machine type to use for the build, defaults to "UNSPECIFIED".
@@ -128,14 +128,14 @@ cws_custom_images = {
   },
   "android-studio-for-platform" = {
     build = {
-      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
       timeout_seconds = 7200
       machine_type = "E2_HIGHCPU_32"
     }
   }
   "code-oss" : {
     build = {
-      dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
       timeout_seconds = 7200
       machine_type    = "E2_HIGHCPU_32"
     }

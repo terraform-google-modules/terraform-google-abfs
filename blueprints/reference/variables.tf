@@ -378,7 +378,7 @@ variable "cws_configs" {
 variable "cws_custom_images" {
   type = map(object({
     build = optional(object({
-      dockerfile_path = optional(string)
+      skaffold_path   = optional(string)
       timeout_seconds = number
       machine_type    = string
       })
@@ -395,21 +395,21 @@ variable "cws_custom_images" {
     // go/keep-sorted start block=yes
     "android-studio" : {
       build = {
-        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
+        skaffold_path   = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
     },
     "android-studio-for-platform" : {
       build = {
-        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
+        skaffold_path   = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
     },
     "code-oss" : {
       build = {
-        dockerfile_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
+        skaffold_path   = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
         timeout_seconds = 7200
         machine_type    = "E2_HIGHCPU_32"
       }
