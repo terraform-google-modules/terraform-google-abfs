@@ -15,7 +15,7 @@
 module "cicd_foundation" {
   count = var.create_cloud_workstation_resources ? 1 : 0
 
-  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_foundation?ref=v3.1.0"
+  source = "github.com/GoogleCloudPlatform/cicd-foundation//infra/modules/cicd_foundation?ref=v4.0.0"
 
   project_id  = data.google_project.project.project_id
   enable_apis = var.enable_apis
