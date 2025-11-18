@@ -62,14 +62,14 @@ abfs_spanner_database_create_tables = true
 
 # Example override for the client instance configuration.
 # Note: You only need to include keys you want to override from the defaults in variables.tf.
-# abfs_client_config = {
-#   name                  = "my-abfs-client"
-#   machine_type          = "e2-standard-16"
-# }
+#abfs_client_config = {
+#  name                  = "my-abfs-client"
+#  machine_type          = "n2-standard-48"
+#}
 
 create_cloud_workstation_resources = true
 
-# binary_authorization_always_create = true
+#binary_authorization_always_create = true
 
 secure_source_manager_repo_git_url_to_clone = "https://github.com/GoogleCloudPlatform/horizon-sdv.git"
 
@@ -84,7 +84,7 @@ cws_configs = {
   "cws-abfs" = {
     cws_cluster                    = "cws"
     idle_timeout_seconds           = 3600
-    machine_type                   = "e2-standard-8"
+    machine_type                   = "n2-standard-48"
     boot_disk_size_gb              = 64
     disable_public_ip_addresses    = true
     pool_size                      = 0
@@ -101,12 +101,12 @@ cws_configs = {
     creators                       = [
       # "your_email@example.com",
     ]
-    instances                      = [
-      {
-        name  = "cws-abfs"
-        # users = ["your_email@example.com"]
-      }
-    ]
+    #instances                      = [
+    #  {
+    #    name  = "cws-abfs"
+    #    users = ["your_email@example.com"]
+    #  }
+    #]
   }
 }
 
