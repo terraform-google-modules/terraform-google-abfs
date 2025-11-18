@@ -124,7 +124,7 @@ variable "abfs_manifest_file" {
 variable "abfs_uploader_cos_image_ref" {
   type        = string
   description = "Reference to the COS boot image to use for the ABFS uploader"
-  default     = "projects/cos-cloud/global/images/family/cos-109-lts"
+  default     = "projects/cos-cloud/global/images/family/cos-125-lts"
 }
 
 variable "abfs_docker_image_uri" {

@@ -59,7 +59,7 @@ variable "abfs_server_name" {
 variable "abfs_server_cos_image_ref" {
   type        = string
   description = "Reference to the COS boot image to use for the ABFS server"
-  default     = "projects/cos-cloud/global/images/family/cos-109-lts"
+  default     = "projects/cos-cloud/global/images/family/cos-125-lts"
 }
 
 variable "abfs_license" {

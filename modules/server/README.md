@@ -19,7 +19,7 @@ For example usage, please check the following [example](../../examples/simple/ma
 | <a name="input_abfs_extra_params"></a> [abfs\_extra\_params](#input\_abfs\_extra\_params) | A list of extra parameters to append to the abfs command | `list(string)` | `[]` | no |
 | <a name="input_abfs_license"></a> [abfs\_license](#input\_abfs\_license) | ABFS license (JSON) | `string` | n/a | yes |
 | <a name="input_abfs_server_allow_stopping_for_update"></a> [abfs\_server\_allow\_stopping\_for\_update](#input\_abfs\_server\_allow\_stopping\_for\_update) | Allow to stop the server to update properties | `bool` | `true` | no |
-| <a name="input_abfs_server_cos_image_ref"></a> [abfs\_server\_cos\_image\_ref](#input\_abfs\_server\_cos\_image\_ref) | Reference to the COS boot image to use for the ABFS server | `string` | `"projects/cos-cloud/global/images/family/cos-109-lts"` | no |
+| <a name="input_abfs_server_cos_image_ref"></a> [abfs\_server\_cos\_image\_ref](#input\_abfs\_server\_cos\_image\_ref) | Reference to the COS boot image to use for the ABFS server | `string` | `"projects/cos-cloud/global/images/family/cos-125-lts"` | no |
 | <a name="input_abfs_server_machine_type"></a> [abfs\_server\_machine\_type](#input\_abfs\_server\_machine\_type) | Machine type for ABFS servers | `string` | `"n2-highmem-128"` | no |
 | <a name="input_abfs_server_name"></a> [abfs\_server\_name](#input\_abfs\_server\_name) | Name for the ABFS server | `string` | `"abfs-server"` | no |
 | <a name="input_abfs_spanner_database_create_tables"></a> [abfs\_spanner\_database\_create\_tables](#input\_abfs\_spanner\_database\_create\_tables) | Creates the tables in the database using the online DDL schema with the given schema version. | `bool` | `false` | no |

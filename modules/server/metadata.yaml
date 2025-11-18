@@ -63,7 +63,7 @@ spec:
       - name: abfs_server_cos_image_ref
         description: Reference to the COS boot image to use for the ABFS server
         varType: string
-        defaultValue: projects/cos-cloud/global/images/family/cos-109-lts
+        defaultValue: projects/cos-cloud/global/images/family/cos-125-lts
       - name: abfs_license
         description: ABFS license (JSON)
         varType: string

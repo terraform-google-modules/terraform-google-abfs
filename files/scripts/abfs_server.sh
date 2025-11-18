@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -ex
+
 source "$(dirname "$0")/abfs_base.sh"
 
 DOCKER_RUN_ARGS=(--privileged \
@@ -27,7 +29,7 @@ if [[ -n "${DATADISK_MOUNTPOINT}" ]]; then
 fi
 
 if [[ -n "${PRE_START_HOOKS_MOUNTPOINT}" ]]; then
-  DOCKER_RUN_ARGS+=(--volume ${PRE_START_HOOKS_MOUNTPOINT}:/etc/abfs/pre-start.d:ro)
+  DOCKER_RUN_ARGS+=(--mount type=bind,src=${PRE_START_HOOKS_MOUNTPOINT},dst=/etc/abfs/pre-start.d,readonly,bind-recursive=writable)
 fi
 
 docker run --name=abfs-server --log-driver=journald \
