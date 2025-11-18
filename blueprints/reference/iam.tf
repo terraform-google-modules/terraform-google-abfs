@@ -102,7 +102,6 @@ module "project-iam-bindings" {
   mode     = "authoritative"
 
   bindings = {
-    "roles/logging.logWriter"                   = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/monitoring.metricWriter"             = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/monitoring.viewer"                   = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/spanner.databaseUser"                = [local.server_service_account.member],
@@ -116,4 +115,16 @@ module "project-iam-bindings" {
     local.uploader_service_account,
     local.client_service_account,
   ]
+}
+
+resource "google_project_iam_member" "log_writer_server" {
+  project = data.google_project.project.project_id
+  role    = "roles/logging.logWriter"
+  member  = local.server_service_account.member
+}
+
+resource "google_project_iam_member" "log_writer_uploader" {
+  project = data.google_project.project.project_id
+  role    = "roles/logging.logWriter"
+  member  = local.uploader_service_account.member
 }
