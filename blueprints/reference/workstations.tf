@@ -21,6 +21,7 @@ module "cicd_foundation" {
   enable_apis = var.enable_apis
   # go/keep-sorted start
   artifact_registry_region                    = var.artifact_registry_region
+  binary_authorization_always_create          = var.binary_authorization_always_create
   cloud_build_region                          = var.cloud_build_region
   cws_clusters                                = var.cws_clusters
   cws_configs                                 = var.cws_configs

@@ -447,3 +447,11 @@ variable "secure_source_manager_repo_name" {
   default     = "horizon-sdv"
 }
 # go/keep-sorted end
+
+# Binary Authorization
+
+variable "binary_authorization_always_create" {
+  type        = bool
+  description = "If true, create Binary Authorization resources even if kritis_signer_image is not provided."
+  default     = false
+}

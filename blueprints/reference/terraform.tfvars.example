@@ -68,6 +68,8 @@ abfs_spanner_database_create_tables = true
 
 create_cloud_workstation_resources = true
 
+# binary_authorization_always_create = true
+
 secure_source_manager_repo_git_url_to_clone = "https://github.com/GoogleCloudPlatform/horizon-sdv.git"
 
 cws_clusters = {
