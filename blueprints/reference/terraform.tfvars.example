@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id                   = "YOUR_PROJECT_ID"
-region                       = "europe-west1"
-zone                         = "europe-west1-c"
-artifact_registry_region     = "europe-west1"
-cloud_build_region           = "europe-west1"
-cws_region                   = "europe-west1"
-secret_manager_region        = "europe-west1"
-secure_source_manager_region = "europe-west4"
+project_id = "YOUR_PROJECT_ID"
+#region                       = "us-central1"
+#zone                         = "us-central1-a"
+#artifact_registry_region     = "us-central1"
+#cloud_build_region           = "us-central1"
+#cws_region                   = "us-central1"
+#secret_manager_region        = "us-central1"
+#secure_source_manager_region = "us-central1"
 
 # If you don't need or want to enable APIs, set this to false.
 #enable_apis = false
@@ -27,9 +27,14 @@ secure_source_manager_region = "europe-west4"
 # If you don't need private access to Artifact Registry, set this to false.
 #create_dns_zones = false
 
-# if unset will create a new service account
-# if set, will use the specified service account
-#abfs_service_account_id = "YOUR_EXISTING_SERVICE_ACCOUNT_ID"
+# if unset will create new service accounts
+# if set, will use the specified service accounts
+#server_service_account_id   = "YOUR_EXISTING_SERVER_SERVICE_ACCOUNT_ID"
+#server_service_account_name = "YOUR_ABFS_SERVER_SA"
+#uploader_service_account_id = "YOUR_EXISTING_UPLOADER_SERVICE_ACCOUNT_ID"
+#uploader_service_account_name = "YOUR_ABFS_UPLOADER_SA"
+#client_service_account_id   = "YOUR_EXISTING_CLIENT_SERVICE_ACCOUNT_ID"
+#client_service_account_name = "YOUR_ABFS_CLIENT_SA"
 
 # run terraform apply first
 # submit the output through the allow-listing form
@@ -39,23 +44,32 @@ secure_source_manager_region = "europe-west4"
 # Using the US region for the docker image with a specific version tag.
 #abfs_docker_image_uri = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"
 
-abfs_server_machine_type = "n2d-standard-48"
+#abfs_server_machine_type = "n2d-standard-48"
 
-cws_subnet_name = "cws-subnet"
-cws_subnet_ip   = "10.3.0.0/16"
+#abfs_network_name           = "YOUR_NETWORK"
+#abfs_subnet_name            = "YOUR_ABFS_SUBNET"
+#abfs_subnet_ip              = "10.10.0.0/16"
+#abfs_subnet_private_access  = false
+#cws_subnet_name             = "YOUR_CWS_SUBNET"
+#cws_subnet_ip               = "10.11.0.0/16"
+#cws_subnet_private_access   = false
 
 # If you want to enable Git LFS support, set this to true.
 #abfs_enable_git_lfs = true
 
-abfs_gerrit_uploader_count           = 3
-abfs_gerrit_uploader_manifest_server = "android.googlesource.com"
-#abfs_gerrit_uploader_git_branch     = ["branch1", "branch2"]
+#abfs_gerrit_uploader_count            = 5
+#abfs_gerrit_uploader_datadisk_size_gb = 2048
+#abfs_gerrit_uploader_machine_type     = "n2d-standard-32"
+#abfs_gerrit_uploader_manifest_server  = "YOUR_GERRIT_SERVER_NAME"
+#abfs_gerrit_uploader_git_branch       = ["branch1", "branch2"]
+#abfs_manifest_file                    = "other.xml"
+#abfs_manifest_project_name            = "YOUR_MANIFEST_PROJECT"
 
-abfs_bucket_location                = "europe-west1"
-abfs_spanner_instance_config        = "regional-europe-west1"
+#abfs_bucket_location                = "us-central1"
+#abfs_spanner_instance_config        = "regional-us-central1"
 abfs_spanner_database_create_tables = true
 
-#alert_notification_email = "your_email@example.com"
+#alert_notification_email = "YOUR_EMAIL@EXAMPLE.COM"
 
 # Whether to create the example GCE instance for testing ABFS.
 #create_client_instance_resource = true
@@ -63,7 +77,7 @@ abfs_spanner_database_create_tables = true
 # Example override for the client instance configuration.
 # Note: You only need to include keys you want to override from the defaults in variables.tf.
 #abfs_client_config = {
-#  name                  = "my-abfs-client"
+#  name                  = "YOUR_ABFS_CLIENT"
 #  machine_type          = "n2-standard-48"
 #}
 
@@ -71,20 +85,24 @@ create_cloud_workstation_resources = true
 
 #binary_authorization_always_create = true
 
-secure_source_manager_repo_git_url_to_clone = "https://github.com/GoogleCloudPlatform/horizon-sdv.git"
+#git_branch_trigger                          = "develop"
+#secure_source_manager_instance_name         = "YOUR_SSM_INSTANCE"
+#secure_source_manager_repo_git_url_to_clone = "YOUR_GIT_URL_TO_CLONE_AND_PUSH_TO_SSM"
+#secure_source_manager_repo_name             = "YOUR_REPO"
 
 cws_clusters = {
   "cws" = {
-    network    = "abfs-network"
-    region     = "europe-west1"
-    subnetwork = "cws-subnet"
+    network    = "abfs-network" # change to YOUR_NETWORK
+    region     = "europe-west1" # change to YOUR_ABFS_SUBNET
+    subnetwork = "cws-subnet"   # change to YOUR_CWS_SUBNET
   }
 }
 cws_configs = {
   "cws-abfs" = {
     cws_cluster                    = "cws"
     idle_timeout_seconds           = 3600
-    machine_type                   = "n2-standard-48"
+    # see https://docs.cloud.google.com/workstations/docs/available-machine-types
+    machine_type                   = "n2-standard-32"
     boot_disk_size_gb              = 64
     disable_public_ip_addresses    = true
     pool_size                      = 0

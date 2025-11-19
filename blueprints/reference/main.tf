@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  create_server_service_account = var.server_service_account_id == ""
+  server_service_account        = local.create_server_service_account ? google_service_account.server[0] : data.google_service_account.server[0]
+
+  create_uploader_service_account = var.uploader_service_account_id == ""
+  uploader_service_account        = local.create_uploader_service_account ? google_service_account.uploader[0] : data.google_service_account.uploader[0]
+
+  create_client_service_account = var.client_service_account_id == ""
+  client_service_account        = var.create_client_instance_resource ? (local.create_client_service_account ? google_service_account.client[0] : data.google_service_account.client[0]) : null
+}
+
 data "google_project" "project" {
   project_id = var.project_id
 

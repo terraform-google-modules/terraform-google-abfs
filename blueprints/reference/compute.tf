@@ -13,16 +13,16 @@
 # limitations under the License.
 
 locals {
+  # go/keep-sorted start block=yes
   base_metadata = {
     startup-script = file("${path.module}/files/abfs-client-startup-script.sh")
   }
-
+  metadata = merge(local.base_metadata, local.oslogin_metadata)
   oslogin_metadata = var.abfs_client_config.enable_oslogin ? {
     enable-osconfig = "TRUE"
     enable-oslogin  = "TRUE"
   } : {}
-
-  metadata = merge(local.base_metadata, local.oslogin_metadata)
+  # go/keep-sorted end
 }
 
 resource "google_compute_instance" "abfs_client" {
@@ -69,5 +69,11 @@ resource "google_compute_instance" "abfs_client" {
     enable_integrity_monitoring = var.abfs_client_config.shielded_instance_config.enable_integrity_monitoring
     enable_secure_boot          = var.abfs_client_config.shielded_instance_config.enable_secure_boot
     enable_vtpm                 = var.abfs_client_config.shielded_instance_config.enable_vtpm
+  }
+
+  lifecycle {
+    ignore_changes = [
+      scheduling
+    ]
   }
 }

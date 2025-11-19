@@ -14,16 +14,18 @@
 
 # General Project & Naming
 
-variable "project_id" {
-  type        = string
-  description = "Google Cloud project ID"
-}
-
+# go/keep-sorted start block=yes newline_separated=yes
 variable "enable_apis" {
   type        = bool
   description = "Whether to enable the required APIs."
   default     = true
 }
+
+variable "project_id" {
+  type        = string
+  description = "Google Cloud project ID"
+}
+# go/keep-sorted end
 
 # Location/Region Variables
 
@@ -141,6 +143,7 @@ variable "alert_notification_email" {
 variable "abfs_bucket_location" {
   type        = string
   description = "The location of the ABFS bucket (https://cloud.google.com/storage/docs/locations)."
+  default     = "europe-west1"
 }
 
 variable "abfs_client_config" {
@@ -192,7 +195,7 @@ variable "abfs_client_config" {
 variable "abfs_docker_image_uri" {
   type        = string
   description = "Docker image URI for ABFS"
-  default     = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"
+  default     = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"
 }
 
 variable "abfs_enable_git_lfs" {
@@ -267,6 +270,7 @@ variable "abfs_spanner_database_create_tables" {
 variable "abfs_spanner_instance_config" {
   type        = string
   description = "The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance (https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/spanner_instance.html#config-1)."
+  default     = "regional-europe-west1"
 }
 
 variable "create_client_instance_resource" {
