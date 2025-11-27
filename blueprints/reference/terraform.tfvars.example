@@ -44,7 +44,7 @@ project_id = "YOUR_PROJECT_ID"
 # Using the US region for the docker image with a specific version tag.
 #abfs_docker_image_uri = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"
 
-#abfs_server_machine_type = "n2d-standard-48"
+#abfs_server_machine_type = "n2d-standard-48"               # Defaults to "n2-highmem-128"
 
 #abfs_network_name           = "YOUR_NETWORK"
 #abfs_subnet_name            = "YOUR_ABFS_SUBNET"
@@ -59,7 +59,7 @@ project_id = "YOUR_PROJECT_ID"
 
 #abfs_gerrit_uploader_count            = 5
 #abfs_gerrit_uploader_datadisk_size_gb = 2048
-#abfs_gerrit_uploader_machine_type     = "n2d-standard-32"
+#abfs_gerrit_uploader_machine_type     = "n2d-standard-32"  # Defaults to "n2d-standard-48"
 #abfs_gerrit_uploader_manifest_server  = "YOUR_GERRIT_SERVER_NAME"
 #abfs_gerrit_uploader_git_branch       = ["branch1", "branch2"]
 #abfs_manifest_file                    = "other.xml"
@@ -99,32 +99,40 @@ cws_clusters = {
 }
 cws_configs = {
   "cws-abfs" = {
-    cws_cluster                    = "cws"
-    idle_timeout_seconds           = 3600
-    # see https://docs.cloud.google.com/workstations/docs/available-machine-types
-    machine_type                   = "n2-standard-32"
-    boot_disk_size_gb              = 64
-    disable_public_ip_addresses    = true
-    pool_size                      = 0
-    enable_nested_virtualization   = true
-    persistent_disk_size_gb        = 1000
-    persistent_disk_fs_type        = "ext4"
-    persistent_disk_type           = "pd-ssd"
-    persistent_disk_reclaim_policy = "RETAIN"
-    custom_image_names             = [
+    # go/keep-sorted start
+    accelerators = [                        # Defaults to []
+    #  {
+    #    type  = "nvidia-tesla-t4"
+    #    count = 1
+    #  }
+    ]
+    boot_disk_size_gb              = 64     # Defaults to 100
+    creators                       = [
+      # "your_email@example.com",
+    ]
+    custom_image_names             = [      # Defaults to []
       "android-studio",
       "android-studio-for-platform",
       "code-oss",
     ]
-    creators                       = [
-      # "your_email@example.com",
-    ]
+    cws_cluster                    = "cws"
+    disable_public_ip_addresses    = true   # Defaults to false
+    #enable_nested_virtualization   = false  # Defaults to true
+    idle_timeout_seconds           = 3600   # Defaults to 7200
     #instances                      = [
     #  {
     #    name  = "cws-abfs"
     #    users = ["your_email@example.com"]
     #  }
     #]
+    # see https://docs.cloud.google.com/workstations/docs/available-machine-types
+    machine_type                   = "n2-standard-32" # Defaults to "n1-standard-96"
+    persistent_disk_fs_type        = "ext4"
+    persistent_disk_reclaim_policy = "RETAIN"
+    persistent_disk_size_gb        = 1000
+    persistent_disk_type           = "pd-ssd"
+    #pool_size                      = 1      # Defaults to 0
+    # go/keep-sorted end
   }
 }
 
