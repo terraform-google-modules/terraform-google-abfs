@@ -374,6 +374,11 @@ variable "cws_configs" {
     persistent_disk_source_snapshot = optional(string)
     persistent_disk_type            = string
     pool_size                       = number
+    shielded_instance_config = optional(object({
+      enable_secure_boot          = optional(bool, true)
+      enable_vtpm                 = optional(bool, true)
+      enable_integrity_monitoring = optional(bool, true)
+    }), null)
     # go/keep-sorted end
   }))
   description = "A map of Cloud Workstation configurations."

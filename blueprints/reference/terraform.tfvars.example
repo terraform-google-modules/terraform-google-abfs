@@ -132,6 +132,11 @@ cws_configs = {
     persistent_disk_size_gb        = 1000
     persistent_disk_type           = "pd-ssd"
     #pool_size                      = 1      # Defaults to 0
+    #shielded_instance_config = {
+    #  enable_secure_boot          = false   # Defaults to true
+    #  enable_vtpm                 = false   # Defaults to true
+    #  enable_integrity_monitoring = false   # Defaults to true
+    #}
     # go/keep-sorted end
   }
 }
