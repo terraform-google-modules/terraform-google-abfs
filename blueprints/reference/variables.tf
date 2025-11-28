@@ -369,7 +369,7 @@ variable "cws_configs" {
     })))
     machine_type                    = string
     persistent_disk_fs_type         = optional(string)
-    persistent_disk_reclaim_policy  = string
+    persistent_disk_reclaim_policy  = optional(string, "RETAIN")
     persistent_disk_size_gb         = optional(number)
     persistent_disk_source_snapshot = optional(string)
     persistent_disk_type            = string

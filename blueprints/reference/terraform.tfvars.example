@@ -128,7 +128,7 @@ cws_configs = {
     # see https://docs.cloud.google.com/workstations/docs/available-machine-types
     machine_type                   = "n2-standard-32" # Defaults to "n1-standard-96"
     persistent_disk_fs_type        = "ext4"
-    persistent_disk_reclaim_policy = "RETAIN"
+    #persistent_disk_reclaim_policy = "DELETE" # Defaults to "RETAIN"
     persistent_disk_size_gb        = 1000
     persistent_disk_type           = "pd-ssd"
     #pool_size                      = 1      # Defaults to 0
