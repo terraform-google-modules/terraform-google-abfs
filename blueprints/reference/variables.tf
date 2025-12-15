@@ -353,6 +353,17 @@ variable "cws_configs" {
       type  = string
       count = number
     })), [])
+    boost_configs = optional(list(object({
+      id = string
+      accelerators = optional(list(object({
+        type  = string
+        count = number
+      })), [])
+      boot_disk_size_gb            = optional(number)
+      enable_nested_virtualization = optional(bool)
+      machine_type                 = optional(string)
+      pool_size                    = optional(number)
+    })), [])
     boot_disk_size_gb            = optional(number, 100)
     creators                     = optional(list(string))
     custom_image_names           = optional(list(string))

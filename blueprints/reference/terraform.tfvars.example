@@ -106,6 +106,18 @@ cws_configs = {
     #    count = 1
     #  }
     ]
+    boost_configs = [  # Defaults to []
+      {
+        id           = "gpu"
+        machine_type = "n1-standard-96"
+        accelerators = [
+          {
+            type  = "nvidia-tesla-t4"
+            count = 1
+          }
+        ]
+      }
+    ]
     boot_disk_size_gb              = 64     # Defaults to 100
     creators                       = [
       # "your_email@example.com",
