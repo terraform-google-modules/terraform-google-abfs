@@ -33,4 +33,8 @@ module "cicd_foundation" {
   secure_source_manager_repo_git_url_to_clone = var.secure_source_manager_repo_git_url_to_clone
   secure_source_manager_repo_name             = var.secure_source_manager_repo_name
   # go/keep-sorted end
+
+  depends_on = [
+    module.abfs_vpc
+  ]
 }
