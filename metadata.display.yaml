@@ -38,6 +38,12 @@ spec:
           section: gerrit_config
           subtext: |
             Format: "android.googlesource.com"
+        abfs_gerrit_uploader_manifest_scheme:
+          name: abfs_gerrit_uploader_manifest_scheme
+          title: ABFS Gerrit Uploader Git Server Scheme
+          section: gerrit_config
+          subtext: |
+            Format: "https"
         abfs_gerrit_uploader_git_branch:
           name: abfs_gerrit_uploader_git_branch
           title: ABFS Gerrit Uploader Git Branch

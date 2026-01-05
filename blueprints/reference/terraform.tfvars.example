@@ -61,6 +61,7 @@ project_id = "YOUR_PROJECT_ID"
 #abfs_gerrit_uploader_datadisk_size_gb = 2048
 #abfs_gerrit_uploader_machine_type     = "n2d-standard-32"  # Defaults to "n2d-standard-48"
 #abfs_gerrit_uploader_manifest_server  = "YOUR_GERRIT_SERVER_NAME"
+#abfs_gerrit_uploader_manifest_scheme = "ssh"  # Defaults is "https"
 #abfs_gerrit_uploader_git_branch       = ["branch1", "branch2"]
 #abfs_manifest_file                    = "other.xml"
 #abfs_manifest_project_name            = "YOUR_MANIFEST_PROJECT"

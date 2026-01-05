@@ -23,7 +23,7 @@ moved {
 }
 
 module "abfs_server" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.9.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.10.0"
 
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
@@ -38,7 +38,7 @@ module "abfs_server" {
 }
 
 module "abfs_uploaders" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.9.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.10.0"
 
   project_id                            = data.google_project.project.project_id
   zone                                  = var.zone
@@ -49,6 +49,7 @@ module "abfs_uploaders" {
   abfs_gerrit_uploader_machine_type     = var.abfs_gerrit_uploader_machine_type
   abfs_gerrit_uploader_datadisk_size_gb = var.abfs_gerrit_uploader_datadisk_size_gb
   abfs_gerrit_uploader_manifest_server  = var.abfs_gerrit_uploader_manifest_server
+  abfs_gerrit_uploader_manifest_scheme  = var.abfs_gerrit_uploader_manifest_scheme
   abfs_gerrit_uploader_git_branch       = var.abfs_gerrit_uploader_git_branch
   abfs_manifest_project_name            = var.abfs_manifest_project_name
   abfs_manifest_file                    = var.abfs_manifest_file

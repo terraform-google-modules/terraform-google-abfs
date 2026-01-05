@@ -80,6 +80,12 @@ variable "abfs_gerrit_uploader_manifest_server" {
   default     = "android.googlesource.com"
 }
 
+variable "abfs_gerrit_uploader_manifest_scheme" {
+  type        = string
+  description = "The manifest scheme to assume"
+  default     = "https"
+}
+
 variable "abfs_gerrit_uploader_git_branch" {
   type        = set(string)
   description = "Branches from where to find projects (e.g. [\"main\",\"v-keystone-qcom-release\"]) (default [\"main\"])"

@@ -176,6 +176,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                 envs = {
                   "ABFS_CMD"                   = <<-EOT
                     --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
+                    --manifest-scheme ${var.abfs_gerrit_uploader_manifest_scheme} \
                     --remote-servers ${var.abfs_server_name}:50051 \
                     --manifest-project-name ${var.abfs_manifest_project_name} \
                     --lfs=${var.abfs_enable_git_lfs} \

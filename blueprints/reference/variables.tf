@@ -234,6 +234,12 @@ variable "abfs_gerrit_uploader_manifest_server" {
   default     = "android.googlesource.com"
 }
 
+variable "abfs_gerrit_uploader_manifest_scheme" {
+  type        = string
+  description = "The manifest scheme to assume"
+  default     = "https"
+}
+
 # If you don't have an ABFS license yet, leave this empty and run terraform apply.
 # Submit the output via the Early Access Program (EAP) form.
 # When you received a license, insert it in your terraform.tfvars file and run terraform apply again.

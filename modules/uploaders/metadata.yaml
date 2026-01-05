@@ -80,6 +80,10 @@ spec:
         description: The manifest server to assume
         varType: string
         defaultValue: android.googlesource.com
+      - name: abfs_gerrit_uploader_manifest_scheme
+        description: The manifest scheme to assume
+        varType: string
+        defaultValue: https
       - name: abfs_gerrit_uploader_git_branch
         description: Branches from where to find projects (e.g. ["main","v-keystone-qcom-release"]) (default ["main"])
         varType: set(string)
