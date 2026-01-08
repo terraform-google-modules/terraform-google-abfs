@@ -128,6 +128,7 @@ The process is designed to be fully automated after the initial setup:
 | <a name="input_abfs_subnet_ip"></a> [abfs\_subnet\_ip](#input\_abfs\_subnet\_ip) | IP range for the ABFS subnetwork | `string` | `"10.2.0.0/16"` | no |
 | <a name="input_abfs_subnet_name"></a> [abfs\_subnet\_name](#input\_abfs\_subnet\_name) | Name of the ABFS subnetwork | `string` | `"abfs-subnet"` | no |
 | <a name="input_abfs_subnet_private_access"></a> [abfs\_subnet\_private\_access](#input\_abfs\_subnet\_private\_access) | Enable private Google access for the ABFS subnetwork | `bool` | `true` | no |
+| <a name="input_abfs_ui_machine_type"></a> [abfs\_ui\_machine\_type](#input\_abfs\_ui\_machine\_type) | Machine type for ABFS UI | `string` | `"n2d-standard-8"` | no |
 | <a name="input_alert_notification_email"></a> [alert\_notification\_email](#input\_alert\_notification\_email) | Email address to send alert notifications to | `string` | n/a | yes |
 | <a name="input_artifact_registry_region"></a> [artifact\_registry\_region](#input\_artifact\_registry\_region) | The region for Artifact Registry. | `string` | `"europe-west4"` | no |
 | <a name="input_binary_authorization_always_create"></a> [binary\_authorization\_always\_create](#input\_binary\_authorization\_always\_create) | If true, create Binary Authorization resources even if kritis\_signer\_image is not provided. | `bool` | `false` | no |

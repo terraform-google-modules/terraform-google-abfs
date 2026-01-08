@@ -66,6 +66,12 @@ project_id = "YOUR_PROJECT_ID"
 #abfs_manifest_file                    = "other.xml"
 #abfs_manifest_project_name            = "YOUR_MANIFEST_PROJECT"
 
+#abfs_ui_machine_type         = "n2d-standard-32"  # Defaults to "n2d-standard-8"
+#abfs_ui_port                 = "9090" # Defaults to 8080
+#abfs_ui_remote_server        = "YOUR_SERVER" # Defaults to "abfs-server"
+#abfs_ui_uploader_count       = 5 # Defaults to 3
+#abfs_ui_uploader_name_prefix = "YOUR_UPLOADER_PREFIX" # Defaults to abfs-gerrit-uploader
+
 #abfs_bucket_location                = "us-central1"
 #abfs_spanner_instance_config        = "regional-us-central1"
 abfs_spanner_database_create_tables = true

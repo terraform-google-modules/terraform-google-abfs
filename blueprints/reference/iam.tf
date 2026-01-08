@@ -61,6 +61,23 @@ resource "google_service_account" "uploader" {
   }
 }
 
+# Service Account - UI
+
+data "google_service_account" "ui" {
+  count = local.create_ui_service_account ? 0 : 1
+
+  project    = data.google_project.project.project_id
+  account_id = var.ui_service_account_id
+}
+
+resource "google_service_account" "ui" {
+  count = local.create_ui_service_account ? 1 : 0
+
+  project      = data.google_project.project.project_id
+  account_id   = var.ui_service_account_name
+  display_name = "Service Account for ABFS UI"
+}
+
 # Service Account - Client
 
 data "google_service_account" "client" {

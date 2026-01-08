@@ -57,3 +57,17 @@ module "abfs_uploaders" {
   abfs_server_name                      = module.abfs_server.abfs_server_name
   abfs_enable_git_lfs                   = var.abfs_enable_git_lfs
 }
+
+module "abfs_ui" {
+  source = "../../modules/ui"
+
+  project_id                   = data.google_project.project.project_id
+  zone                         = var.zone
+  service_account_email        = local.ui_service_account.email
+  subnetwork                   = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
+  abfs_docker_image_uri        = var.abfs_docker_image_uri
+  abfs_ui_machine_type         = var.abfs_ui_machine_type
+  abfs_ui_remote_server        = module.abfs_server.abfs_server_name
+  abfs_ui_uploader_count       = module.abfs_uploaders.abfs_gerrit_uploader_count
+  abfs_ui_uploader_name_prefix = module.abfs_uploaders.abfs_gerrit_uploader_name_prefix
+}

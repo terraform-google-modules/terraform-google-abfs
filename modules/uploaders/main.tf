@@ -156,6 +156,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
             content = base64gzip(templatefile("${local.templates_files_root}/abfs_container.env.tftpl",
               {
                 envs = {
+                  "RUN_MODE"        = "uploader"
                   "NEEDS_GIT"       = true # gerrit uploaders need git access
                   "GIT_LFS_ENABLED" = var.abfs_enable_git_lfs
                 }
@@ -190,6 +191,7 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
                   "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,
                   "DATADISK_MOUNTPOINT"        = var.abfs_datadisk_mountpoint,
                   "PRE_START_HOOKS_MOUNTPOINT" = length(local.pre_start_hooks) > 0 ? "/var/lib/abfs/pre-start-hooks.d/" : "",
+                  "PUBLISH_ARG"                = "8086:8086"
                 }
             }))
           }

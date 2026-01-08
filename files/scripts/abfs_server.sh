@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Despite the name, this script is used by all ABFS containers currently:
+# server, uploader, and UI
+
 set -ex
 
 source "$(dirname "$0")/abfs_base.sh"
@@ -20,9 +23,12 @@ source "$(dirname "$0")/abfs_base.sh"
 DOCKER_RUN_ARGS=(--privileged \
     --cap-add=all \
     --pid=host \
-    --env-file /var/run/abfs/abfs_container.env \
-    --publish 50051:50051
+    --env-file /var/run/abfs/abfs_container.env
 )
+
+if [[ -n "${PUBLISH_ARG}" ]]; then
+  DOCKER_RUN_ARGS+=(--publish ${PUBLISH_ARG})
+fi
 
 if [[ -n "${DATADISK_MOUNTPOINT}" ]]; then
   DOCKER_RUN_ARGS+=(--volume ${DATADISK_MOUNTPOINT}:/abfs-storage)
@@ -34,7 +40,7 @@ fi
 
 docker run --name=abfs-server --log-driver=journald \
   "${DOCKER_RUN_ARGS[@]}" "${ABFS_DOCKER_IMAGE_URI}" \
-  ${ABFS_CMD} 
+  ${ABFS_CMD}
 
 # Wait until the container is definitely started
 while "$( docker container inspect -f '{{.State.Running}}' abfs-server )" != "true"; do

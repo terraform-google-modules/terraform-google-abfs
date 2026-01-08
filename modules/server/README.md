@@ -4,7 +4,7 @@ This module implements the deployment of a ABFS server as GCE VM.
 
 ## Usage
 
-For example usage, please check the following [example](../../examples/simple/main.tf) file.
+For example usage, please check the following [example](../../blueprints/reference/abfs.tf) file.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs

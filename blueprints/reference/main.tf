@@ -19,6 +19,9 @@ locals {
   create_uploader_service_account = var.uploader_service_account_id == ""
   uploader_service_account        = local.create_uploader_service_account ? google_service_account.uploader[0] : data.google_service_account.uploader[0]
 
+  create_ui_service_account = var.ui_service_account_id == ""
+  ui_service_account        = local.create_ui_service_account ? google_service_account.ui[0] : data.google_service_account.ui[0]
+
   create_client_service_account = var.client_service_account_id == ""
   client_service_account        = var.create_client_instance_resource ? (local.create_client_service_account ? google_service_account.client[0] : data.google_service_account.client[0]) : null
 }

@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 # limitations under the License.
 
 locals {
-  common_files_root       = "${path.module}/../../files"
-  goog_cm_deployment_name = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
-  abfs_server_name        = "${local.goog_cm_deployment_name}${var.abfs_server_name}"
+  common_files_root         = "${path.module}/../../files"
+  goog_cm_deployment_name   = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
+  abfs_ui_name              = "${local.goog_cm_deployment_name}${var.abfs_ui_name}"
 
   static_script_files = flatten([
     for folder in ["${local.common_files_root}/scripts", "${path.module}/files/scripts"] : [
@@ -30,6 +30,8 @@ locals {
     ]
   ])
 
+  templates_files_root = "${path.module}/files/templates"
+
   systemd_files = flatten([
     for folder in ["${local.common_files_root}/systemd", "${path.module}/files/systemd"] : [
       for filename in fileset(folder, "*") :
@@ -42,8 +44,6 @@ locals {
       }
     ]
   ])
-
-  templates_files_root = "${path.module}/files/templates"
 
   runcmd = [
     "systemctl daemon-reload",
@@ -58,22 +58,22 @@ locals {
   ]
 }
 
-resource "google_compute_disk" "abfs_server_bootdisk" {
+resource "google_compute_disk" "abfs_ui_bootdisk" {
   project = var.project_id
-  name    = "${local.abfs_server_name}-bootdisk"
+  name    = "${local.abfs_ui_name}-bootdisk"
   zone    = var.zone
-  image   = var.abfs_server_cos_image_ref
+  image   = var.abfs_ui_cos_image_ref
   size    = var.abfs_bootdisk_size_gb
   type    = var.abfs_bootdisk_type
 }
 
-resource "google_compute_instance" "abfs_server" {
+resource "google_compute_instance" "abfs_ui" {
   project      = var.project_id
-  name         = local.abfs_server_name
-  machine_type = var.abfs_server_machine_type
+  name         = local.abfs_ui_name
+  machine_type = var.abfs_ui_machine_type
   zone         = var.zone
 
-  allow_stopping_for_update = var.abfs_server_allow_stopping_for_update
+  allow_stopping_for_update = var.abfs_ui_allow_stopping_for_update
 
   service_account {
     # Google recommends custom service accounts with a cloud-platform scope and permissions granted via IAM roles.
@@ -82,7 +82,7 @@ resource "google_compute_instance" "abfs_server" {
   }
 
   boot_disk {
-    source = google_compute_disk.abfs_server_bootdisk.name
+    source = google_compute_disk.abfs_ui_bootdisk.name
   }
 
   network_interface {
@@ -95,12 +95,11 @@ resource "google_compute_instance" "abfs_server" {
   }
 
   metadata = {
-    abfs-license = base64encode(var.abfs_license)
-    user-data    = data.cloudinit_config.abfs_server.rendered
+    user-data = data.cloudinit_config.abfs_ui_configs.rendered
   }
 }
 
-data "cloudinit_config" "abfs_server" {
+data "cloudinit_config" "abfs_ui_configs" {
   gzip          = false
   base64_encode = false
 
@@ -120,8 +119,9 @@ data "cloudinit_config" "abfs_server" {
             content = base64gzip(templatefile("${local.templates_files_root}/abfs_container.env.tftpl",
               {
                 envs = {
-                  "RUN_MODE"  = "server"
-                  "NEEDS_GIT" = false
+                  "RUN_MODE"      = "ui"
+                  "NEEDS_GIT"     = false
+                  "REMOTE_SERVER" = "${var.abfs_ui_remote_server}:50051"
                 }
             }))
           }
@@ -138,15 +138,16 @@ data "cloudinit_config" "abfs_server" {
             content = base64gzip(templatefile("${local.templates_files_root}/abfs_base.sh.tftpl",
               {
                 envs = {
-                  "ABFS_CMD"              = <<-EOT
-                    --project ${google_spanner_instance.abfs.project} \
-                    --bucket ${data.google_storage_bucket.abfs.name} \
-                    --instance ${google_spanner_instance.abfs.name} \
-                    --db ${google_spanner_database.abfs.name} \
-                    ${join(" ", var.abfs_extra_params)}
+                  "ABFS_CMD"                   = <<-EOT
+                    ${join(" ", var.abfs_extra_params)} \
+                    ui-server --port ${var.abfs_ui_port} -s /abfsui/browser \
+                    %{ for i in range(var.abfs_ui_uploader_count) ~}
+                    --proxy pusher${i}:${var.abfs_ui_uploader_name_prefix}-${i}:8086 \
+                    %{ endfor ~}
+                    ${join(" ", var.abfs_ui_extra_params)}
                   EOT
-                  "ABFS_DOCKER_IMAGE_URI" = var.abfs_docker_image_uri,
-                  "PUBLISH_ARG"           = "50051:50051"
+                  "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,
+                  "PUBLISH_ARG"                = "${var.abfs_ui_port}:${var.abfs_ui_port}"
                 }
             }))
           }
@@ -159,14 +160,14 @@ data "cloudinit_config" "abfs_server" {
             encoding    = "gzip+base64"
             content = base64gzip(templatefile("${local.templates_files_root}/abfs-server.service.tftpl",
               {
-                type = "server"
+                type = "ui"
             }))
           }
         ],
         # static script files used during startup
         local.static_script_files,
         # config for systemd services, targets, paths, etc
-        local.systemd_files
+        local.systemd_files,
       )
       runcmd  = local.runcmd,
       bootcmd = local.bootcmd

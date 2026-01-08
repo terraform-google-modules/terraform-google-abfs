@@ -279,6 +279,12 @@ variable "abfs_spanner_instance_config" {
   default     = "regional-europe-west1"
 }
 
+variable "abfs_ui_machine_type" {
+  type        = string
+  description = "Machine type for ABFS UI"
+  default     = "n2d-standard-8"
+}
+
 variable "create_client_instance_resource" {
   type        = bool
   description = "Whether to create a Google Cloud Engine compute instance for an ABFS client"
@@ -313,6 +319,19 @@ variable "server_service_account_name" {
   type        = string
   description = "The name of the service account to create in case server_service_account_id is not specified."
   default     = "abfs-server"
+}
+
+variable "ui_service_account_id" {
+  type        = string
+  description = "Service account ID (e.g. abfs-ui@<project-id>.iam.gserviceaccount.com) used for the ABFS UI. If not specified, a new service account will be created using the value of ui_service_account_name."
+  default     = ""
+  nullable    = false
+}
+
+variable "ui_service_account_name" {
+  type        = string
+  description = "The name of the service account to create in case ui_service_account_id is not specified."
+  default     = "abfs-ui"
 }
 
 variable "uploader_service_account_id" {
