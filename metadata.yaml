@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ spec:
     title: Deploy ABFS in containers on GCE VMs
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
-      sourceType: git
     description: {}
   content:
     subBlueprints:
       - name: server
         location: modules/server
+      - name: ui
+        location: modules/ui
       - name: uploaders
         location: modules/uploaders
     examples:

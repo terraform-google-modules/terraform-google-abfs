@@ -126,6 +126,18 @@ variable "abfs_spanner_instance_config" {
   description = "The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance."
 }
 
+variable "abfs_spanner_instance_min_nodes" {
+  type        = number
+  description = "The minimum number of nodes in the Spanner instance."
+  default     = 1
+}
+
+variable "abfs_spanner_instance_max_nodes" {
+  type        = number
+  description = "The maximum number of nodes in the Spanner instance."
+  default     = 10
+}
+
 variable "abfs_spanner_database_name" {
   type        = string
   description = "A unique identifier for the ABFS database, which cannot be changed after the instance is created."

@@ -1,0 +1,102 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-abfs-ui
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: ABFS UI Terraform module
+    source:
+      repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      dir: /modules/ui
+    description: {}
+  content: {}
+  interfaces:
+    variables:
+      - name: project_id
+        description: Google Cloud project ID
+        varType: string
+        required: true
+      - name: zone
+        description: Zone for ABFS UI
+        varType: string
+        required: true
+      - name: subnetwork
+        description: Subnetwork for the servers
+        varType: string
+        required: true
+      - name: service_account_email
+        description: Email of service account to attach to the servers
+        varType: string
+        required: true
+      - name: abfs_ui_allow_stopping_for_update
+        description: Allow to stop UI to update properties
+        varType: bool
+        defaultValue: true
+      - name: abfs_ui_uploader_count
+        description: The number of gerrit uploader instances to proxy
+        varType: number
+        defaultValue: 3
+      - name: abfs_ui_machine_type
+        description: Machine type for ABFS UI
+        varType: string
+        defaultValue: n2d-standard-8
+      - name: abfs_ui_uploader_name_prefix
+        description: Name prefix for the ABFS gerrit uploader VM(s)
+        varType: string
+        defaultValue: abfs-gerrit-uploader
+      - name: abfs_bootdisk_size_gb
+        description: Size in GB for the ABFS bootdisk that will be attached to the VM
+        varType: number
+        defaultValue: 200
+      - name: abfs_bootdisk_type
+        description: The PD regional disk type to use for the ABFS bootdisk
+        varType: string
+        defaultValue: pd-ssd
+      - name: abfs_extra_params
+        description: A list of extra parameters to append to the abfs command
+        varType: list(string)
+        defaultValue: []
+      - name: abfs_ui_extra_params
+        description: A list of extra parameters to append to the ui-server sub-command
+        varType: list(string)
+        defaultValue: []
+      - name: abfs_ui_name
+        description: Name for the ABFS UI
+        varType: string
+        defaultValue: abfs-ui
+      - name: abfs_ui_port
+        description: The port to listen on
+        varType: number
+        defaultValue: 8080
+      - name: abfs_ui_remote_server
+        description: The name of the ABFS server for the cacheman process
+        varType: string
+        defaultValue: abfs-server
+      - name: abfs_ui_cos_image_ref
+        description: Reference to the COS boot image to use for the ABFS UI
+        varType: string
+        defaultValue: projects/cos-cloud/global/images/family/cos-125-lts
+      - name: abfs_docker_image_uri
+        description: Docker image URI for the ABFS UI
+        varType: string
+        required: true
+      - name: goog_cm_deployment_name
+        description: The name of the deployment for Marketplace
+        varType: string
+        defaultValue: ""

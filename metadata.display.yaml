@@ -1,10 +1,10 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,67 +22,20 @@ spec:
   info:
     title: Deploy ABFS in containers on GCE VMs
     source:
-      repo: https://android-keystone-os.googlesource.com/abfs_deploy_cos
-      sourceType: git
-      dir: /server
+      repo: https://github.com/terraform-google-modules/terraform-google-abfs
   ui:
     input:
       variables:
-        goog_cm_deployment_name:
-          name: goog_cm_deployment_name
-          title: Deployment name
-          subtext: If set, this value will be used as a prefix for all VM and disk names
-        abfs_gerrit_uploader_manifest_server:
-          name: abfs_gerrit_uploader_manifest_server
-          title: ABFS Gerrit Uploader Git Servers
-          section: gerrit_config
-          subtext: |
-            Format: "android.googlesource.com"
-        abfs_gerrit_uploader_manifest_scheme:
-          name: abfs_gerrit_uploader_manifest_scheme
-          title: ABFS Gerrit Uploader Git Server Scheme
-          section: gerrit_config
-          subtext: |
-            Format: "https"
-        abfs_gerrit_uploader_git_branch:
-          name: abfs_gerrit_uploader_git_branch
-          title: ABFS Gerrit Uploader Git Branch
-          section: gerrit_config
-        zone:
-          name: zone
-          title: Zone
-          section: location_and_network
-          xGoogleProperty:
-            type: ET_GCE_ZONE
-        subnetwork:
-          name: subnetwork
-          title: Subnetwork
-          section: location_and_network
-          subtext: Ensure that the subnet you choose is available in the location you have selected for the VMs. Subnets are regional resources. This UI does not validate the region for the subnet.
-        abfs_server_name:
-          name: abfs_server_name
-          title: ABFS Server Name
-          section: abfs_server
+        abfs_datadisk_mountpoint:
+          name: abfs_datadisk_mountpoint
+          title: ABFS Data Disk Mountpoint
           invisible: true
-        abfs_server_machine_type:
-          name: abfs_server_machine_type
-          title: ABFS Server Machine Type
-          section: abfs_server
-          xGoogleProperty:
-            type: ET_GCE_MACHINE_TYPE
-            zoneProperty: zone
+          section: advanced
         abfs_datadisk_name:
           name: abfs_datadisk_name
           title: ABFS Data Disk Name
-          section: abfs_server
           invisible: true
-        abfs_datadisk_type:
-          name: abfs_datadisk_type
-          title: ABFS Data Disk Type
           section: abfs_server
-          xGoogleProperty:
-            type: ET_GCE_DISK_TYPE
-            zoneProperty: zone
         abfs_datadisk_size_gb:
           name: abfs_datadisk_size_gb
           title: ABFS Data Disk Size Gb
@@ -91,36 +44,27 @@ spec:
             type: ET_GCE_DISK_SIZE
             gceDiskSize:
               diskTypeVariable: abfs_datadisk_type
-        abfs_gerrit_uploader_count:
-          name: abfs_gerrit_uploader_count
-          title: ABFS Gerrit Uploader Count
-          section: abfs_gerrit_uploaders
-          min: 0
-          max: 6
-        abfs_gerrit_uploader_name_prefix:
-          name: abfs_gerrit_uploader_name_prefix
-          title: ABFS Gerrit Uploader Name Prefix
-          section: abfs_gerrit_uploaders
-          invisible: true
-        abfs_gerrit_uploader_machine_type:
-          name: abfs_gerrit_uploader_machine_type
-          title: ABFS Gerrit Uploader Machine Type
-          section: abfs_gerrit_uploaders
-          xGoogleProperty:
-            type: ET_GCE_MACHINE_TYPE
-            zoneProperty: zone
-        abfs_gerrit_uploader_datadisk_name_prefix:
-          name: abfs_gerrit_uploader_datadisk_name_prefix
-          title: ABFS Gerrit Uploader Datadisk Name Prefix
-          section: abfs_gerrit_uploaders
-          invisible: true
-        abfs_gerrit_uploader_datadisk_type:
-          name: abfs_gerrit_uploader_datadisk_type
-          title: ABFS Gerrit Uploader Datadisk Type
-          section: abfs_gerrit_uploaders
+        abfs_datadisk_type:
+          name: abfs_datadisk_type
+          title: ABFS Data Disk Type
+          section: abfs_server
           xGoogleProperty:
             type: ET_GCE_DISK_TYPE
             zoneProperty: zone
+        abfs_docker_image_uri:
+          name: abfs_docker_image_uri
+          title: ABFS Docker Image Uri
+          section: advanced
+        abfs_gerrit_uploader_count:
+          name: abfs_gerrit_uploader_count
+          title: ABFS Gerrit Uploader Count
+          max: 6
+          section: abfs_gerrit_uploaders
+        abfs_gerrit_uploader_datadisk_name_prefix:
+          name: abfs_gerrit_uploader_datadisk_name_prefix
+          title: ABFS Gerrit Uploader Datadisk Name Prefix
+          invisible: true
+          section: abfs_gerrit_uploaders
         abfs_gerrit_uploader_datadisk_size_gb:
           name: abfs_gerrit_uploader_datadisk_size_gb
           title: ABFS Gerrit Uploader Datadisk Size Gb
@@ -129,28 +73,68 @@ spec:
             type: ET_GCE_DISK_SIZE
             gceDiskSize:
               diskTypeVariable: abfs_gerrit_uploader_datadisk_type
-        abfs_docker_image_uri:
-          name: abfs_docker_image_uri
-          title: ABFS Docker Image Uri
-          section: advanced
-#          invisible: true
+        abfs_gerrit_uploader_datadisk_type:
+          name: abfs_gerrit_uploader_datadisk_type
+          title: ABFS Gerrit Uploader Datadisk Type
+          section: abfs_gerrit_uploaders
+          xGoogleProperty:
+            type: ET_GCE_DISK_TYPE
+            zoneProperty: zone
+        abfs_gerrit_uploader_git_branch:
+          name: abfs_gerrit_uploader_git_branch
+          title: ABFS Gerrit Uploader Git Branch
+          section: gerrit_config
+        abfs_gerrit_uploader_machine_type:
+          name: abfs_gerrit_uploader_machine_type
+          title: ABFS Gerrit Uploader Machine Type
+          section: abfs_gerrit_uploaders
+          xGoogleProperty:
+            type: ET_GCE_MACHINE_TYPE
+            zoneProperty: zone
+        abfs_gerrit_uploader_manifest_scheme:
+          name: abfs_gerrit_uploader_manifest_scheme
+          title: ABFS Gerrit Uploader Git Server Scheme
+          section: gerrit_config
+          subtext: |
+            Format: "https"
+        abfs_gerrit_uploader_manifest_server:
+          name: abfs_gerrit_uploader_manifest_server
+          title: ABFS Gerrit Uploader Git Servers
+          section: gerrit_config
+          subtext: |
+            Format: "android.googlesource.com"
+        abfs_gerrit_uploader_name_prefix:
+          name: abfs_gerrit_uploader_name_prefix
+          title: ABFS Gerrit Uploader Name Prefix
+          invisible: true
+          section: abfs_gerrit_uploaders
         abfs_server_command:
           name: abfs_server_command
           title: ABFS Server Command
           section: advanced
-#          invisible: true
         abfs_server_cos_image_ref:
           name: abfs_server_cos_image_ref
           title: ABFS Server COS Image Ref
-          section: advanced
           invisible: true
+          section: advanced
           xGoogleProperty:
             type: ET_GCE_DISK_IMAGE
-        abfs_datadisk_mountpoint:
-          name: abfs_datadisk_mountpoint
-          title: ABFS Data Disk Mountpoint
-          section: advanced
+        abfs_server_machine_type:
+          name: abfs_server_machine_type
+          title: ABFS Server Machine Type
+          section: abfs_server
+          xGoogleProperty:
+            type: ET_GCE_MACHINE_TYPE
+            zoneProperty: zone
+        abfs_server_name:
+          name: abfs_server_name
+          title: ABFS Server Name
           invisible: true
+          section: abfs_server
+        goog_cm_deployment_name:
+          name: goog_cm_deployment_name
+          title: Deployment name
+          subtext: If set, this value will be used as a prefix for all VM and disk names
         labels:
           name: labels
           title: Labels
@@ -170,6 +154,17 @@ spec:
                 - roles/monitoring.viewer
                 - roles/stackdriver.resourceMetadata.writer
                 - roles/artifactregistry.reader
+        subnetwork:
+          name: subnetwork
+          title: Subnetwork
+          section: location_and_network
+          subtext: Ensure that the subnet you choose is available in the location you have selected for the VMs. Subnets are regional resources. This UI does not validate the region for the subnet.
+        zone:
+          name: zone
+          title: Zone
+          section: location_and_network
+          xGoogleProperty:
+            type: ET_GCE_ZONE
       sections:
         - name: gerrit_config
           title: Gerrit Configuration

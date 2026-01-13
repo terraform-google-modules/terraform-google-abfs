@@ -39,8 +39,8 @@ resource "google_spanner_instance" "abfs" {
 
   autoscaling_config {
     autoscaling_limits {
-      min_nodes = 1
-      max_nodes = 10
+      min_nodes = var.abfs_spanner_instance_min_nodes
+      max_nodes = var.abfs_spanner_instance_max_nodes
     }
     autoscaling_targets {
       high_priority_cpu_utilization_percent = 65

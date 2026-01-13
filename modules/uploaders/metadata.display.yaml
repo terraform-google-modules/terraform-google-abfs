@@ -1,0 +1,107 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-abfs-uploaders-display
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  info:
+    title: ABFS Uploaders Terraform module
+    source:
+      repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      dir: /modules/uploaders
+  ui:
+    input:
+      variables:
+        abfs_datadisk_mountpoint:
+          name: abfs_datadisk_mountpoint
+          title: Abfs Datadisk Mountpoint
+        abfs_docker_image_uri:
+          name: abfs_docker_image_uri
+          title: Abfs Docker Image Uri
+        abfs_enable_git_lfs:
+          name: abfs_enable_git_lfs
+          title: Abfs Enable Git Lfs
+        abfs_extra_params:
+          name: abfs_extra_params
+          title: Abfs Extra Params
+        abfs_gerrit_uploader_allow_stopping_for_update:
+          name: abfs_gerrit_uploader_allow_stopping_for_update
+          title: Abfs Gerrit Uploader Allow Stopping For Update
+        abfs_gerrit_uploader_count:
+          name: abfs_gerrit_uploader_count
+          title: Abfs Gerrit Uploader Count
+        abfs_gerrit_uploader_datadisk_name_prefix:
+          name: abfs_gerrit_uploader_datadisk_name_prefix
+          title: Abfs Gerrit Uploader Datadisk Name Prefix
+        abfs_gerrit_uploader_datadisk_size_gb:
+          name: abfs_gerrit_uploader_datadisk_size_gb
+          title: Abfs Gerrit Uploader Datadisk Size Gb
+        abfs_gerrit_uploader_datadisk_type:
+          name: abfs_gerrit_uploader_datadisk_type
+          title: Abfs Gerrit Uploader Datadisk Type
+        abfs_gerrit_uploader_extra_params:
+          name: abfs_gerrit_uploader_extra_params
+          title: Abfs Gerrit Uploader Extra Params
+        abfs_gerrit_uploader_git_branch:
+          name: abfs_gerrit_uploader_git_branch
+          title: Abfs Gerrit Uploader Git Branch
+        abfs_gerrit_uploader_machine_type:
+          name: abfs_gerrit_uploader_machine_type
+          title: Abfs Gerrit Uploader Machine Type
+        abfs_gerrit_uploader_manifest_scheme:
+          name: abfs_gerrit_uploader_manifest_scheme
+          title: Abfs Gerrit Uploader Manifest Scheme
+        abfs_gerrit_uploader_manifest_server:
+          name: abfs_gerrit_uploader_manifest_server
+          title: Abfs Gerrit Uploader Manifest Server
+        abfs_gerrit_uploader_name_prefix:
+          name: abfs_gerrit_uploader_name_prefix
+          title: Abfs Gerrit Uploader Name Prefix
+        abfs_license:
+          name: abfs_license
+          title: Abfs License
+        abfs_manifest_file:
+          name: abfs_manifest_file
+          title: Abfs Manifest File
+        abfs_manifest_project_name:
+          name: abfs_manifest_project_name
+          title: Abfs Manifest Project Name
+        abfs_server_name:
+          name: abfs_server_name
+          title: Abfs Server Name
+        abfs_uploader_cos_image_ref:
+          name: abfs_uploader_cos_image_ref
+          title: Abfs Uploader Cos Image Ref
+        goog_cm_deployment_name:
+          name: goog_cm_deployment_name
+          title: Goog Cm Deployment Name
+        pre_start_hooks:
+          name: pre_start_hooks
+          title: Pre Start Hooks
+        project_id:
+          name: project_id
+          title: Project Id
+        service_account_email:
+          name: service_account_email
+          title: Service Account Email
+        subnetwork:
+          name: subnetwork
+          title: Subnetwork
+        zone:
+          name: zone
+          title: Zone
