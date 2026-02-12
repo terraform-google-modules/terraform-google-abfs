@@ -135,3 +135,8 @@ spec:
         description: The name of the deployment for Marketplace
         varType: string
         defaultValue: ""
+    outputs:
+      - name: abfs_gerrit_uploader_count
+        description: The number of gerrit uploader instances to create
+      - name: abfs_gerrit_uploader_name_prefix
+        description: Name prefix for the ABFS gerrit uploader VM(s)

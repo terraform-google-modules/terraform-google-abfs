@@ -49,13 +49,29 @@ module "abfs_vpc" {
       direction   = "INGRESS"
       priority    = 1000
 
-      source_service_accounts = compact([local.uploader_service_account.email, var.create_client_instance_resource ? local.client_service_account.email : null])
+      source_service_accounts = compact([local.uploader_service_account.email, local.ui_service_account.email, var.create_client_instance_resource ? local.client_service_account.email : null])
       target_service_accounts = [local.server_service_account.email]
 
       allow = [
         {
           protocol = "tcp"
           ports    = ["50051"]
+        },
+      ]
+    },
+    {
+      name        = "abfs-uploader-allow-ui-ingress"
+      description = "Allow ingress from the ABFS UI to the ABFS uploaders"
+      direction   = "INGRESS"
+      priority    = 1000
+
+      source_service_accounts = [local.ui_service_account.email]
+      target_service_accounts = [local.uploader_service_account.email]
+
+      allow = [
+        {
+          protocol = "tcp"
+          ports    = ["8086"]
         },
       ]
     },

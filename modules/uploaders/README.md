@@ -40,6 +40,9 @@ For example usage, please check the following [example](../../blueprints/referen
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| abfs\_gerrit\_uploader\_count | The number of gerrit uploader instances to create |
+| abfs\_gerrit\_uploader\_name\_prefix | Name prefix for the ABFS gerrit uploader VM(s) |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
