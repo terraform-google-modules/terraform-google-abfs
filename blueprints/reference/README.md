@@ -110,17 +110,15 @@ The process is designed to be fully automated after the initial setup:
 |------|-------------|------|---------|:--------:|
 | abfs\_bucket\_location | The location of the ABFS bucket (https://cloud.google.com/storage/docs/locations). | `string` | `"europe-west1"` | no |
 | abfs\_client\_config | Configuration for the ABFS client compute instance. | <pre>object({<br>    name                  = string<br>    machine_type          = string<br>    image_project         = string<br>    image_name            = string<br>    size                  = number<br>    type                  = string<br>    scopes                = list(string)<br>    goog_ops_agent_policy = string<br>    preemptible           = bool<br>    automatic_restart     = bool<br>    enable_oslogin        = bool<br>    can_ip_forward        = bool<br>    deletion_protection   = bool<br>    enable_display        = bool<br>    shielded_instance_config = object({<br>      enable_integrity_monitoring = bool<br>      enable_secure_boot          = bool<br>      enable_vtpm                 = bool<br>    })<br>  })</pre> | <pre>{<br>  "automatic_restart": false,<br>  "can_ip_forward": false,<br>  "deletion_protection": false,<br>  "enable_display": false,<br>  "enable_oslogin": true,<br>  "goog_ops_agent_policy": "v2-x86-template-1-4-0",<br>  "image_name": "ubuntu-minimal-2404-noble-amd64-v20250818",<br>  "image_project": "ubuntu-os-cloud",<br>  "machine_type": "n1-standard-8",<br>  "name": "abfs-client",<br>  "preemptible": true,<br>  "scopes": [<br>    "cloud-platform"<br>  ],<br>  "shielded_instance_config": {<br>    "enable_integrity_monitoring": true,<br>    "enable_secure_boot": false,<br>    "enable_vtpm": true<br>  },<br>  "size": 2000,<br>  "type": "pd-ssd"<br>}</pre> | no |
-| abfs\_docker\_image\_uri | Docker image URI for ABFS | `string` | `"europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"` | no |
+| abfs\_docker\_image\_uri | Docker image URI for ABFS | `string` | `"europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.2-15-gfaf00af1"` | no |
 | abfs\_enable\_git\_lfs | Enable Git LFS support | `bool` | `false` | no |
+| abfs\_gerrit\_uploader\_branch\_files | Branch and manifest file tuples from where to find projects (e.g. [["main","default.xml"]]) (default [["main","default.xml"]]) | `set(tuple([string, string]))` | <pre>[<br>  [<br>    "main",<br>    "default.xml"<br>  ]<br>]</pre> | no |
 | abfs\_gerrit\_uploader\_count | The number of gerrit uploader instances to create | `number` | `3` | no |
 | abfs\_gerrit\_uploader\_datadisk\_size\_gb | Size in GB for the ABFS gerrit uploader datadisk(s) that will be attached to the VM(s) | `number` | `4096` | no |
-| abfs\_gerrit\_uploader\_git\_branch | Branches from where to find projects (e.g. ["main","v-keystone-qcom-release"]) (default ["main"]) | `set(string)` | <pre>[<br>  "main"<br>]</pre> | no |
 | abfs\_gerrit\_uploader\_machine\_type | Machine type for ABFS gerrit uploaders | `string` | `"n2d-standard-48"` | no |
-| abfs\_gerrit\_uploader\_manifest\_scheme | The manifest scheme to assume | `string` | `"https"` | no |
-| abfs\_gerrit\_uploader\_manifest\_server | The manifest server to assume | `string` | `"android.googlesource.com"` | no |
+| abfs\_gerrit\_uploader\_manifest\_project\_url | The URL of the manifest project | `string` | `"https://android.googlesource.com/platform/manifest"` | no |
+| abfs\_gerrit\_uploader\_name\_prefix | Name prefix for the ABFS gerrit uploader VM(s) | `string` | `"abfs-gerrit-uploader"` | no |
 | abfs\_license | ABFS license (JSON) | `string` | `""` | no |
-| abfs\_manifest\_file | Relative path from the manifest project root to the manifest file | `string` | `"default.xml"` | no |
-| abfs\_manifest\_project\_name | Name of the git project on the manifest-server containing manifests | `string` | `"platform/manifest"` | no |
 | abfs\_network\_name | Name of the ABFS network | `string` | `"abfs-network"` | no |
 | abfs\_server\_machine\_type | Machine type for ABFS servers | `string` | `"n2-highmem-128"` | no |
 | abfs\_spanner\_database\_create\_tables | Creates the tables in the database. | `bool` | `false` | no |

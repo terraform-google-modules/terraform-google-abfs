@@ -23,6 +23,7 @@ spec:
     title: Deploy ABFS in containers on GCE VMs
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
     description: {}
   content:
     subBlueprints:

@@ -38,7 +38,7 @@ if [[ -n "${PRE_START_HOOKS_MOUNTPOINT}" ]]; then
   DOCKER_RUN_ARGS+=(--mount type=bind,src=${PRE_START_HOOKS_MOUNTPOINT},dst=/etc/abfs/pre-start.d,readonly,bind-recursive=writable)
 fi
 
-docker run --name=abfs-server --log-driver=journald \
+docker run --hostname=$(hostname) --name=abfs-server --log-driver=journald \
   "${DOCKER_RUN_ARGS[@]}" "${ABFS_DOCKER_IMAGE_URI}" \
   ${ABFS_CMD}
 

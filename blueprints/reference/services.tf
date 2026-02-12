@@ -37,6 +37,8 @@ module "project-services" {
     "dns.googleapis.com",
     "iam.googleapis.com",
     "monitoring.googleapis.com",
+    "run.googleapis.com",
+    "secretmanager.googleapis.com",
     "spanner.googleapis.com",
     // go/keep-sorted end
   ]

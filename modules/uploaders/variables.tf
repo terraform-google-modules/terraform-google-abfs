@@ -17,6 +17,11 @@ variable "project_id" {
   description = "Google Cloud project ID"
 }
 
+variable "region" {
+  type        = string
+  description = "Region for ABFS servers"
+}
+
 variable "zone" {
   type        = string
   description = "Zone for ABFS servers"
@@ -74,22 +79,18 @@ variable "abfs_gerrit_uploader_datadisk_type" {
   default     = "pd-ssd"
 }
 
-variable "abfs_gerrit_uploader_manifest_server" {
+variable "abfs_gerrit_uploader_manifest_project_url" {
   type        = string
-  description = "The manifest server to assume"
-  default     = "android.googlesource.com"
+  description = "The URL of the manifest project"
+  default     = "https://android.googlesource.com/platform/manifest"
 }
 
-variable "abfs_gerrit_uploader_manifest_scheme" {
-  type        = string
-  description = "The manifest scheme to assume"
-  default     = "https"
-}
-
-variable "abfs_gerrit_uploader_git_branch" {
-  type        = set(string)
-  description = "Branches from where to find projects (e.g. [\"main\",\"v-keystone-qcom-release\"]) (default [\"main\"])"
-  default     = ["main"]
+variable "abfs_gerrit_uploader_branch_files" {
+  type        = set(tuple([string, string]))
+  description = "Branch and manifest file tuples from where to find projects (e.g. [[\"main\",\"default.xml\"]]) (default [[\"main\",\"default.xml\"]])"
+  default     = [
+    ["main", "default.xml"]
+  ]
 }
 
 variable "abfs_extra_params" {
@@ -113,18 +114,6 @@ variable "abfs_enable_git_lfs" {
 variable "abfs_license" {
   type        = string
   description = "ABFS license (JSON)"
-}
-
-variable "abfs_manifest_project_name" {
-  type        = string
-  description = "Name of the git project on the manifest-server containing manifests"
-  default     = "platform/manifest"
-}
-
-variable "abfs_manifest_file" {
-  type        = string
-  description = "Relative path from the manifest project root to the manifest file"
-  default     = "default.xml"
 }
 
 variable "abfs_uploader_cos_image_ref" {

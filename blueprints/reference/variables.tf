@@ -195,13 +195,19 @@ variable "abfs_client_config" {
 variable "abfs_docker_image_uri" {
   type        = string
   description = "Docker image URI for ABFS"
-  default     = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.1"
+  default     = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.2-15-gfaf00af1"
 }
 
 variable "abfs_enable_git_lfs" {
   type        = bool
   description = "Enable Git LFS support"
   default     = false
+}
+
+variable "abfs_gerrit_uploader_name_prefix" {
+  type        = string
+  description = "Name prefix for the ABFS gerrit uploader VM(s)"
+  default     = "abfs-gerrit-uploader"
 }
 
 variable "abfs_gerrit_uploader_count" {
@@ -216,10 +222,12 @@ variable "abfs_gerrit_uploader_datadisk_size_gb" {
   default     = 4096
 }
 
-variable "abfs_gerrit_uploader_git_branch" {
-  type        = set(string)
-  description = "Branches from where to find projects (e.g. [\"main\",\"v-keystone-qcom-release\"]) (default [\"main\"])"
-  default     = ["main"]
+variable "abfs_gerrit_uploader_branch_files" {
+  type        = set(tuple([string, string]))
+  description = "Branch and manifest file tuples from where to find projects (e.g. [[\"main\",\"default.xml\"]]) (default [[\"main\",\"default.xml\"]])"
+  default     = [
+    ["main", "default.xml"]
+  ]
 }
 
 variable "abfs_gerrit_uploader_machine_type" {
@@ -228,16 +236,10 @@ variable "abfs_gerrit_uploader_machine_type" {
   default     = "n2d-standard-48"
 }
 
-variable "abfs_gerrit_uploader_manifest_server" {
+variable "abfs_gerrit_uploader_manifest_project_url" {
   type        = string
-  description = "The manifest server to assume"
-  default     = "android.googlesource.com"
-}
-
-variable "abfs_gerrit_uploader_manifest_scheme" {
-  type        = string
-  description = "The manifest scheme to assume"
-  default     = "https"
+  description = "The URL of the manifest project"
+  default     = "https://android.googlesource.com/platform/manifest"
 }
 
 # If you don't have an ABFS license yet, leave this empty and run terraform apply.
@@ -247,18 +249,6 @@ variable "abfs_license" {
   type        = string
   description = "ABFS license (JSON)"
   default     = ""
-}
-
-variable "abfs_manifest_file" {
-  type        = string
-  description = "Relative path from the manifest project root to the manifest file"
-  default     = "default.xml"
-}
-
-variable "abfs_manifest_project_name" {
-  type        = string
-  description = "Name of the git project on the manifest-server containing manifests"
-  default     = "platform/manifest"
 }
 
 variable "abfs_server_machine_type" {

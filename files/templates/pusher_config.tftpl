@@ -1,0 +1,31 @@
+name: default
+
+pushers-count: ${count}
+
+defaults:
+  port: 8086
+  max-remote-pushes: 5000
+  max-projects-syncs: 1000
+
+
+pushers:
+%{ for i in range(count) ~}
+  - name: ${name_prefix}-${i}
+%{ endfor ~}
+
+repos:
+  - manifest:
+      url: ${manifest_project_url}
+      files:
+%{ for branch_file in branch_files ~}
+        - branch: ${branch_file[0]}
+          file: ${branch_file[1]}
+%{ endfor ~}
+    project-defaults:
+      workers: 200
+      fetch-ref-spec:
+        - refs/*:refs/*
+        - ^refs/changes/*/meta
+        - ^refs/changes/*/robot-comments
+        - ^refs/cache-automerge/*
+

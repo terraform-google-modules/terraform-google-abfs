@@ -70,8 +70,120 @@ locals {
   ]
 }
 
+# Add the pusher config to secret manager
+# This is an idiomatic way to allow bindmounting into a cloud run job.
+resource "google_secret_manager_secret" "pusher_config" {
+  secret_id = "pusher-config"
+  replication {
+    auto {}
+  }
+}
+
+resource "google_secret_manager_secret_version" "pusher_config_version" {
+  secret      = google_secret_manager_secret.pusher_config.id
+  secret_data = templatefile("${path.module}/files/templates/pusher_config.tftpl", {
+    count                = var.abfs_gerrit_uploader_count
+    name_prefix          = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_name_prefix}"
+    manifest_project_url = var.abfs_gerrit_uploader_manifest_project_url
+    branch_files         = var.abfs_gerrit_uploader_branch_files
+  })
+}
+
+# Give the Uploader SA access to the secret.
+resource "google_secret_manager_secret_iam_binding" "run_job_accessor" {
+  secret_id = google_secret_manager_secret.pusher_config.id
+  role      = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${var.service_account_email}",
+  ]
+}
+
+resource "google_cloud_run_v2_job" "create_pusher_config" {
+  project             = var.project_id
+  location            = var.region
+  name                = "pusher-config"
+  deletion_protection = false
+
+  timeouts {
+    create = "2m"
+  }
+
+  template {
+    template {
+      service_account = var.service_account_email
+      containers {
+        image = var.abfs_docker_image_uri
+
+        volume_mounts {
+          name       = "pusher-config-volume"
+          mount_path = "/etc/pusher-config"
+        }
+
+        command = ["/bin/bash", "-c"]
+
+        args = [
+          <<-EOT
+          set -ex
+
+          # Need the FQDN when connecting from Cloud Run
+          # It lives outside the VPC
+          ARGS="--remote-servers ${var.abfs_server_name}.${var.zone}.c.${var.project_id}.internal:50051 --tunnel-ports 0"
+
+          # Create the intended directory structure for the ABFS hashpath resolution
+          # This structure contains the pusher config
+          mkdir /tmp/workspace && cd /tmp/workspace
+          git init
+          mkdir git-pusher
+          cp /etc/pusher-config/default git-pusher/default
+          git add git-pusher/default
+          git config --global user.email "${var.service_account_email}"
+          git config --global user.name "Cloud Run Job"
+          git commit -a -m "Creating the default pusher config."
+          abfs $ARGS init
+          abfs $ARGS cacheman run &
+          abfs cacheman ping
+          abfs $ARGS push -r $PWD
+          abfs cacheman wait
+
+          # After pushing to ABFS, we update the ABFS ref with the tree object we created in the commit.
+          TREE=$(git rev-parse HEAD^{tree})
+          echo "$TREE" config | abfs $ARGS test-client put-ref -p abfs-meta -s default-server
+          EOT
+        ]
+      }
+      volumes {
+        name = "pusher-config-volume"
+        secret {
+          secret = google_secret_manager_secret.pusher_config.secret_id
+          items {
+            version = "latest"
+            path    = "default" # File will be at /etc/pusher-config/default
+          }
+        }
+      }
+      vpc_access {
+        network_interfaces {
+          subnetwork = var.subnetwork
+        }
+        egress = "PRIVATE_RANGES_ONLY"
+      }
+    }
+  }
+}
+
+resource "null_resource" "run_pusher_config" {
+  depends_on = [google_cloud_run_v2_job.create_pusher_config]
+
+  provisioner "local-exec" {
+    command = "gcloud --project ${var.project_id} run jobs execute ${google_cloud_run_v2_job.create_pusher_config.name} --region ${var.region} --wait"
+  }
+}
+
 resource "google_compute_instance" "abfs_gerrit_uploaders" {
   count = var.abfs_gerrit_uploader_count
+
+  # Wait for the cloud run pusher config write to complete
+  depends_on = [null_resource.run_pusher_config]
 
   project      = var.project_id
   name         = "${local.goog_cm_deployment_name}${var.abfs_gerrit_uploader_name_prefix}-${count.index}"
@@ -176,16 +288,13 @@ data "cloudinit_config" "abfs_gerrit_uploader_configs" {
               {
                 envs = {
                   "ABFS_CMD"                   = <<-EOT
-                    --manifest-server ${var.abfs_gerrit_uploader_manifest_server} \
-                    --manifest-scheme ${var.abfs_gerrit_uploader_manifest_scheme} \
+                    --tunnel-ports 0 \
                     --remote-servers ${var.abfs_server_name}:50051 \
-                    --manifest-project-name ${var.abfs_manifest_project_name} \
                     --lfs=${var.abfs_enable_git_lfs} \
                     ${join(" ", var.abfs_extra_params)} \
-                    gerrit upload-daemon ${var.abfs_gerrit_uploader_count} ${count.index} \
-                    --branch ${join(",", var.abfs_gerrit_uploader_git_branch)} \
-                    --project-storage-path /abfs-storage \
-                    --manifest-file ${var.abfs_manifest_file} \
+                    git-pusher \
+                    --config config:git-pusher/default \
+                    --storage-path /abfs-storage \
                     ${join(" ", var.abfs_gerrit_uploader_extra_params)}
                   EOT
                   "ABFS_DOCKER_IMAGE_URI"      = var.abfs_docker_image_uri,

@@ -23,6 +23,7 @@ spec:
     title: ABFS Uploaders Terraform module
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
       dir: /modules/uploaders
     description: {}
   content:
@@ -33,6 +34,10 @@ spec:
     variables:
       - name: project_id
         description: Google Cloud project ID
+        varType: string
+        required: true
+      - name: region
+        description: Region for ABFS servers
         varType: string
         required: true
       - name: zone
@@ -75,19 +80,16 @@ spec:
         description: The PD regional disk type to use for the ABFS gerrit uploader datadisk(s)
         varType: string
         defaultValue: pd-ssd
-      - name: abfs_gerrit_uploader_manifest_server
-        description: The manifest server to assume
+      - name: abfs_gerrit_uploader_manifest_project_url
+        description: The URL of the manifest project
         varType: string
-        defaultValue: android.googlesource.com
-      - name: abfs_gerrit_uploader_manifest_scheme
-        description: The manifest scheme to assume
-        varType: string
-        defaultValue: https
-      - name: abfs_gerrit_uploader_git_branch
-        description: Branches from where to find projects (e.g. ["main","v-keystone-qcom-release"]) (default ["main"])
-        varType: set(string)
+        defaultValue: https://android.googlesource.com/platform/manifest
+      - name: abfs_gerrit_uploader_branch_files
+        description: Branch and manifest file tuples from where to find projects (e.g. [["main","default.xml"]]) (default [["main","default.xml"]])
+        varType: set(tuple([string, string]))
         defaultValue:
-          - main
+          - - main
+            - default.xml
       - name: abfs_extra_params
         description: A list of extra parameters to append to the abfs command
         varType: list(string)
@@ -104,14 +106,6 @@ spec:
         description: ABFS license (JSON)
         varType: string
         required: true
-      - name: abfs_manifest_project_name
-        description: Name of the git project on the manifest-server containing manifests
-        varType: string
-        defaultValue: platform/manifest
-      - name: abfs_manifest_file
-        description: Relative path from the manifest project root to the manifest file
-        varType: string
-        defaultValue: default.xml
       - name: abfs_uploader_cos_image_ref
         description: Reference to the COS boot image to use for the ABFS uploader
         varType: string

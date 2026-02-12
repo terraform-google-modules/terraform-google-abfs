@@ -40,22 +40,26 @@ module "abfs_server" {
 module "abfs_uploaders" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.11.0"
 
-  project_id                            = data.google_project.project.project_id
-  zone                                  = var.zone
-  service_account_email                 = local.uploader_service_account.email
-  subnetwork                            = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
-  abfs_docker_image_uri                 = var.abfs_docker_image_uri
-  abfs_gerrit_uploader_count            = var.abfs_gerrit_uploader_count
-  abfs_gerrit_uploader_machine_type     = var.abfs_gerrit_uploader_machine_type
-  abfs_gerrit_uploader_datadisk_size_gb = var.abfs_gerrit_uploader_datadisk_size_gb
-  abfs_gerrit_uploader_manifest_server  = var.abfs_gerrit_uploader_manifest_server
-  abfs_gerrit_uploader_manifest_scheme  = var.abfs_gerrit_uploader_manifest_scheme
-  abfs_gerrit_uploader_git_branch       = var.abfs_gerrit_uploader_git_branch
-  abfs_manifest_project_name            = var.abfs_manifest_project_name
-  abfs_manifest_file                    = var.abfs_manifest_file
-  abfs_license                          = var.abfs_license
-  abfs_server_name                      = module.abfs_server.abfs_server_name
-  abfs_enable_git_lfs                   = var.abfs_enable_git_lfs
+  project_id                                = data.google_project.project.project_id
+  region                                    = var.region
+  zone                                      = var.zone
+  service_account_email                     = local.uploader_service_account.email
+  subnetwork                                = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
+  abfs_docker_image_uri                     = var.abfs_docker_image_uri
+  abfs_gerrit_uploader_count                = var.abfs_gerrit_uploader_count
+  abfs_gerrit_uploader_machine_type         = var.abfs_gerrit_uploader_machine_type
+  abfs_gerrit_uploader_datadisk_size_gb     = var.abfs_gerrit_uploader_datadisk_size_gb
+  abfs_gerrit_uploader_manifest_project_url = var.abfs_gerrit_uploader_manifest_project_url
+  abfs_gerrit_uploader_branch_files         = var.abfs_gerrit_uploader_branch_files
+  abfs_gerrit_uploader_name_prefix          = var.abfs_gerrit_uploader_name_prefix
+  abfs_license                              = var.abfs_license
+  abfs_server_name                          = module.abfs_server.abfs_server_name
+  abfs_enable_git_lfs                       = var.abfs_enable_git_lfs
+
+  # APIs need to be enabled prior to starting the Cloud Run jobs.
+  depends_on = [
+    module.project-services
+  ]
 }
 
 module "abfs_ui" {
@@ -68,6 +72,6 @@ module "abfs_ui" {
   abfs_docker_image_uri        = var.abfs_docker_image_uri
   abfs_ui_machine_type         = var.abfs_ui_machine_type
   abfs_ui_remote_server        = module.abfs_server.abfs_server_name
-  abfs_ui_uploader_count       = module.abfs_uploaders.abfs_gerrit_uploader_count
-  abfs_ui_uploader_name_prefix = module.abfs_uploaders.abfs_gerrit_uploader_name_prefix
+  abfs_ui_uploader_count       = var.abfs_gerrit_uploader_count
+  abfs_ui_uploader_name_prefix = var.abfs_gerrit_uploader_name_prefix
 }

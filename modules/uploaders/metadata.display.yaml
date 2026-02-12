@@ -23,6 +23,7 @@ spec:
     title: ABFS Uploaders Terraform module
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
       dir: /modules/uploaders
   ui:
     input:
@@ -42,6 +43,9 @@ spec:
         abfs_gerrit_uploader_allow_stopping_for_update:
           name: abfs_gerrit_uploader_allow_stopping_for_update
           title: Abfs Gerrit Uploader Allow Stopping For Update
+        abfs_gerrit_uploader_branch_files:
+          name: abfs_gerrit_uploader_branch_files
+          title: Abfs Gerrit Uploader Branch Files
         abfs_gerrit_uploader_count:
           name: abfs_gerrit_uploader_count
           title: Abfs Gerrit Uploader Count
@@ -57,30 +61,18 @@ spec:
         abfs_gerrit_uploader_extra_params:
           name: abfs_gerrit_uploader_extra_params
           title: Abfs Gerrit Uploader Extra Params
-        abfs_gerrit_uploader_git_branch:
-          name: abfs_gerrit_uploader_git_branch
-          title: Abfs Gerrit Uploader Git Branch
         abfs_gerrit_uploader_machine_type:
           name: abfs_gerrit_uploader_machine_type
           title: Abfs Gerrit Uploader Machine Type
-        abfs_gerrit_uploader_manifest_scheme:
-          name: abfs_gerrit_uploader_manifest_scheme
-          title: Abfs Gerrit Uploader Manifest Scheme
-        abfs_gerrit_uploader_manifest_server:
-          name: abfs_gerrit_uploader_manifest_server
-          title: Abfs Gerrit Uploader Manifest Server
+        abfs_gerrit_uploader_manifest_project_url:
+          name: abfs_gerrit_uploader_manifest_project_url
+          title: Abfs Gerrit Uploader Manifest Project URL
         abfs_gerrit_uploader_name_prefix:
           name: abfs_gerrit_uploader_name_prefix
           title: Abfs Gerrit Uploader Name Prefix
         abfs_license:
           name: abfs_license
           title: Abfs License
-        abfs_manifest_file:
-          name: abfs_manifest_file
-          title: Abfs Manifest File
-        abfs_manifest_project_name:
-          name: abfs_manifest_project_name
-          title: Abfs Manifest Project Name
         abfs_server_name:
           name: abfs_server_name
           title: Abfs Server Name
@@ -96,6 +88,9 @@ spec:
         project_id:
           name: project_id
           title: Project Id
+        region:
+          name: region
+          title: Region
         service_account_email:
           name: service_account_email
           title: Service Account Email

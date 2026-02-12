@@ -23,6 +23,7 @@ spec:
     title: Deploy ABFS in containers on GCE VMs
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
   ui:
     input:
       variables:
@@ -55,6 +56,10 @@ spec:
           name: abfs_docker_image_uri
           title: ABFS Docker Image Uri
           section: advanced
+        abfs_gerrit_uploader_branch_files:
+          name: abfs_gerrit_uploader_branch_files
+          title: ABFS Gerrit Uploader Branch Files
+          section: gerrit_config
         abfs_gerrit_uploader_count:
           name: abfs_gerrit_uploader_count
           title: ABFS Gerrit Uploader Count
@@ -80,10 +85,6 @@ spec:
           xGoogleProperty:
             type: ET_GCE_DISK_TYPE
             zoneProperty: zone
-        abfs_gerrit_uploader_git_branch:
-          name: abfs_gerrit_uploader_git_branch
-          title: ABFS Gerrit Uploader Git Branch
-          section: gerrit_config
         abfs_gerrit_uploader_machine_type:
           name: abfs_gerrit_uploader_machine_type
           title: ABFS Gerrit Uploader Machine Type
@@ -91,18 +92,12 @@ spec:
           xGoogleProperty:
             type: ET_GCE_MACHINE_TYPE
             zoneProperty: zone
-        abfs_gerrit_uploader_manifest_scheme:
-          name: abfs_gerrit_uploader_manifest_scheme
-          title: ABFS Gerrit Uploader Git Server Scheme
+        abfs_gerrit_uploader_manifest_project_url:
+          name: abfs_gerrit_uploader_manifest_project_url
+          title: ABFS Gerrit Uploader Manifest Project URL
           section: gerrit_config
           subtext: |
-            Format: "https"
-        abfs_gerrit_uploader_manifest_server:
-          name: abfs_gerrit_uploader_manifest_server
-          title: ABFS Gerrit Uploader Git Servers
-          section: gerrit_config
-          subtext: |
-            Format: "android.googlesource.com"
+            Format: "https://android.googlesource.com/platform/manifest"
         abfs_gerrit_uploader_name_prefix:
           name: abfs_gerrit_uploader_name_prefix
           title: ABFS Gerrit Uploader Name Prefix

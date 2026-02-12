@@ -23,6 +23,7 @@ spec:
     title: ABFS Server Terraform module
     source:
       repo: https://github.com/terraform-google-modules/terraform-google-abfs
+      sourceType: git
       dir: /modules/server
   ui:
     input:
