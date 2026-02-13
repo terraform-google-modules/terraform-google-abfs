@@ -26,7 +26,7 @@ locals {
 }
 
 resource "google_compute_instance" "abfs_client" {
-  count = var.create_client_instance_resource ? 1 : 0
+  count = var.create_client_instance_resource && var.abfs_license != "" ? 1 : 0
 
   project             = var.project_id
   name                = var.abfs_client_config.name

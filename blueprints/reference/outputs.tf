@@ -13,26 +13,28 @@
 # limitations under the License.
 
 output "license_information" {
-  value = {
-    project_id                = data.google_project.project.project_id,
-    project_number            = data.google_project.project.number,
-    service_account_email     = local.server_service_account.email
-    service_account_unique_id = local.server_service_account.unique_id
-  }
+  description = "Information required for ABFS license generation."
+  value = var.abfs_license != "" ? null : <<-EOT
+  Please provide the below license information to your ABFS contact and update
+  the 'abfs_license' variable. Also ensure this project Service Accounts are
+  allowlisted to the artifact registry of abfs-binaries before proceeding with
+  phase 2 of 'tf apply'.
+
+  project_id                = ${data.google_project.project.project_id}
+  project_number            = ${data.google_project.project.number}
+  service_account_email     = ${local.server_service_account.email}
+  service_account_unique_id = ${local.server_service_account.unique_id}
+  EOT
 }
 
 output "spanner_database_schema_creation" {
-  description = "The CLI command for creating the Spanner database schema"
-  value = var.abfs_spanner_database_create_tables ? (
-    "# The abfs_spanner_database_create_tables variable was set to true; no further action required."
-    ) : (
-    <<-EOT
-      # Execute the following command to create the Spanner database schema:
+  description = "The CLI command for creating or updating the Spanner database schema."
+  value = (var.abfs_license == "" || var.abfs_spanner_database_create_tables) ? null : <<-EOT
+      # To manually apply or update the Spanner database schema, execute:
       gcloud --project ${data.google_project.project.project_id} \
         spanner databases ddl update \
-        --instance ${module.abfs_server.abfs_spanner_instance.name} \
-        ${module.abfs_server.abfs_spanner_database.name} \
-        --ddl-file ${module.abfs_server.abfs_spanner_database_schema_file}
+        --instance ${module.abfs_server[0].abfs_spanner_instance.name} \
+        ${module.abfs_server[0].abfs_spanner_database.name} \
+        --ddl-file ${module.abfs_server[0].abfs_spanner_database_schema_file}
     EOT
-  )
 }

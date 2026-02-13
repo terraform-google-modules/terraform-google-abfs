@@ -24,6 +24,7 @@ moved {
 
 module "abfs_server" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.11.0"
+  count  = var.abfs_license == "" ? 0 : 1
 
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
@@ -39,6 +40,7 @@ module "abfs_server" {
 
 module "abfs_uploaders" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.11.0"
+  count  = var.abfs_license == "" ? 0 : 1
 
   project_id                                = data.google_project.project.project_id
   region                                    = var.region
@@ -53,7 +55,7 @@ module "abfs_uploaders" {
   abfs_gerrit_uploader_branch_files         = var.abfs_gerrit_uploader_branch_files
   abfs_gerrit_uploader_name_prefix          = var.abfs_gerrit_uploader_name_prefix
   abfs_license                              = var.abfs_license
-  abfs_server_name                          = module.abfs_server.abfs_server_name
+  abfs_server_name                          = module.abfs_server[0].abfs_server_name
   abfs_enable_git_lfs                       = var.abfs_enable_git_lfs
 
   # APIs need to be enabled prior to starting the Cloud Run jobs.
@@ -64,6 +66,7 @@ module "abfs_uploaders" {
 
 module "abfs_ui" {
   source = "../../modules/ui"
+  count  = var.abfs_license == "" ? 0 : 1
 
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone
@@ -71,7 +74,7 @@ module "abfs_ui" {
   subnetwork                   = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
   abfs_docker_image_uri        = var.abfs_docker_image_uri
   abfs_ui_machine_type         = var.abfs_ui_machine_type
-  abfs_ui_remote_server        = module.abfs_server.abfs_server_name
+  abfs_ui_remote_server        = module.abfs_server[0].abfs_server_name
   abfs_ui_uploader_count       = var.abfs_gerrit_uploader_count
   abfs_ui_uploader_name_prefix = var.abfs_gerrit_uploader_name_prefix
 }

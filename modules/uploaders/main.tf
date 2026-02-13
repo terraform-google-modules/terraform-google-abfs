@@ -105,7 +105,7 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
   deletion_protection = false
 
   timeouts {
-    create = "2m"
+    create = "5m"
   }
 
   template {
@@ -141,7 +141,7 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
           git commit -a -m "Creating the default pusher config."
           abfs $ARGS init
           abfs $ARGS cacheman run &
-          abfs cacheman ping
+          abfs cacheman ping -t 1m
           abfs $ARGS push -r $PWD
           abfs cacheman wait
 
@@ -175,7 +175,21 @@ resource "null_resource" "run_pusher_config" {
   depends_on = [google_cloud_run_v2_job.create_pusher_config]
 
   provisioner "local-exec" {
-    command = "gcloud --project ${var.project_id} run jobs execute ${google_cloud_run_v2_job.create_pusher_config.name} --region ${var.region} --wait"
+    command = <<EOT
+gcloud --project ${var.project_id} run jobs execute ${google_cloud_run_v2_job.create_pusher_config.name} --region ${var.region} --wait || {
+  echo "
+ERROR: Failed to execute Cloud Run job to update the pusher configuration.
+Please check the following:
+* Ensure the Cloud Run Executor Service Account has access to the abfs-binaries artifact registry.
+* Ensure the Spanner DDL schema has been applied.
+  * This is done automatically during the 'tf apply' if abfs_spanner_database_create_tables=true.
+  * Otherwise a manual 'gcloud spanner databases ddl update' is required.
+* Ensure the license information has been added to the variables.
+* Review the Cloud Run job logs.
+"
+  exit 1
+}
+EOT
   }
 }
 

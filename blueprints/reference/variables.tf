@@ -260,7 +260,7 @@ variable "abfs_server_machine_type" {
 variable "abfs_spanner_database_create_tables" {
   type        = bool
   description = "Creates the tables in the database."
-  default     = false
+  default     = true
 }
 
 variable "abfs_spanner_instance_config" {
