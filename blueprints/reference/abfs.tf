@@ -66,7 +66,9 @@ module "abfs_uploaders" {
 
 module "abfs_ui" {
   source = "../../modules/ui"
-  count  = var.abfs_license == "" ? 0 : 1
+  #count  = var.abfs_license == "" ? 0 : 1
+  # TODO: The UI needs changes with new git-pusher
+  count = 0
 
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone
