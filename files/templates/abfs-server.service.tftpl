@@ -26,8 +26,8 @@ Environment="HOME=/home/abfs-server"
 ExecStart=/bin/bash /var/lib/abfs/bin/abfs_server.sh
 ExecStop=/usr/bin/docker stop abfs-server
 ExecStopPost=/usr/bin/docker rm abfs-server
-StandardOutput=journal+console
-StandardError=journal+console
+StandardOutput=null
+StandardError=null
 Restart=always
 RestartSec=5
 TimeoutStartSec=600

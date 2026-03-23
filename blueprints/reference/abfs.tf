@@ -23,7 +23,7 @@ moved {
 }
 
 module "abfs_server" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.11.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
   count  = var.abfs_license == "" ? 0 : 1
 
   project_id                          = data.google_project.project.project_id
@@ -39,7 +39,7 @@ module "abfs_server" {
 }
 
 module "abfs_uploaders" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.11.0"
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
   count  = var.abfs_license == "" ? 0 : 1
 
   project_id                                = data.google_project.project.project_id
