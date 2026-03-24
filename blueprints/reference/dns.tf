@@ -12,21 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-moved {
-  from = module.cloud-dns-private-google-apis
-  to   = module.cloud-dns-private-google-apis[0]
-}
-
-moved {
-  from = module.cloud-dns-private-artifact-registry
-  to   = module.cloud-dns-private-artifact-registry[0]
-}
-
-moved {
-  from = module.source-repositories-private-artifact-registry
-  to   = module.source-repositories-private-artifact-registry[0]
-}
-
 locals {
   # See https://cloud.google.com/vpc/docs/configure-private-google-access#config-domain
   private_google_access_ips = [
@@ -34,7 +19,7 @@ locals {
   ]
 }
 
-module "cloud-dns-private-google-apis" {
+module "cloud_dns_private_google_apis" {
   count   = var.create_dns_zones ? 1 : 0
   source  = "terraform-google-modules/cloud-dns/google"
   version = "~>6.1.0"
@@ -67,7 +52,7 @@ module "cloud-dns-private-google-apis" {
   ]
 }
 
-module "cloud-dns-private-artifact-registry" {
+module "cloud_dns_private_artifact_registry" {
   count   = var.create_dns_zones ? 1 : 0
   source  = "terraform-google-modules/cloud-dns/google"
   version = "~>6.1.0"
@@ -100,7 +85,7 @@ module "cloud-dns-private-artifact-registry" {
   ]
 }
 
-module "source-repositories-private-artifact-registry" {
+module "source_repositories_private_artifact_registry" {
   count   = var.create_dns_zones ? 1 : 0
   source  = "terraform-google-modules/cloud-dns/google"
   version = "~>6.1.0"

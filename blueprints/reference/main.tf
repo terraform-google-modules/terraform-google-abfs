@@ -32,6 +32,6 @@ data "google_project" "project" {
   project_id = var.project_id
 
   depends_on = [
-    module.project-services
+    module.project_services
   ]
 }

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "project-services-cloud-resource-manager" {
+module "project_services_cloud_resource_manager" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "18.1.0"
 
@@ -24,7 +24,7 @@ module "project-services-cloud-resource-manager" {
   ]
 }
 
-module "project-services" {
+module "project_services" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "18.1.0"
 
@@ -44,6 +44,6 @@ module "project-services" {
   ]
 
   depends_on = [
-    module.project-services-cloud-resource-manager
+    module.project_services_cloud_resource_manager
   ]
 }

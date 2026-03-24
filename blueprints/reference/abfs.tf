@@ -12,16 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-moved {
-  from = module.abfs-deployment
-  to   = module.abfs_server
-}
-
-moved {
-  from = module.abfs-uploaders
-  to   = module.abfs_uploaders
-}
-
 locals {
   abfs_subnet_identifier = var.use_shared_vpc ? data.google_compute_subnetwork.abfs_subnet[0].id : module.abfs_vpc[0].subnets["${var.region}/${var.abfs_subnet_name}"].id
 }
@@ -67,7 +57,7 @@ module "abfs_uploaders" {
 
   # APIs need to be enabled prior to starting the Cloud Run jobs.
   depends_on = [
-    module.project-services
+    module.project_services
   ]
 }
 

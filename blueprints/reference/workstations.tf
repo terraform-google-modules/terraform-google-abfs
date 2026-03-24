@@ -50,7 +50,7 @@ module "cicd_foundation" {
   # go/keep-sorted end
 
   depends_on = [
-    module.project-services,
+    module.project_services,
     null_resource.cws_network_dependency,
   ]
 }

@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-moved {
-  from = module.abfs-vpc
-  to   = module.abfs_vpc[0]
-}
-
 module "abfs_vpc" {
   count   = var.use_shared_vpc ? 0 : 1
 
@@ -95,7 +90,7 @@ module "abfs_vpc" {
   ]
 
   depends_on = [
-    module.project-services
+    module.project_services
   ]
 }
 

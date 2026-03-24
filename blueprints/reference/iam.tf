@@ -14,11 +14,6 @@
 
 # Service Account - Server
 
-moved {
-  from = google_service_account.abfs[0]
-  to   = google_service_account.server[0]
-}
-
 data "google_service_account" "server" {
   count = local.create_server_service_account ? 0 : 1
 
@@ -100,7 +95,7 @@ resource "google_service_account" "client" {
   }
 }
 
-module "project-iam-bindings" {
+module "project_iam_bindings" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "8.2.0"
 
@@ -108,15 +103,17 @@ module "project-iam-bindings" {
   mode     = "additive"
 
   bindings = {
+    # go/keep-sorted start
     "roles/monitoring.metricWriter"             = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/monitoring.viewer"                   = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/spanner.databaseUser"                = [local.server_service_account.member],
     "roles/stackdriver.resourceMetadata.writer" = [local.server_service_account.member, local.uploader_service_account.member],
     "roles/storage.objectAdmin"                 = [local.server_service_account.member],
+    # go/keep-sorted end
   }
 
   depends_on = [
-    module.project-services,
+    module.project_services,
     local.server_service_account,
     local.uploader_service_account,
     local.client_service_account,
