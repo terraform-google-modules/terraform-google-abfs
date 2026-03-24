@@ -184,7 +184,7 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
         network_interfaces {
           subnetwork = var.subnetwork
         }
-        egress = "PRIVATE_RANGES_ONLY"
+        egress = "ALL_TRAFFIC"
       }
     }
   }
