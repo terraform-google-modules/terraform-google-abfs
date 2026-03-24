@@ -241,7 +241,7 @@ variable "abfs_client_config" {
     name                  = "abfs-client"
     machine_type          = "n1-standard-8"
     image_project         = "ubuntu-os-cloud"
-    image_name            = "ubuntu-minimal-2404-noble-amd64-v20250818"
+    image_name            = "ubuntu-minimal-2404-noble-amd64-v20260316"
     size                  = 2000
     type                  = "pd-ssd"
     scopes                = ["cloud-platform"]
@@ -254,7 +254,7 @@ variable "abfs_client_config" {
     enable_display        = false
     shielded_instance_config = {
       enable_integrity_monitoring = true
-      enable_secure_boot          = false
+      enable_secure_boot          = true
       enable_vtpm                 = true
     }
   }
