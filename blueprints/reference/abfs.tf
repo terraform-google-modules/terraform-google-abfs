@@ -24,7 +24,7 @@ moved {
 
 module "abfs_server" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
-  count  = var.abfs_license == "" ? 0 : 1
+  count  = local.has_abfs_license ? 1 : 0
 
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
@@ -40,7 +40,7 @@ module "abfs_server" {
 
 module "abfs_uploaders" {
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
-  count  = var.abfs_license == "" ? 0 : 1
+  count  = local.has_abfs_license ? 1 : 0
 
   project_id                                = data.google_project.project.project_id
   region                                    = var.region
@@ -66,7 +66,7 @@ module "abfs_uploaders" {
 
 module "abfs_ui" {
   source = "../../modules/ui"
-  #count  = var.abfs_license == "" ? 0 : 1
+  #count  = local.has_abfs_license ? 1 : 0
   # TODO: The UI needs changes with new git-pusher
   count = 0
 

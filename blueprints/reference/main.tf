@@ -13,6 +13,8 @@
 # limitations under the License.
 
 locals {
+  has_abfs_license = trimspace(var.abfs_license) != "" && trimspace(var.abfs_license) != "{}"
+
   create_server_service_account = var.server_service_account_id == ""
   server_service_account        = local.create_server_service_account ? google_service_account.server[0] : data.google_service_account.server[0]
 

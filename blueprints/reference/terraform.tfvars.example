@@ -38,8 +38,11 @@ project_id = "YOUR_PROJECT_ID"
 
 # run terraform apply first
 # submit the output through the allow-listing form
-# then insert the license here and run terraform apply again
-#abfs_license            = "INSERT_YOUR_LICENSE_HERE"
+# then insert the license here (replace the {} with the license) and
+# run terraform apply again
+abfs_license            = <<-EOF
+{}
+EOF
 
 # Using the US region for the docker image with a specific version tag.
 #abfs_docker_image_uri = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.2-15-gfaf00af1"
