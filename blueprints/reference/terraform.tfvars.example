@@ -21,6 +21,19 @@ project_id = "YOUR_PROJECT_ID"
 #secret_manager_region        = "us-central1"
 #secure_source_manager_region = "us-central1"
 
+# If using Shared VPC, set use_shared_vpc to true and provide the host project ID.
+# Ensure that the subnet names match those in the host project.
+# use_shared_vpc = true
+# vpc_project_id = "your-host-project-id"
+
+# If deploying in a VPC-SC perimeter, you may need to enable Cloud Build private
+# pools and Secure Source Manager private instances.
+# cloud_build_peered_network = "projects/YOUR_PROJECT_ID/global/networks/YOUR_NETWORK_NAME"
+# To use a private SSM instance, either provide an existing CA pool:
+# secure_source_manager_ca_pool = "projects/YOUR_PROJECT_ID/locations/YOUR_REGION/caPools/YOUR_CA_POOL_NAME"
+# Or set secure_source_manager_create_ca_pool to true to create a new one:
+# secure_source_manager_create_ca_pool = true
+
 # If you don't need or want to enable APIs, set this to false.
 #enable_apis = false
 

@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+resource "null_resource" "cws_network_dependency" {
+  count = var.use_shared_vpc ? 0 : 1
+
+  triggers = {
+    network_id = module.abfs_vpc[0].network_id
+  }
+}
+
 module "cicd_foundation" {
   count = var.create_cloud_workstation_resources ? 1 : 0
 
@@ -22,12 +30,19 @@ module "cicd_foundation" {
   # go/keep-sorted start
   artifact_registry_region                    = var.artifact_registry_region
   binary_authorization_always_create          = var.binary_authorization_always_create
+  cloud_build_peered_network                  = var.cloud_build_peered_network
   cloud_build_region                          = var.cloud_build_region
   cws_clusters                                = var.cws_clusters
   cws_configs                                 = var.cws_configs
   cws_custom_images                           = var.cws_custom_images
   git_branch_trigger                          = var.git_branch_trigger
   secret_manager_region                       = var.secret_manager_region
+  secure_source_manager_ca_common_name        = var.secure_source_manager_ca_common_name
+  secure_source_manager_ca_key_algorithm      = var.secure_source_manager_ca_key_algorithm
+  secure_source_manager_ca_lifetime_seconds   = var.secure_source_manager_ca_lifetime_seconds
+  secure_source_manager_ca_organization       = var.secure_source_manager_ca_organization
+  secure_source_manager_ca_pool               = var.secure_source_manager_ca_pool
+  secure_source_manager_create_ca_pool        = var.secure_source_manager_create_ca_pool
   secure_source_manager_instance_name         = var.secure_source_manager_instance_name
   secure_source_manager_region                = var.secure_source_manager_region
   secure_source_manager_repo_git_url_to_clone = var.secure_source_manager_repo_git_url_to_clone
@@ -35,6 +50,7 @@ module "cicd_foundation" {
   # go/keep-sorted end
 
   depends_on = [
-    module.abfs_vpc
+    module.project-services,
+    null_resource.cws_network_dependency,
   ]
 }

@@ -14,10 +14,12 @@
 
 moved {
   from = module.abfs-vpc
-  to   = module.abfs_vpc
+  to   = module.abfs_vpc[0]
 }
 
 module "abfs_vpc" {
+  count   = var.use_shared_vpc ? 0 : 1
+
   source  = "terraform-google-modules/network/google"
   version = "~>16.1.0"
 
@@ -97,18 +99,38 @@ module "abfs_vpc" {
   ]
 }
 
+data "google_compute_subnetwork" "abfs_subnet" {
+  count   = var.use_shared_vpc ? 1 : 0
+
+  name    = var.abfs_subnet_name
+  project = var.vpc_project_id
+  region  = var.region
+}
+
+data "google_compute_subnetwork" "cws_subnet" {
+  count   = var.use_shared_vpc && var.create_cloud_workstation_resources ? 1 : 0
+
+  name    = var.cws_subnet_name
+  project = var.vpc_project_id
+  region  = var.cws_region
+}
+
 resource "google_compute_router" "nat_router" {
+  count   = var.use_shared_vpc ? 0 : 1
+
   project = var.project_id
   name    = "natgw-router"
-  network = module.abfs_vpc.network_self_link
+  network = module.abfs_vpc[0].network_self_link
   region  = var.region
 }
 
 module "cloud-nat" {
+  count   = var.use_shared_vpc ? 0 : 1
+
   source  = "terraform-google-modules/cloud-nat/google"
   version = "~> 5.4.0"
 
   project_id = var.project_id
   region     = var.region
-  router     = google_compute_router.nat_router.name
+  router     = google_compute_router.nat_router[0].name
 }

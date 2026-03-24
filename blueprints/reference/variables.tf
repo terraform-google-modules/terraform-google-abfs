@@ -36,6 +36,12 @@ variable "artifact_registry_region" {
   default     = "europe-west4"
 }
 
+variable "cloud_build_peered_network" {
+  type        = string
+  description = "If set, configures Cloud Build to use a private worker pool connected to the specified VPC network for VPC-SC. The network must be provided in the format projects/{project}/global/networks/{network}."
+  default     = null
+}
+
 variable "cloud_build_region" {
   type        = string
   description = "The region for Cloud Build."
@@ -64,6 +70,46 @@ variable "secret_replication_locations" {
   type        = list(string)
   description = "A list of Google Cloud regions to replicate Secret Manager secrets to. If empty, automatic replication is used."
   default     = []
+}
+
+variable "secure_source_manager_ca_common_name" {
+  type        = string
+  description = "The common name for the root CA certificate."
+  default     = "SSM Root CA"
+}
+
+variable "secure_source_manager_ca_key_algorithm" {
+  type        = string
+  description = "The key algorithm to use for the root CA."
+  default     = "RSA_PKCS1_4096_SHA256"
+}
+
+variable "secure_source_manager_ca_lifetime_seconds" {
+  type        = string
+  description = "The lifetime of the root CA certificate in seconds."
+  default     = "315360000s" # 10 years
+}
+
+variable "secure_source_manager_ca_organization" {
+  type        = string
+  description = "The organization name for the root CA certificate."
+  default     = "Example.com"
+}
+
+variable "secure_source_manager_ca_pool" {
+  type        = string
+  description = "The CA pool to use for issuing instance certificates for a private Secure Source Manager instance, in the format projects/{project}/locations/{location}/caPools/{ca_pool}. If null and secure_source_manager_create_ca_pool is true, a new pool will be created."
+  default     = null
+}
+
+variable "secure_source_manager_create_ca_pool" {
+  type        = bool
+  description = "If true, and secure_source_manager_ca_pool is not set, creates a new CA Pool and Root CA for use with a private Secure Source Manager instance."
+  default     = false
+  validation {
+    condition     = ! var.secure_source_manager_create_ca_pool || var.secure_source_manager_ca_pool == null
+    error_message = "Cannot set secure_source_manager_create_ca_pool to true when secure_source_manager_ca_pool is provided."
+  }
 }
 
 variable "secure_source_manager_region" {
@@ -121,6 +167,22 @@ variable "cws_subnet_private_access" {
   type        = bool
   description = "Enable private Google access for the CWS subnetwork"
   default     = true
+}
+
+variable "use_shared_vpc" {
+  type        = bool
+  description = "Whether to use an existing Shared VPC network and subnet."
+  default     = false
+}
+
+variable "vpc_project_id" {
+  type        = string
+  description = "The project ID of the Shared VPC host project."
+  default     = ""
+  validation {
+    condition     = ! var.use_shared_vpc || var.vpc_project_id != ""
+    error_message = "vpc_project_id is required when use_shared_vpc is true."
+  }
 }
 # go/keep-sorted end
 
@@ -381,7 +443,7 @@ variable "cws_configs" {
         count = number
       })), [])
       boot_disk_size_gb            = optional(number)
-      enable_nested_virtualization = optional(bool)
+      enable_nested_virtualization = optional(bool, true)
       machine_type                 = optional(string)
       pool_size                    = optional(number)
     })), [])
@@ -389,9 +451,9 @@ variable "cws_configs" {
     creators                     = optional(list(string))
     custom_image_names           = optional(list(string))
     cws_cluster                  = string
-    disable_public_ip_addresses  = bool
+    disable_public_ip_addresses  = optional(bool, false)
     display_name                 = optional(string)
-    enable_nested_virtualization = bool
+    enable_nested_virtualization = optional(bool, true)
     idle_timeout_seconds         = number
     image                        = optional(string)
     instances = optional(list(object({
@@ -405,7 +467,7 @@ variable "cws_configs" {
     persistent_disk_size_gb         = optional(number)
     persistent_disk_source_snapshot = optional(string)
     persistent_disk_type            = string
-    pool_size                       = number
+    pool_size                       = optional(number, 1)
     shielded_instance_config = optional(object({
       enable_secure_boot          = optional(bool, true)
       enable_vtpm                 = optional(bool, true)

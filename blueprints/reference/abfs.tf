@@ -22,15 +22,19 @@ moved {
   to   = module.abfs_uploaders
 }
 
+locals {
+  abfs_subnet_identifier = var.use_shared_vpc ? data.google_compute_subnetwork.abfs_subnet[0].id : module.abfs_vpc[0].subnets["${var.region}/${var.abfs_subnet_name}"].id
+}
+
 module "abfs_server" {
   count  = local.has_abfs_license ? 1 : 0
 
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
-
+  
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
   service_account_email               = local.server_service_account.email
-  subnetwork                          = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
+  subnetwork                          = local.abfs_subnet_identifier
   abfs_docker_image_uri               = var.abfs_docker_image_uri
   abfs_license                        = var.abfs_license
   abfs_bucket_location                = var.abfs_bucket_location
@@ -43,12 +47,12 @@ module "abfs_uploaders" {
   count  = local.has_abfs_license ? 1 : 0
 
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
-
+  
   project_id                                = data.google_project.project.project_id
   region                                    = var.region
   zone                                      = var.zone
   service_account_email                     = local.uploader_service_account.email
-  subnetwork                                = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
+  subnetwork                                = local.abfs_subnet_identifier
   abfs_docker_image_uri                     = var.abfs_docker_image_uri
   abfs_gerrit_uploader_count                = var.abfs_gerrit_uploader_count
   abfs_gerrit_uploader_machine_type         = var.abfs_gerrit_uploader_machine_type
@@ -73,11 +77,11 @@ module "abfs_ui" {
   count = 0
 
   source = "../../modules/ui"
-
+  
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone
   service_account_email        = local.ui_service_account.email
-  subnetwork                   = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].name
+  subnetwork                   = local.abfs_subnet_identifier
   abfs_docker_image_uri        = var.abfs_docker_image_uri
   abfs_ui_machine_type         = var.abfs_ui_machine_type
   abfs_ui_remote_server        = module.abfs_server[0].abfs_server_name

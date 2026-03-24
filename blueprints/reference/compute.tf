@@ -23,6 +23,9 @@ locals {
     enable-oslogin  = "TRUE"
   } : {}
   # go/keep-sorted end
+
+  # Determine the subnetwork self_link dynamically depending on if we use a shared VPC or local VPC
+  abfs_subnet_self_link = var.use_shared_vpc ? data.google_compute_subnetwork.abfs_subnet[0].self_link : module.abfs_vpc[0].subnets["${var.region}/${var.abfs_subnet_name}"].self_link
 }
 
 resource "google_compute_instance" "abfs_client" {
@@ -53,7 +56,7 @@ resource "google_compute_instance" "abfs_client" {
   network_interface {
     queue_count = 0
     stack_type  = "IPV4_ONLY"
-    subnetwork  = module.abfs_vpc.subnets["${var.region}/${var.abfs_subnet_name}"].self_link
+    subnetwork  = local.abfs_subnet_self_link
   }
   scheduling {
     automatic_restart   = var.abfs_client_config.automatic_restart
