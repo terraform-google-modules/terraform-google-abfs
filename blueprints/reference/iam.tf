@@ -105,7 +105,7 @@ module "project-iam-bindings" {
   version = "8.2.0"
 
   projects = [data.google_project.project.project_id]
-  mode     = "authoritative"
+  mode     = "additive"
 
   bindings = {
     "roles/monitoring.metricWriter"             = [local.server_service_account.member, local.uploader_service_account.member],

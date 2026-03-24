@@ -60,6 +60,12 @@ variable "secret_manager_region" {
   default     = "europe-west4"
 }
 
+variable "secret_replication_locations" {
+  type        = list(string)
+  description = "A list of Google Cloud regions to replicate Secret Manager secrets to. If empty, automatic replication is used."
+  default     = []
+}
+
 variable "secure_source_manager_region" {
   type        = string
   description = "The region for the Secure Source Manager instance, cf. https://cloud.google.com/secure-source-manager/docs/locations."
@@ -204,10 +210,12 @@ variable "abfs_enable_git_lfs" {
   default     = false
 }
 
-variable "abfs_gerrit_uploader_name_prefix" {
-  type        = string
-  description = "Name prefix for the ABFS gerrit uploader VM(s)"
-  default     = "abfs-gerrit-uploader"
+variable "abfs_gerrit_uploader_branch_files" {
+  type        = set(tuple([string, string]))
+  description = "Branch and manifest file tuples from where to find projects (e.g. [[\"main\",\"default.xml\"]]) (default [[\"main\",\"default.xml\"]])"
+  default     = [
+    ["main", "default.xml"]
+  ]
 }
 
 variable "abfs_gerrit_uploader_count" {
@@ -222,14 +230,6 @@ variable "abfs_gerrit_uploader_datadisk_size_gb" {
   default     = 4096
 }
 
-variable "abfs_gerrit_uploader_branch_files" {
-  type        = set(tuple([string, string]))
-  description = "Branch and manifest file tuples from where to find projects (e.g. [[\"main\",\"default.xml\"]]) (default [[\"main\",\"default.xml\"]])"
-  default     = [
-    ["main", "default.xml"]
-  ]
-}
-
 variable "abfs_gerrit_uploader_machine_type" {
   type        = string
   description = "Machine type for ABFS gerrit uploaders"
@@ -240,6 +240,12 @@ variable "abfs_gerrit_uploader_manifest_project_url" {
   type        = string
   description = "The URL of the manifest project"
   default     = "https://android.googlesource.com/platform/manifest"
+}
+
+variable "abfs_gerrit_uploader_name_prefix" {
+  type        = string
+  description = "Name prefix for the ABFS gerrit uploader VM(s)"
+  default     = "abfs-gerrit-uploader"
 }
 
 # If you don't have an ABFS license yet, leave this empty and run terraform apply.

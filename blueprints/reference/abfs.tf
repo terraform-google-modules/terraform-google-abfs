@@ -23,8 +23,9 @@ moved {
 }
 
 module "abfs_server" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
   count  = local.has_abfs_license ? 1 : 0
+
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
 
   project_id                          = data.google_project.project.project_id
   zone                                = var.zone
@@ -39,8 +40,9 @@ module "abfs_server" {
 }
 
 module "abfs_uploaders" {
-  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
   count  = local.has_abfs_license ? 1 : 0
+
+  source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
 
   project_id                                = data.google_project.project.project_id
   region                                    = var.region
@@ -54,6 +56,7 @@ module "abfs_uploaders" {
   abfs_gerrit_uploader_manifest_project_url = var.abfs_gerrit_uploader_manifest_project_url
   abfs_gerrit_uploader_branch_files         = var.abfs_gerrit_uploader_branch_files
   abfs_gerrit_uploader_name_prefix          = var.abfs_gerrit_uploader_name_prefix
+  abfs_secret_replication_locations         = var.secret_replication_locations
   abfs_license                              = var.abfs_license
   abfs_server_name                          = module.abfs_server[0].abfs_server_name
   abfs_enable_git_lfs                       = var.abfs_enable_git_lfs
@@ -65,10 +68,11 @@ module "abfs_uploaders" {
 }
 
 module "abfs_ui" {
-  source = "../../modules/ui"
   #count  = local.has_abfs_license ? 1 : 0
   # TODO: The UI needs changes with new git-pusher
   count = 0
+
+  source = "../../modules/ui"
 
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone

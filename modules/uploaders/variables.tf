@@ -144,6 +144,12 @@ variable "pre_start_hooks" {
   default     = null
 }
 
+variable "abfs_secret_replication_locations" {
+  type        = list(string)
+  description = "A list of Google Cloud regions to replicate the Secret Manager secrets to. If empty, automatic replication is used."
+  default     = []
+}
+
 // Marketplace requires this variable name to be declared
 variable "goog_cm_deployment_name" {
   type        = string

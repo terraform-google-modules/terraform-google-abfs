@@ -14,7 +14,7 @@
 
 output "license_information" {
   description = "Information required for ABFS license generation."
-  value = local.has_abfs_license ? null : <<-EOT
+  value       = local.has_abfs_license ? null : <<-EOT
   Please provide the below license information to your ABFS contact and update
   the 'abfs_license' variable. Also ensure this project Service Accounts are
   allowlisted to the artifact registry of abfs-binaries before proceeding with
@@ -29,7 +29,7 @@ output "license_information" {
 
 output "spanner_database_schema_creation" {
   description = "The CLI command for creating or updating the Spanner database schema."
-  value = (!local.has_abfs_license || var.abfs_spanner_database_create_tables) ? null : <<-EOT
+  value       = (!local.has_abfs_license || var.abfs_spanner_database_create_tables) ? null : <<-EOT
       # To manually apply or update the Spanner database schema, execute:
       gcloud --project ${data.google_project.project.project_id} \
         spanner databases ddl update \

@@ -79,6 +79,9 @@ spec:
         abfs_uploader_cos_image_ref:
           name: abfs_uploader_cos_image_ref
           title: Abfs Uploader Cos Image Ref
+        abfs_secret_replication_locations:
+          name: abfs_secret_replication_locations
+          title: Abfs Secret Replication Locations
         goog_cm_deployment_name:
           name: goog_cm_deployment_name
           title: Goog Cm Deployment Name

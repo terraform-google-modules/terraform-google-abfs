@@ -73,9 +73,27 @@ locals {
 # Add the pusher config to secret manager
 # This is an idiomatic way to allow bindmounting into a cloud run job.
 resource "google_secret_manager_secret" "pusher_config" {
+  project   = var.project_id
   secret_id = "pusher-config"
   replication {
-    auto {}
+    dynamic "auto" {
+      for_each = length(var.abfs_secret_replication_locations) == 0 ? [1] : []
+
+      content {}
+    }
+    dynamic "user_managed" {
+      for_each = length(var.abfs_secret_replication_locations) > 0 ? [1] : []
+
+      content {
+        dynamic "replicas" {
+          for_each = var.abfs_secret_replication_locations
+
+          content {
+            location = replicas.value
+          }
+        }
+      }
+    }
   }
 }
 
@@ -91,6 +109,7 @@ resource "google_secret_manager_secret_version" "pusher_config_version" {
 
 # Give the Uploader SA access to the secret.
 resource "google_secret_manager_secret_iam_binding" "run_job_accessor" {
+  project   = var.project_id
   secret_id = google_secret_manager_secret.pusher_config.id
   role      = "roles/secretmanager.secretAccessor"
   members = [
