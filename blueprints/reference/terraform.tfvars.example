@@ -89,6 +89,7 @@ EOF
 #abfs_bucket_location                = "us-central1"
 #abfs_spanner_instance_config        = "regional-us-central1"
 abfs_spanner_database_create_tables = true
+#abfs_spanner_database_deletion_protection = false
 
 #alert_notification_email = "YOUR_EMAIL@EXAMPLE.COM"
 

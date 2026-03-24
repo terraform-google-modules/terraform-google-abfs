@@ -58,7 +58,8 @@ resource "google_spanner_database" "abfs" {
   instance            = google_spanner_instance.abfs.name
   name                = var.abfs_spanner_database_name
   ddl                 = local.spanner_ddl_statements
-  deletion_protection = true
+  deletion_protection = var.abfs_spanner_database_deletion_protection
+
   lifecycle {
     # Ignore changes after database creation to avoid accidental data loss.
     ignore_changes = [ddl]

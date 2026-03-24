@@ -331,6 +331,12 @@ variable "abfs_spanner_database_create_tables" {
   default     = true
 }
 
+variable "abfs_spanner_database_deletion_protection" {
+  type        = bool
+  description = "Whether to enable deletion protection for the Spanner database."
+  default     = true
+}
+
 variable "abfs_spanner_instance_config" {
   type        = string
   description = "The name of the instance's configuration (similar but not quite the same as a region) which defines the geographic placement and replication of your ABFS database in this instance (https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/spanner_instance.html#config-1)."

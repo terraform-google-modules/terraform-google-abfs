@@ -20,24 +20,25 @@ module "abfs_server" {
   count  = local.has_abfs_license ? 1 : 0
 
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/server?ref=v0.13.0"
-  
-  project_id                          = data.google_project.project.project_id
-  zone                                = var.zone
-  service_account_email               = local.server_service_account.email
-  subnetwork                          = local.abfs_subnet_identifier
-  abfs_docker_image_uri               = var.abfs_docker_image_uri
-  abfs_license                        = var.abfs_license
-  abfs_bucket_location                = var.abfs_bucket_location
-  abfs_server_machine_type            = var.abfs_server_machine_type
-  abfs_spanner_instance_config        = var.abfs_spanner_instance_config
-  abfs_spanner_database_create_tables = var.abfs_spanner_database_create_tables
+
+  project_id                                = data.google_project.project.project_id
+  zone                                      = var.zone
+  service_account_email                     = local.server_service_account.email
+  subnetwork                                = local.abfs_subnet_identifier
+  abfs_docker_image_uri                     = var.abfs_docker_image_uri
+  abfs_license                              = var.abfs_license
+  abfs_bucket_location                      = var.abfs_bucket_location
+  abfs_server_machine_type                  = var.abfs_server_machine_type
+  abfs_spanner_instance_config              = var.abfs_spanner_instance_config
+  abfs_spanner_database_create_tables       = var.abfs_spanner_database_create_tables
+  abfs_spanner_database_deletion_protection = var.abfs_spanner_database_deletion_protection
 }
 
 module "abfs_uploaders" {
   count  = local.has_abfs_license ? 1 : 0
 
   source = "github.com/terraform-google-modules/terraform-google-abfs//modules/uploaders?ref=v0.13.0"
-  
+
   project_id                                = data.google_project.project.project_id
   region                                    = var.region
   zone                                      = var.zone
@@ -67,7 +68,7 @@ module "abfs_ui" {
   count = 0
 
   source = "../../modules/ui"
-  
+
   project_id                   = data.google_project.project.project_id
   zone                         = var.zone
   service_account_email        = local.ui_service_account.email

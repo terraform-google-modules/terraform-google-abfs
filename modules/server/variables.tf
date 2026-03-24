@@ -156,6 +156,12 @@ variable "abfs_spanner_database_schema_version" {
   default     = "0.0.31"
 }
 
+variable "abfs_spanner_database_deletion_protection" {
+  type        = bool
+  description = "Whether to enable deletion protection for the Spanner database."
+  default     = true
+}
+
 // Marketplace requires this variable name to be declared
 variable "goog_cm_deployment_name" {
   type        = string
