@@ -58,7 +58,7 @@ abfs_license            = <<-EOF
 EOF
 
 # Using the US region for the docker image with a specific version tag.
-#abfs_docker_image_uri = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.2-15-gfaf00af1"
+#abfs_docker_image_uri = "us-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.3-72-gc73c233b"
 
 #abfs_server_machine_type = "n2d-standard-48"               # Defaults to "n2-highmem-128"
 

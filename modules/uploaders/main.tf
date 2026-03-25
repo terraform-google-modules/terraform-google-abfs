@@ -145,7 +145,6 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
           set -ex
 
           # Need the FQDN when connecting from Cloud Run
-          # It lives outside the VPC
           ARGS="--remote-servers ${var.abfs_server_name}.${var.zone}.c.${var.project_id}.internal:50051 --tunnel-ports 0"
 
           # Create the intended directory structure for the ABFS hashpath resolution
@@ -154,13 +153,17 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
           git init
           mkdir git-pusher
           cp /etc/pusher-config/default git-pusher/default
-          git add git-pusher/default
+          echo "concurrent-uploads: 200" > clients/defaults
+          git add git-pusher/default clients/defaults
           git config --global user.email "${var.service_account_email}"
           git config --global user.name "Cloud Run Job"
           git commit -a -m "Creating the default pusher config."
           abfs $ARGS init
           abfs $ARGS cacheman run &
-          abfs cacheman ping -t 1m
+          if ! abfs cacheman ping -t 1m; then
+            abfs cacheman tail -a
+            exit 1
+          fi
           abfs $ARGS push -r $PWD
           abfs cacheman wait
 

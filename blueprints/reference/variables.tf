@@ -263,7 +263,7 @@ variable "abfs_client_config" {
 variable "abfs_docker_image_uri" {
   type        = string
   description = "Docker image URI for ABFS"
-  default     = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.2-15-gfaf00af1"
+  default     = "europe-docker.pkg.dev/abfs-binaries/abfs-containers-alpha/abfs-alpha:0.1.3-72-gc73c233b"
 }
 
 variable "abfs_enable_git_lfs" {
