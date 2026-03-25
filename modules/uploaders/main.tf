@@ -151,7 +151,7 @@ resource "google_cloud_run_v2_job" "create_pusher_config" {
           # This structure contains the pusher config
           mkdir /tmp/workspace && cd /tmp/workspace
           git init
-          mkdir git-pusher
+          mkdir git-pusher clients
           cp /etc/pusher-config/default git-pusher/default
           echo "concurrent-uploads: 200" > clients/defaults
           git add git-pusher/default clients/defaults
