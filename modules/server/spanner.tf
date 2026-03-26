@@ -50,7 +50,7 @@ resource "google_spanner_instance" "abfs" {
 }
 
 data "local_file" "abfs_spanner_database_schema" {
-  filename = "${path.module}/../../files/schemas/${var.abfs_spanner_database_schema_version}-schema.sql"
+  filename = "${path.module}/files/schemas/${var.abfs_spanner_database_schema_version}-schema.sql"
 }
 
 resource "google_spanner_database" "abfs" {

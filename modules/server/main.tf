@@ -13,12 +13,11 @@
 # limitations under the License.
 
 locals {
-  common_files_root       = "${path.module}/../../files"
   goog_cm_deployment_name = var.goog_cm_deployment_name == "" ? "" : "${var.goog_cm_deployment_name}-"
   abfs_server_name        = "${local.goog_cm_deployment_name}${var.abfs_server_name}"
 
   static_script_files = flatten([
-    for folder in ["${local.common_files_root}/scripts", "${path.module}/files/scripts"] : [
+    for folder in ["${path.module}/files/common_scripts", "${path.module}/files/scripts"] : [
       for filename in fileset(folder, "*.sh") :
       {
         path        = "/var/lib/abfs/bin/${filename}"
@@ -31,7 +30,7 @@ locals {
   ])
 
   systemd_files = flatten([
-    for folder in ["${local.common_files_root}/systemd", "${path.module}/files/systemd"] : [
+    for folder in ["${path.module}/files/common_systemd", "${path.module}/files/systemd"] : [
       for filename in fileset(folder, "*") :
       {
         path        = "/etc/systemd/system/${filename}"
