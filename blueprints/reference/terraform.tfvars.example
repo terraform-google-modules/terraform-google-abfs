@@ -117,6 +117,12 @@ cws_clusters = {
     network    = "abfs-network" # change to YOUR_NETWORK
     region     = "europe-west1" # change to YOUR_ABFS_SUBNET
     subnetwork = "cws-subnet"   # change to YOUR_CWS_SUBNET
+    #domain_config = {
+    #  domain = "workstations.example.com"
+    #}
+    #private_cluster_config = {
+    #  enable_private_endpoint = true  # Defaults to false
+    #}
   }
 }
 cws_configs = {

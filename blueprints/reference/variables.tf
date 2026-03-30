@@ -426,6 +426,12 @@ variable "cws_clusters" {
     network    = string
     region     = string
     subnetwork = string
+    domain_config = optional(object({
+      domain = string
+    }))
+    private_cluster_config = optional(object({
+      enable_private_endpoint = optional(bool, false)
+    }))
   }))
   description = "A map of Cloud Workstation clusters to create. The key of the map is used as the unique ID for the cluster."
   default     = {}
