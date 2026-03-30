@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2025-2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,6 +57,12 @@ variable "cws_region" {
 variable "region" {
   type        = string
   description = "The region for ABFS resources"
+  default     = "europe-west4"
+}
+
+variable "scheduler_default_region" {
+  type        = string
+  description = "The default region for the Cloud Scheduler if not specified in the application config."
   default     = "europe-west4"
 }
 
@@ -412,9 +418,31 @@ variable "uploader_service_account_name" {
 }
 # go/keep-sorted end
 
+# Cloud Build
+
+# go/keep-sorted start block=yes newline_separated=yes
+variable "build_machine_type_default" {
+  type        = string
+  description = "The default machine type to use for Cloud Build jobs."
+  default     = "UNSPECIFIED"
+}
+
+variable "build_timeout_default_seconds" {
+  type        = number
+  description = "The default timeout in seconds for Cloud Build jobs."
+  default     = 7200
+}
+# go/keep-sorted end
+
 # Cloud Workstations
 
 # go/keep-sorted start block=yes newline_separated=yes
+variable "boot_disk_size_gb_default" {
+  type        = number
+  description = "The default boot disk size in GB for Cloud Workstation instances."
+  default     = 100
+}
+
 variable "create_cloud_workstation_resources" {
   type        = bool
   description = "Whether to create Cloud Workstation resources"
@@ -460,26 +488,26 @@ variable "cws_configs" {
       machine_type                 = optional(string)
       pool_size                    = optional(number)
     })), [])
-    boot_disk_size_gb            = optional(number, 100)
+    boot_disk_size_gb            = optional(number)
     creators                     = optional(list(string))
     custom_image_names           = optional(list(string))
     cws_cluster                  = string
-    disable_public_ip_addresses  = optional(bool, false)
+    disable_public_ip_addresses  = optional(bool)
     display_name                 = optional(string)
-    enable_nested_virtualization = optional(bool, true)
-    idle_timeout_seconds         = number
+    enable_nested_virtualization = optional(bool)
+    idle_timeout_seconds         = optional(number)
     image                        = optional(string)
     instances = optional(list(object({
       name         = string
       display_name = optional(string)
       users        = list(string)
     })))
-    machine_type                    = string
+    machine_type                    = optional(string)
     persistent_disk_fs_type         = optional(string)
-    persistent_disk_reclaim_policy  = optional(string, "RETAIN")
+    persistent_disk_reclaim_policy  = optional(string)
     persistent_disk_size_gb         = optional(number)
     persistent_disk_source_snapshot = optional(string)
-    persistent_disk_type            = string
+    persistent_disk_type            = optional(string)
     pool_size                       = optional(number, 1)
     shielded_instance_config = optional(object({
       enable_secure_boot          = optional(bool, true)
@@ -494,18 +522,32 @@ variable "cws_configs" {
     condition     = ! var.create_cloud_workstation_resources || length(var.cws_configs) > 0
     error_message = "cws_configs is required when create_cloud_workstation_resources is enabled."
   }
+  validation {
+    condition = alltrue([
+      for k, v in var.cws_configs :
+      v.persistent_disk_source_snapshot == null || v.persistent_disk_size_gb == null
+    ])
+    error_message = "If persistent_disk_source_snapshot is provided, persistent_disk_size_gb must not be set."
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.cws_configs :
+      v.persistent_disk_source_snapshot != null || v.persistent_disk_size_gb != null
+    ])
+    error_message = "If persistent_disk_source_snapshot is not provided, persistent_disk_size_gb must be set."
+  }
 }
 
 variable "cws_custom_images" {
   type = map(object({
     build = optional(object({
       skaffold_path   = optional(string)
-      timeout_seconds = number
-      machine_type    = string
+      timeout_seconds = optional(number)
+      machine_type    = optional(string)
       })
     )
     workstation_config = optional(object({
-      scheduler_region = string
+      scheduler_region = optional(string)
       ci_schedule      = string
     }))
   }))
@@ -531,14 +573,59 @@ variable "cws_custom_images" {
     "code-oss" : {
       build = {
         skaffold_path   = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
-        timeout_seconds = 7200
-        machine_type    = "E2_HIGHCPU_32"
       }
     },
     // go/keep-sorted end
   }
 }
 
+variable "disable_public_ip_addresses_default" {
+  type        = bool
+  description = "The default for disabling public IP addresses for Cloud Workstation instances."
+  default     = false
+}
+
+variable "enable_nested_virtualization_default" {
+  type        = bool
+  description = "The default for enabling nested virtualization for Cloud Workstation instances."
+  default     = true
+}
+
+variable "idle_timeout_seconds_default" {
+  type        = number
+  description = "The default idle timeout in seconds for Cloud Workstation instances."
+  default     = 3600
+}
+
+variable "machine_type_default" {
+  type        = string
+  description = "The default machine type for Cloud Workstation instances."
+  default     = "n1-standard-96"
+}
+
+variable "persistent_disk_fs_type_default" {
+  type        = string
+  description = "The default filesystem type for Cloud Workstation persistent disks."
+  default     = "ext4"
+}
+
+variable "persistent_disk_reclaim_policy_default" {
+  type        = string
+  description = "The default reclaim policy for Cloud Workstation persistent disks."
+  default     = "RETAIN"
+}
+
+variable "persistent_disk_type_default" {
+  type        = string
+  description = "The default disk type for Cloud Workstation persistent disks."
+  default     = "pd-balanced"
+}
+
+variable "pool_size_default" {
+  type        = number
+  description = "The default pool size for Cloud Workstation instances."
+  default     = 1
+}
 # go/keep-sorted end
 
 # Source Control (GitHub & Secure Source Manager)

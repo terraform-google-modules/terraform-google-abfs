@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2025-2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,6 +112,41 @@ create_cloud_workstation_resources = true
 #secure_source_manager_repo_git_url_to_clone = "YOUR_GIT_URL_TO_CLONE_AND_PUSH_TO_SSM"
 #secure_source_manager_repo_name             = "YOUR_REPO"
 
+# Example for custom images for Cloud Workstations.
+# The key of the map is the name of the image to be built.
+cws_custom_images = {
+  "android-studio" : {
+    build = {
+      # Optional: The relative path to the Dockerfile within the repository.
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
+      # Optional: The timeout for the build in seconds, defaults to 7200.
+      timeout_seconds = 7200
+      # Optional: The machine type to use for the build, defaults to "UNSPECIFIED".
+      machine_type    = "E2_HIGHCPU_32"
+    }
+    #workstation_config = {
+    #  # Optional: The region for the Cloud Scheduler job, defaults to the region of the Cloud Build trigger.
+    #  scheduler_region = "europe-west1"
+    #  # Optional: The schedule for the image rebuild, defaults to daily at 3 AM.
+    #  ci_schedule      = "0 3 * * *"
+    #}
+  },
+  "android-studio-for-platform" = {
+    build = {
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
+      timeout_seconds = 7200
+      machine_type = "E2_HIGHCPU_32"
+    }
+  },
+  "code-oss" : {
+    build = {
+      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
+      timeout_seconds = 7200
+      machine_type    = "E2_HIGHCPU_32"
+    }
+  },
+}
+
 cws_clusters = {
   "cws" = {
     network    = "abfs-network" # change to YOUR_NETWORK
@@ -126,6 +161,7 @@ cws_clusters = {
     #}
   }
 }
+
 cws_configs = {
   "cws-abfs" = {
     # go/keep-sorted start
@@ -180,39 +216,4 @@ cws_configs = {
     #}
     # go/keep-sorted end
   }
-}
-
-# Example for custom images for Cloud Workstations.
-# The key of the map is the name of the image to be built.
-cws_custom_images = {
-  "android-studio" : {
-    build = {
-      # Optional: The relative path to the Dockerfile within the repository.
-      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-android-studio"
-      # Optional: The timeout for the build in seconds, defaults to 7200.
-      timeout_seconds = 7200
-      # Optional: The machine type to use for the build, defaults to "UNSPECIFIED".
-      machine_type    = "E2_HIGHCPU_32"
-    }
-    #workstation_config = {
-    #  # Optional: The region for the Cloud Scheduler job, defaults to the region of the Cloud Build trigger.
-    #  scheduler_region = "europe-west1"
-    #  # Optional: The schedule for the image rebuild, defaults to daily at 3 AM.
-    #  ci_schedule      = "0 3 * * *"
-    #}
-  },
-  "android-studio-for-platform" = {
-    build = {
-      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-asfp"
-      timeout_seconds = 7200
-      machine_type = "E2_HIGHCPU_32"
-    }
-  }
-  "code-oss" : {
-    build = {
-      skaffold_path = "workloads/cloud-workstations/pipelines/workstation-images/horizon-code-oss"
-      timeout_seconds = 7200
-      machine_type    = "E2_HIGHCPU_32"
-    }
-  },
 }
