@@ -117,6 +117,7 @@ cws_clusters = {
     network    = "abfs-network" # change to YOUR_NETWORK
     region     = "europe-west1" # change to YOUR_ABFS_SUBNET
     subnetwork = "cws-subnet"   # change to YOUR_CWS_SUBNET
+    #vpc_project = "your-host-project-id" # for shared-VPC
     #domain_config = {
     #  domain = "workstations.example.com"
     #}
@@ -172,10 +173,10 @@ cws_configs = {
     persistent_disk_size_gb        = 1000
     persistent_disk_type           = "pd-ssd"
     #pool_size                      = 1      # Defaults to 0
-    #shielded_instance_config = {
-    #  enable_secure_boot          = false   # Defaults to true
-    #  enable_vtpm                 = false   # Defaults to true
-    #  enable_integrity_monitoring = false   # Defaults to true
+    #shielded_instance_config = {            # Defaults to null
+    #  enable_secure_boot          = false   # Defaults to true within shielded_instance_config
+    #  enable_vtpm                 = false   # Defaults to true within shielded_instance_config
+    #  enable_integrity_monitoring = false   # Defaults to true within shielded_instance_config
     #}
     # go/keep-sorted end
   }
